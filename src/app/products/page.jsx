@@ -1,0 +1,33 @@
+import Pagination from "@/components/Pagination";
+import ProductCard from "@/components/ProductCard";
+import { getProducts } from "@/lib/getProducts";
+
+export default async function Products({ searchParams }) {
+    const params = await searchParams;      // Read URL query parameters
+    const page = Number(params.page) || 1;  // at first the url is "/products" so we are manually setting the  page number 1 and loading the data. "/products?page=2,3,4" this is created when we click the pagination buttons 
+    const limit = 4;                     
+
+    const { products, totalPages } = await getProducts(page, limit);
+
+    return (
+        <div className="mb-10">
+            <h1 className="text-start text-3xl p-6 font-semibold">
+                Our Products
+            </h1>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6">
+                {products.map((product) => (
+                    <ProductCard
+                        key={product._id}
+                        product={product}
+                    />
+                ))}
+            </div>
+
+            <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+            />
+        </div>
+    );
+}
