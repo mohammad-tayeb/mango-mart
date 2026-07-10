@@ -39,7 +39,7 @@ export default function Pagination({ currentPage, totalPages }) {
                         href={createPageLink(page)}
                         className={`w-10 h-10 rounded-md flex items-center justify-center border transition ${
                             currentPage === page
-                                ? "bg-[#FE7704] text-white border-[#FE7704]"
+                                ? "bg-orange-500 text-white border-orange-500"
                                 : "hover:bg-gray-100"
                         }`}
                     >

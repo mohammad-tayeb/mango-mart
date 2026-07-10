@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
 import { getOrders } from "@/lib/getOrders";
+import { generateTrackingId } from "@/lib/generateTrackingId";
 
 export async function POST(req) {
+  const trackingId = generateTrackingId();
   try {
     const order = await req.json();
     if (!order.customer?.fullName) {
@@ -34,13 +36,25 @@ export async function POST(req) {
 
     const result = await orderCollection.insertOne({
       ...order,
+      trackingId,
       orderStatus: "Pending",
+
+      orderHistory: [
+        {
+          status: "Pending",
+          time: new Date(),
+          note: "Order placed successfully",
+        },
+      ],
+
       createdAt: new Date(),
+      updatedAt: new Date(),
     });
 
     return NextResponse.json({
       success: true,
       insertedId: result.insertedId,
+      trackingId,
       message: "Order placed successfully",
     });
   } catch (error) {

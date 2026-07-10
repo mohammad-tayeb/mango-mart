@@ -9,8 +9,8 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-6">
 
           {/* Column 1: Brand Logo & Contact Info */}
-          <div className="space-y-4">
-            <div className="flex items-center">
+          <div className="space-y-4 text-center md:text-left">
+            <div className="flex justify-center md:justify-start">
               <Image
                 src="/logo.png" // Ensure your logo file is in the public folder
                 alt="Mango Lovers Logo"
@@ -38,8 +38,8 @@ function Footer() {
           </div>
 
           {/* Column 2: Help Links */}
-          <div>
-            <h3 className="text-white font-bold tracking-wider uppercase text-sm mb-6">
+          <div className='text-center md:text-left'>
+            <h3 className="text-white font-bold tracking-wider uppercase text-sm mb-6 ">
               Help
             </h3>
             <ul className="space-y-4 text-sm">
@@ -52,7 +52,7 @@ function Footer() {
           </div>
 
           {/* Column 3: Information Links */}
-          <div>
+          <div className='text-center md:text-left'>
             <h3 className="text-white font-bold tracking-wider uppercase text-sm mb-6">
               Information
             </h3>
@@ -76,12 +76,12 @@ function Footer() {
           </div>
 
           {/* Column 4: Social Icons */}
-          <div>
+          <div className='text-center md:text-left'>
             <h3 className="text-white font-bold tracking-wider uppercase text-sm mb-6">
               Follow Us
             </h3>
 
-            <div className="flex space-x-3">
+            <div className="flex justify-center md:justify-start gap-3">
               <a
                 href="https://www.facebook.com/mangomartbd11"
                 target="_blank"
@@ -109,7 +109,7 @@ function Footer() {
 
         {/* Bottom Bar: Copyright & Payment Badges */}
         <div className=' text-center'>
-          &copy; 2026 Mango Mart. All rights reserved.
+          &copy; 2026 Mango Mart BD. All rights reserved.
         </div>
       </div>
     </footer>

@@ -31,7 +31,7 @@ function AdminDashboard({ session, children }) {
         {
             id: 'products',
             label: 'Manage Products',
-            href: '/admin/products',
+            href: '/admin/manageProducts',
             icon: <FiPackage className="h-5 w-5" />,
         },
     ];
@@ -46,7 +46,7 @@ function AdminDashboard({ session, children }) {
     const avatarInitials = adminName.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
 
     return (
-        <div className="min-h-screen bg-slate-50 text-slate-800 antialiased flex">
+        <div className="h-screen bg-slate-50 text-slate-800 antialiased flex">
 
             {/* 1. MOBILE SIDEBAR OVERLAY */}
             {isSidebarOpen && (
@@ -58,7 +58,7 @@ function AdminDashboard({ session, children }) {
 
             {/* 2. SIDEBAR NAVIGATION */}
             <aside className={`
-                fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-slate-200 bg-white transition-transform duration-300 ease-in-out
+                fixed inset-y-0 left-0 z-50 flex w-48 flex-col border-r border-slate-200 bg-white transition-transform duration-300 ease-in-out
                 lg:static lg:translate-x-0
                 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
@@ -88,7 +88,7 @@ function AdminDashboard({ session, children }) {
                                 href={item.href}
                                 onClick={() => setIsSidebarOpen(false)} // Close sidebar upon mobile route change
                                 className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all cursor-pointer ${isActive
-                                    ? 'bg-indigo-50/60 text-[#FE7704]'
+                                    ? 'bg-indigo-50/60 text-orange-500'
                                     : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                                     }`}
                             >
@@ -103,7 +103,7 @@ function AdminDashboard({ session, children }) {
                 <div className="border-t border-slate-100 p-4">
                     {/* User Info */}
                     <div className="flex items-center gap-3 rounded-xl p-2">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#FE7704] font-semibold text-white">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-500 font-semibold text-white">
                             {avatarInitials}
                         </div>
 

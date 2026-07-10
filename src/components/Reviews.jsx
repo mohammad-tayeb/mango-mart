@@ -24,10 +24,10 @@ export default function Reviews() {
     if (isLoading) return <div className="text-center py-12">Loading...</div>;
 
     return (
-        <section className="bg-white py-12 px-4 sm:px-6 lg:px-8 font-sans mt-10">
+        <section className="bg-amber-50 w-full py-12 px-4 sm:px-6 lg:px-8 font-sans mt-10">
             <div className="max-w-4xl mx-auto text-center">
                 {/* Top Tag */}
-                <span className="inline-block text-xs font-semibold tracking-wider text-[#FE7704] uppercase bg-[#fef2f2] px-3 py-1 rounded-full border border-[#fecaca] mb-3">
+                <span className="inline-block text-xs font-semibold tracking-wider text-orange-500 uppercase bg-[#fef2f2] px-3 py-1 rounded-full border border-[#fecaca] mb-3">
                     Happy Customers
                 </span>
 
@@ -54,10 +54,10 @@ export default function Reviews() {
                     >
                         {reviews.map((review) => (
                             <SwiperSlide key={review._id || review.id}>
-                                <div className="h-full w-full bg-white border-2 border-[#FE7704] rounded-2xl p-6 shadow-sm flex flex-col justify-between text-left">
+                                <div className="h-full w-full bg-white border-2 border-orange-500 rounded-2xl p-6 shadow-sm flex flex-col justify-between text-left">
                                     <div>
                                         <div className="flex items-center justify-between mb-4">
-                                            <div className="flex gap-0.5 text-[#FE7704]">
+                                            <div className="flex gap-0.5 text-orange-500">
                                                 {[...Array(review.rating || 5)].map((_, i) => (
                                                     <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
                                                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -72,7 +72,7 @@ export default function Reviews() {
                                     </div>
 
                                     <div className="flex items-center gap-3 border-t border-gray-100 pt-3">
-                                        <div className="w-10 h-10 rounded-full bg-[#fef2f2] border border-[#fecaca] text-[#FE7704] flex items-center justify-center font-bold text-xs uppercase shrink-0">
+                                        <div className="w-10 h-10 rounded-full bg-[#fef2f2] border border-[#fecaca] text-orange-500 flex items-center justify-center font-bold text-xs uppercase shrink-0">
                                             {review.customer
                                                 ? review.customer.split(" ").map((name) => name[0]).join("").slice(0, 2)
                                                 : "U"}
@@ -115,7 +115,7 @@ export default function Reviews() {
                 </div>
 
                 {/* "See All Reviews" Button */}
-                <Link href="/reviews" className="mt-6 inline-flex items-center gap-2 px-6 py-2.5 border border-[#FE7704] text-[#FE7704] rounded-full font-medium text-sm hover:bg-[#fef2f2] transition-colors focus:outline-none">
+                <Link href="/reviews" className="mt-6 inline-flex items-center gap-2 px-6 py-2.5 border border-orange-500 text-orange-500 rounded-full font-medium text-sm hover:bg-[#fef2f2] transition-colors focus:outline-none">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                     </svg>
@@ -123,7 +123,7 @@ export default function Reviews() {
                 </Link>
 
                 {/* Bottom Banner Section */}
-                <div className="mt-14 bg-[#FE7704] text-white rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-left">
+                <div className="mt-14 bg-orange-500 text-white rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-left">
                     <div>
                         <h3 className="text-lg sm:text-xl font-bold mb-1">
                             Love Our Products?
@@ -132,7 +132,7 @@ export default function Reviews() {
                             Share your experience and help others discover our products.
                         </p>
                     </div>
-                    <Link href="/reviews" className="whitespace-nowrap px-6 py-2.5 bg-white text-[#FE7704] rounded-full font-semibold text-sm hover:bg-red-50 transition-colors focus:outline-none shadow-sm">
+                    <Link href="/reviews" className="whitespace-nowrap px-6 py-2.5 bg-white text-orange-500 rounded-full font-semibold text-sm hover:bg-red-50 transition-colors focus:outline-none shadow-sm">
                         Write a Review
                     </Link>
                 </div>

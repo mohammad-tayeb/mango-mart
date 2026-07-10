@@ -32,18 +32,20 @@ function ProductCard({ product }) {
         >
             {/* Image */}
             <div className="relative w-full aspect-square mb-4 overflow-hidden rounded-md flex items-center justify-center bg-gray-50/50">
-                <Image
-                    src={product.images?.[0] || "/placeholder.jpg"}
-                    alt={product.name}
-                    width={260}
-                    height={260}
-                    className="object-contain max-h-[220px] transition-transform duration-300 group-hover:scale-105"
-                />
+                <Link href={`/products/${product._id}`}>
+                    <Image
+                        src={product.images?.[0] || "/placeholder.jpg"}
+                        alt={product.name}
+                        width={260}
+                        height={260}
+                        className="object-contain max-h-[220px] transition-transform duration-300 group-hover:scale-105"
+                    />
+                </Link>
 
                 <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
                     <Link
                         href={`/products/${product._id}`}
-                        className="bg-white text-gray-900 font-medium px-5 py-2.5 rounded-md text-sm shadow-md transition-transform duration-200 transform translate-y-2 group-hover:translate-y-0 hover:bg-[#FE7704] hover:text-white"
+                        className="bg-white text-gray-900 font-medium px-5 py-2.5 rounded-md text-sm shadow-md transition-transform duration-200 transform translate-y-2 group-hover:translate-y-0 hover:bg-orange-500 hover:text-white"
                     >
                         View Details
                     </Link>
@@ -54,7 +56,7 @@ function ProductCard({ product }) {
             <div className="flex-grow flex flex-col justify-between">
                 <div>
                     <h2 className="text-[21px] font-medium text-slate-800 leading-snug tracking-tight line-clamp-2 min-h-[58px]">
-                        {product.name}
+                        <Link href={`/products/${product._id}`}>{product.name}</Link>
                     </h2>
 
                     {/* Unit Price Info */}
@@ -73,8 +75,8 @@ function ProductCard({ product }) {
                                     type="button"
                                     onClick={() => setSelectedVariant(variant)}
                                     className={`px-3 py-1 text-xs font-medium border rounded-full transition-all ${selectedVariant?.quantity === variant.quantity
-                                            ? "border-[#FE7704] bg-[#FE7704]/10 text-[#FE7704]"
-                                            : "border-gray-200 text-gray-600 hover:border-gray-400"
+                                        ? "border-orange-500 bg-orange-500/10 text-orange-500"
+                                        : "border-gray-200 text-gray-600 hover:border-gray-400"
                                         }`}
                                 >
                                     {variant.quantity}
@@ -88,7 +90,7 @@ function ProductCard({ product }) {
                         {selectedVariant ? (
                             selectedVariant.offerPrice ? (
                                 <div className="flex items-center gap-3">
-                                    <span className="text-2xl font-bold text-[#FE7704]">
+                                    <span className="text-2xl font-bold text-orange-500">
                                         ৳{selectedVariant.offerPrice}
                                     </span>
                                     <span className="text-lg text-gray-400 line-through">
@@ -96,7 +98,7 @@ function ProductCard({ product }) {
                                     </span>
                                 </div>
                             ) : (
-                                <span className="text-2xl font-bold text-[#FE7704]">
+                                <span className="text-2xl font-bold text-orange-500">
                                     ৳{selectedVariant.price}
                                 </span>
                             )
@@ -106,13 +108,21 @@ function ProductCard({ product }) {
                     </div>
                 </div>
 
-                <button
-                    onClick={handleAddToCart}
-                    disabled={!selectedVariant}
-                    className="w-full border border-[#FE7704] text-[#FE7704] font-medium py-3 rounded-md hover:bg-[#FE7704] hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                    Add To Cart
-                </button>
+                {product.stock?.status === "out_of_stock" ? (
+                    <div className="w-full py-3 rounded-md bg-gray-100 border border-gray-200 text-center">
+                        <span className="font-semibold text-red-600">
+                            Out of Stock
+                        </span>
+                    </div>
+                ) : (
+                    <button
+                        onClick={handleAddToCart}
+                        disabled={!selectedVariant}
+                        className="w-full border border-orange-500 text-orange-500 font-medium py-3 rounded-md hover:bg-orange-500 hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Add To Cart
+                    </button>
+                )}
             </div>
         </div>
     )

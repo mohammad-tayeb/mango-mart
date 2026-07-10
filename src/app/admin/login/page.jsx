@@ -78,12 +78,12 @@ export default function AdminLogin() {
                                 }
                             })}
                             className={`w-full rounded-xl border px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition duration-200 focus:bg-white focus:outline-none focus:ring-4 ${errors.email
-                                ? 'border-[#FE7704] bg-red-50/30 focus:border-[#FE7704] focus:ring-red-50'
-                                : 'border-slate-200 bg-slate-50 focus:border-[#FE7704] focus:ring-indigo-50'
+                                ? 'border-orange-500 bg-red-50/30 focus:border-orange-500 focus:ring-red-50'
+                                : 'border-slate-200 bg-slate-50 focus:border-orange-500 focus:ring-indigo-50'
                                 }`}
                         />
                         {errors.email && (
-                            <p className="mt-1.5 text-xs font-medium text-[#FE7704]">{errors.email.message}</p>
+                            <p className="mt-1.5 text-xs font-medium text-orange-500">{errors.email.message}</p>
                         )}
                     </div>
 
@@ -105,12 +105,12 @@ export default function AdminLogin() {
                                 }
                             })}
                             className={`w-full rounded-xl border px-4 py-3 text-sm text-slate-900 placeholder-slate-400 transition duration-200 focus:bg-white focus:outline-none focus:ring-4 ${errors.password
-                                ? 'border-[#FE7704] bg-red-50/30 focus:border-[#FE7704] focus:ring-red-50'
-                                : 'border-slate-200 bg-slate-50 focus:border-[#FE7704] focus:ring-indigo-50'
+                                ? 'border-orange-500 bg-red-50/30 focus:border-orange-500 focus:ring-red-50'
+                                : 'border-slate-200 bg-slate-50 focus:border-orange-500 focus:ring-indigo-50'
                                 }`}
                         />
                         {errors.password && (
-                            <p className="mt-1.5 text-xs font-medium text-[#FE7704]">{errors.password.message}</p>
+                            <p className="mt-1.5 text-xs font-medium text-orange-500">{errors.password.message}</p>
                         )}
                     </div>
 
@@ -118,7 +118,7 @@ export default function AdminLogin() {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full flex justify-center items-center cursor-pointer rounded-xl bg-[#FE7704] px-4 py-3 text-sm font-medium text-white shadow-md shadow-indigo-100 transition duration-200 hover:bg-[#f98f31] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="w-full flex justify-center items-center cursor-pointer rounded-xl bg-orange-500 px-4 py-3 text-sm font-medium text-white shadow-md shadow-indigo-100 transition duration-200 hover:bg-[#f98f31] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                         {isSubmitting ? (
                             <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

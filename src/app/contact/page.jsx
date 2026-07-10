@@ -41,36 +41,36 @@ export default function Page() {
             label: "PHONE / WHATSAPP",
             value: "01822-350799",
             icon: (
-                <FaPhone className="text-[#FE7704]"></FaPhone>
+                <FaPhone className="text-orange-500"></FaPhone>
             ),
         },
         {
             label: "EMAIL",
             value: "info@mangomartbd.com",
             icon: (
-                <FaMailBulk className="text-[#FE7704]"></FaMailBulk>
+                <FaMailBulk className="text-orange-500"></FaMailBulk>
             ),
         },
         {
             label: "ADDRESS",
             value: "Chattogram, Bangladesh\n4202 Bangladesh",
             icon: (
-                <FaMapLocation className="text-[#FE7704]"></FaMapLocation>
+                <FaMapLocation className="text-orange-500"></FaMapLocation>
             ),
         },
         {
             label: "BUSINESS HOURS",
             value: "Sat – Thu: 9am – 9pm",
             icon: (
-                <FaClock className="text-[#FE7704]"></FaClock>
+                <FaClock className="text-orange-500"></FaClock>
             ),
         },
     ];
 
     return (
         <div className="mb-10">
-            <div className="w-full bg-gray-50/50 py-8 px-4 flex items-center justify-center">
-                <div className="max-w-6xl w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="w-full mb-10 bg-amber-50 py-8 px-4 flex items-center justify-center">
+                <div className="max-w-6xl  w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {contactInfo.map((card, index) => (
                         <div
                             key={index}
@@ -111,18 +111,18 @@ export default function Page() {
                                     <div className="form-control w-full">
                                         <label className="label py-1">
                                             <span className="label-text font-medium text-gray-700">
-                                                Your Name <span className="text-[#FE7704]">*</span>
+                                                Your Name <span className="text-orange-500">*</span>
                                             </span>
                                         </label>
                                         <input
                                             type="text"
                                             placeholder="e.g. Ayesha Rahman"
-                                            className={`input input-bordered w-full h-11 bg-white focus:outline-none focus:ring-2 focus:ring-[#FE7704] focus:border-[#FE7704] rounded-lg border-gray-200 transition ${errors.name ? "border-[#FE7704] focus:ring-[#FE7704]" : ""
+                                            className={`input input-bordered w-full h-11 bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 rounded-lg border-gray-200 transition ${errors.name ? "border-orange-500 focus:ring-orange-500" : ""
                                                 }`}
                                             {...register("name", { required: "Name is required" })}
                                         />
                                         {errors.name && (
-                                            <p className="text-xs text-[#FE7704] mt-1">{errors.name.message}</p>
+                                            <p className="text-xs text-orange-500 mt-1">{errors.name.message}</p>
                                         )}
                                     </div>
 
@@ -133,11 +133,11 @@ export default function Page() {
                                         <input
                                             type="tel"
                                             placeholder="01XXXXXXXXX"
-                                            className="input input-bordered w-full h-11 bg-white focus:outline-none focus:ring-2 focus:ring-[#FE7704] focus:border-[#FE7704] rounded-lg border-gray-200 transition"
+                                            className="input input-bordered w-full h-11 bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 rounded-lg border-gray-200 transition"
                                             {...register("phone", { required: "phone is required" })}
                                         />
                                         {errors.phone && (
-                                            <p className="text-xs text-[#FE7704] mt-1">{errors.phone.message}</p>
+                                            <p className="text-xs text-orange-500 mt-1">{errors.phone.message}</p>
                                         )}
                                     </div>
                                 </div>
@@ -150,11 +150,11 @@ export default function Page() {
                                     <input
                                         type="email"
                                         placeholder="you@example.com"
-                                        className="input input-bordered w-full h-11 bg-white focus:outline-none focus:ring-2 focus:ring-[#FE7704] focus:border-[#FE7704] rounded-lg border-gray-200 transition"
+                                        className="input input-bordered w-full h-11 bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 rounded-lg border-gray-200 transition"
                                         {...register("email", { required: "Email is required" })}
                                     />
                                     {errors.email && (
-                                        <p className="text-xs text-[#FE7704] mt-1">{errors.email.message}</p>
+                                        <p className="text-xs text-orange-500 mt-1">{errors.email.message}</p>
                                     )}
                                 </div>
 
@@ -162,13 +162,13 @@ export default function Page() {
                                 <div className="form-control w-full relative">
                                     <label className="label py-1">
                                         <span className="label-text font-medium text-gray-700">
-                                            Message <span className="text-[#FE7704]">*</span>
+                                            Message <span className="text-orange-500">*</span>
                                         </span>
                                     </label>
                                     <textarea
                                         rows={5}
                                         placeholder="Write your message here..."
-                                        className={`textarea textarea-bordered w-full p-3 bg-white focus:outline-none focus:ring-2 focus:ring-[#FE7704] focus:border-[#FE7704] rounded-lg border-gray-200 resize-none transition ${errors.message ? "border-[#FE7704] focus:ring-[#FE7704]" : ""
+                                        className={`textarea textarea-bordered w-full p-3 bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 rounded-lg border-gray-200 resize-none transition ${errors.message ? "border-orange-500 focus:ring-orange-500" : ""
                                             }`}
                                         maxLength={100}
                                         {...register("message", { required: "Message field cannot be empty" })}
@@ -177,7 +177,7 @@ export default function Page() {
                                         {messageContent.length}/100
                                     </div>
                                     {errors.message && (
-                                        <p className="text-xs text-[#FE7704] mt-0.5">{errors.message.message}</p>
+                                        <p className="text-xs text-orange-500 mt-0.5">{errors.message.message}</p>
                                     )}
                                 </div>
 
@@ -185,7 +185,7 @@ export default function Page() {
                                 <button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="btn border-none bg-[#FE7704] hover:bg-[#f88521] text-white font-medium px-6 py-2.5 rounded-xl flex items-center gap-2 shadow-sm capitalize transition"
+                                    className="btn border-none bg-orange-500 hover:bg-[#f88521] text-white font-medium px-6 py-2.5 rounded-xl flex items-center gap-2 shadow-sm capitalize transition"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -211,7 +211,7 @@ export default function Page() {
                     <div className="flex flex-col gap-5">
                         {/* WhatsApp Button */}
                         <a
-                            href="https://wa.me/8801871284044?text=Hello%20I%20would%20like%20to%20know%20more%20about%20your%20products."
+                            href="https://wa.me/8801822-350799?text=Hello%20I%20would%20like%20to%20know%20more%20about%20your%20products."
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-4 bg-[#1FC35F] hover:bg-[#19a850] text-white p-4 rounded-2xl shadow-sm group transition-all"
@@ -286,7 +286,7 @@ export default function Page() {
                                 <a
                                     href="https://www.facebook.com/mangomartbd11"
                                     target="_blank"
-                                    className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 text-[#FE7704] hover:bg-rose-50 hover:scale-105 transition duration-200"
+                                    className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 text-orange-500 hover:bg-rose-50 hover:scale-105 transition duration-200"
                                 >
                                     <FaFacebook></FaFacebook>
                                 </a>
@@ -294,7 +294,7 @@ export default function Page() {
                                 {/* Instagram */}
                                 <a
                                     href="#"
-                                    className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 text-[#FE7704] hover:bg-rose-50 hover:scale-105 transition duration-200"
+                                    className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 text-orange-500 hover:bg-rose-50 hover:scale-105 transition duration-200"
                                 >
                                     <FaInstagram></FaInstagram>
                                 </a>

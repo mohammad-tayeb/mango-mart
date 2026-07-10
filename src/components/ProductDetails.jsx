@@ -35,6 +35,20 @@ function ProductDetails({ product, relatedProducts }) {
         }
     };
 
+    const details = [
+        ["আমের জাত", product.description.variety],
+        ["উৎপত্তিস্থল", product.description.origin],
+        ["স্বাদ", product.description.taste],
+        ["রং", product.description.color],
+        ["চাষের ধরন", product.description.cultivation],
+        ["রাসায়নিক ব্যবহার", product.description.chemicalFree],
+        ["প্যাকেজিং", product.description.packaging],
+        ["ডেলিভারি", product.description.delivery],
+        ["ওজন", product.description.weight],
+        ["সংরক্ষণ", product.description.storage],
+        ["বিশেষ দ্রষ্টব্য", product.description.note],
+    ];
+
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
@@ -58,7 +72,7 @@ function ProductDetails({ product, relatedProducts }) {
                                 type="button"
                                 onClick={() => setSelectedImage(img)}
                                 className={`w-20 h-20 relative bg-white border rounded-lg overflow-hidden flex items-center justify-center p-1 transition-all ${selectedImage === img
-                                    ? "border-[#FE7704] ring-1 ring-[#FE7704]"
+                                    ? "border-orange-500 ring-1 ring-orange-500"
                                     : "border-gray-200 hover:border-gray-300"
                                     }`}
                             >
@@ -90,7 +104,7 @@ function ProductDetails({ product, relatedProducts }) {
                             </span>
                         )}
 
-                        <span className="text-3xl font-bold text-[#FE7704]">
+                        <span className="text-3xl font-bold text-orange-500">
                             ৳{" "}
                             {(selectedVariant?.offerPrice || selectedVariant?.price).toLocaleString()}
                         </span>
@@ -114,7 +128,7 @@ function ProductDetails({ product, relatedProducts }) {
                                         type="button"
                                         onClick={() => setSelectedVariant(variant)}
                                         className={`px-5 py-2.5 rounded-md text-sm font-semibold border transition-all ${isActive
-                                            ? "border-[#FE7704] ring-1 ring-[#FE7704]"
+                                            ? "border-orange-500 ring-1 ring-orange-500"
                                             : "border-gray-200"
                                             }`}
                                     >
@@ -126,71 +140,95 @@ function ProductDetails({ product, relatedProducts }) {
                     </div>
 
                     {/* Counter Quantity Controls */}
-                    <div className="flex items-center">
-                        <div className="flex items-center border border-gray-200 rounded-md bg-white shadow-sm">
-                            <button
-                                type="button"
-                                onClick={decrementQuantity}
-                                className="px-4 py-2 text-gray-400 hover:text-gray-600 transition-colors text-lg font-medium focus:outline-none"
-                            >
-                                -
-                            </button>
-                            <span className="w-12 text-center text-sm font-semibold text-gray-800 select-none">
-                                {quantity}
-                            </span>
-                            <button
-                                type="button"
-                                onClick={incrementQuantity}
-                                className="px-4 py-2 text-gray-400 hover:text-gray-600 transition-colors text-lg font-medium focus:outline-none"
-                            >
-                                +
-                            </button>
+                    {/* Quantity Label */}
+                    <div>
+                        <p className="text-sm font-medium text-gray-700 mb-2">
+                            আপনি কতটি{" "}
+                            <span className="font-semibold text-orange-500">
+                                {selectedVariant?.quantity}
+                            </span>{" "}
+                            বক্স নিতে চান?
+                        </p>
+
+                        <div className="flex items-center">
+                            <div className="flex items-center border border-gray-200 rounded-md bg-white shadow-sm">
+                                <button
+                                    type="button"
+                                    onClick={decrementQuantity}
+                                    className="px-4 py-2 text-gray-400 hover:text-gray-600 transition-colors text-lg font-medium focus:outline-none"
+                                >
+                                    -
+                                </button>
+
+                                <span className="w-12 text-center text-sm font-semibold text-gray-800 select-none">
+                                    {quantity}
+                                </span>
+
+                                <button
+                                    type="button"
+                                    onClick={incrementQuantity}
+                                    className="px-4 py-2 text-gray-400 hover:text-gray-600 transition-colors text-lg font-medium focus:outline-none"
+                                >
+                                    +
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     {/* Core Layout Action Grid buttons */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                        {/* Add to Cart button */}
-                        <button
-                            onClick={handleAddToCart}
-                            type="button"
-                            className="w-full border-2 border-gray-900 text-gray-900 font-bold py-3.5 px-6 rounded-md text-base transition-colors hover:bg-gray-900 hover:text-white"
-                        >
-                            কাটে যোগ করুন
-                        </button>
+                    {product.stock.status === "out_of_stock" ? (
+                        <div className="mt-2 rounded-lg border border-red-200 bg-red-50 p-5 text-center">
+                            <h3 className="text-lg font-bold text-red-600">
+                                Out of Stock
+                            </h3>
+                            <p className="mt-1 text-sm text-red-500">
+                                এই পণ্যটি বর্তমানে স্টকে নেই।
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                            {/* Add to Cart */}
+                            <button
+                                onClick={handleAddToCart}
+                                type="button"
+                                className="w-full border-2 border-gray-900 text-gray-900 font-bold py-3.5 px-6 rounded-md hover:bg-gray-900 hover:text-white transition"
+                            >
+                                কার্টে যোগ করুন
+                            </button>
 
-                        {/* Direct Order Now Button */}
-                        <button
-                            onClick={() => handleAddToCart("proceed")}
-                            type="button"
-                            className="w-full bg-[#FE7704] text-white font-bold py-3.5 px-6 rounded-md text-base transition-colors hover:bg-[#e06600] flex items-center justify-center gap-2 shadow-md"
-                        >
-                            <FaBagShopping className="text-lg" />
-                            অর্ডার করুন
-                        </button>
+                            {/* Order Now */}
+                            <button
+                                onClick={() => handleAddToCart("proceed")}
+                                type="button"
+                                className="w-full bg-orange-500 text-white font-bold py-3.5 px-6 rounded-md hover:bg-orange-600 flex items-center justify-center gap-2"
+                            >
+                                <FaBagShopping />
+                                অর্ডার করুন
+                            </button>
 
-                        {/* WhatsApp Order Button */}
-                        <a
-                            href="https://wa.me/8801339900138" // Update phone values dynamically later
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full bg-[#25D366] text-white font-bold py-3.5 px-6 rounded-md text-base transition-colors hover:bg-[#20ba5a] flex items-center justify-center gap-2 shadow-md"
-                        >
-                            <FaWhatsapp className="text-xl" />
-                            হোয়াটসঅ্যাপে অর্ডার করুন
-                        </a>
+                            {/* WhatsApp */}
+                            <a
+                                href="https://wa.me/8801339900138"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full bg-[#25D366] text-white font-bold py-3.5 px-6 rounded-md hover:bg-[#20ba5a] flex items-center justify-center gap-2"
+                            >
+                                <FaWhatsapp />
+                                হোয়াটসঅ্যাপে অর্ডার করুন
+                            </a>
 
-                        {/* Direct Phone Call Button */}
-                        <a
-                            href="tel:09678812525"
-                            className="w-full border-2 border-gray-900 text-gray-900 font-bold py-3.5 px-6 rounded-md text-base transition-colors hover:bg-gray-50 flex items-center justify-center gap-2"
-                        >
-                            <FaPhone className="text-sm rotate-95" />
-                            কল অর্ডার: 09678812525
-                        </a>
-                    </div>
+                            {/* Call */}
+                            <a
+                                href="tel:09678812525"
+                                className="w-full border-2 border-gray-900 text-gray-900 font-bold py-3.5 px-6 rounded-md hover:bg-gray-50 flex items-center justify-center gap-2"
+                            >
+                                <FaPhone className="rotate-95" />
+                                কল অর্ডার
+                            </a>
+                        </div>
+                    )}
 
-                    <hr className="border-gray-100 !mt-8" />
+                    <hr className="border-gray-100 mt-8!" />
 
                     {/* Product Footer Category Data metadata */}
                     <div className="text-sm text-gray-500 font-medium">
@@ -199,6 +237,52 @@ function ProductDetails({ product, relatedProducts }) {
 
                 </div>
             </div>
+            {/* Product Description */}
+            <section className="mt-14 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.05)]">
+
+                {/* Header */}
+                <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-8 py-7">
+
+                    <h2 className="text-2xl font-bold text-white">
+                        পণ্যের বিবরণ
+                    </h2>
+
+                    <p className="mt-1 text-orange-100 text-sm">
+                        এই পণ্যের বিস্তারিত তথ্য
+                    </p>
+
+                </div>
+
+                {/* Body */}
+
+                <div className="p-2">
+
+                    {details.map(([title, value], index) => (
+
+                        <div
+                            key={title}
+                            className={`grid md:grid-cols-[240px_1fr] gap-6 items-start rounded-2xl px-6 py-5 transition-all hover:bg-orange-50 ${index !== details.length - 1
+                                ? "border-b border-gray-100"
+                                : ""
+                                }`}
+                        >
+
+                            <div className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+                                {title}
+                            </div>
+
+                            <div className="text-gray-800 leading-7">
+                                {value}
+                            </div>
+
+                        </div>
+
+                    ))}
+
+                </div>
+
+            </section>
+
             <div className="mt-20">
                 <h2 className="text-2xl font-bold mb-6">
                     Related Products

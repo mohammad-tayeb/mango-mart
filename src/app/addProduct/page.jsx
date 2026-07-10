@@ -98,7 +98,7 @@ export default function AddProduct() {
                     <input
                         type="text"
                         placeholder="e.g., Egyptian Medjool Premium Dates"
-                        className={`w-full px-4 py-3 bg-gray-50 border rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:bg-white transition-colors text-sm ${errors.name ? "border-red-500 focus:border-red-500" : "border-gray-200 focus:border-[#FE7704]"
+                        className={`w-full px-4 py-3 bg-gray-50 border rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:bg-white transition-colors text-sm ${errors.name ? "border-red-500 focus:border-red-500" : "border-gray-200 focus:border-orange-500"
                             }`}
                         {...register("name", { required: "Product name is required" })}
                     />
@@ -122,7 +122,7 @@ export default function AddProduct() {
                             <input
                                 type="number"
                                 placeholder="2200"
-                                className={`w-full pl-8 pr-4 py-3 bg-gray-50 border rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:bg-white transition-colors text-sm ${errors.price ? "border-red-500 focus:border-red-500" : "border-gray-200 focus:border-[#FE7704]"
+                                className={`w-full pl-8 pr-4 py-3 bg-gray-50 border rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:bg-white transition-colors text-sm ${errors.price ? "border-red-500 focus:border-red-500" : "border-gray-200 focus:border-orange-500"
                                     }`}
                                 {...register("price", {
                                     required: "Price is required",
@@ -148,7 +148,7 @@ export default function AddProduct() {
                             <input
                                 type="number"
                                 placeholder="1950"
-                                className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#FE7704] focus:bg-white transition-colors text-sm"
+                                className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:border-orange-500 focus:bg-white transition-colors text-sm"
                                 {...register("offerPrice")}
                             />
                         </div>
@@ -169,7 +169,7 @@ export default function AddProduct() {
                                     type="button"
                                     onClick={() => handleQuantityChipClick(qty)}
                                     className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-wide border transition-all ${isSelected
-                                            ? "bg-orange-50 border-[#FE7704] text-[#FE7704]"
+                                            ? "bg-orange-50 border-orange-500 text-orange-500"
                                             : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
                                         }`}
                                 >
@@ -194,7 +194,7 @@ export default function AddProduct() {
                                 <input
                                     type="url"
                                     placeholder="https://i.ibb.co/your-image-hash/filename.jpg"
-                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#FE7704] focus:bg-white transition-colors text-sm"
+                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:border-orange-500 focus:bg-white transition-colors text-sm"
                                     {...register(`images.${index}.url`)}
                                 />
                                 <button
@@ -212,7 +212,7 @@ export default function AddProduct() {
                     <button
                         type="button"
                         onClick={() => append({ url: "" })}
-                        className="mt-3 flex items-center gap-1.5 text-xs font-bold text-[#FE7704] bg-orange-50/50 hover:bg-orange-50 px-3 py-2 rounded-lg border border-dashed border-orange-200 transition-colors"
+                        className="mt-3 flex items-center gap-1.5 text-xs font-bold text-orange-500 bg-orange-50/50 hover:bg-orange-50 px-3 py-2 rounded-lg border border-dashed border-orange-200 transition-colors"
                     >
                         <FiPlus /> Add Another Image Row
                     </button>
@@ -223,7 +223,7 @@ export default function AddProduct() {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full bg-[#FE7704] text-white font-semibold py-3.5 px-4 rounded-lg shadow-md hover:bg-[#e06600] transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-orange-500 text-white font-semibold py-3.5 px-4 rounded-lg shadow-md hover:bg-[#e06600] transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isSubmitting ? "Publishing Listing..." : "Publish Product Listing"}
                     </button>

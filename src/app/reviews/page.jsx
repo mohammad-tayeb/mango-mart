@@ -66,7 +66,7 @@ export default function Page() {
 
     return (
         <div>
-            <section className="w-full bg-gradient-to-r from-[#FE7704] via-[#f3780c] to-[#fa7a0a] text-white py-12 px-4 text-center select-none font-sans">
+            <section className="w-full bg-gradient-to-r from-orange-500 via-[#f3780c] to-[#fa7a0a] text-white py-12 px-4 text-center select-none font-sans">
                 <div className="max-w-4xl mx-auto flex flex-col items-center">
                     {/* Main Heading */}
                     <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
@@ -149,11 +149,11 @@ export default function Page() {
                     {visibleReviews.map((review) => (
                         <div
                             key={review._id}
-                            className="bg-white border-2 border-[#FE7704] rounded-2xl p-6 shadow-sm flex flex-col justify-between relative"
+                            className="bg-white border-2 border-orange-500 rounded-2xl p-6 shadow-sm flex flex-col justify-between relative"
                         >
                             <div>
                                 <div className="flex items-center justify-between mb-4">
-                                    <div className="flex gap-0.5 text-[#FE7704]">
+                                    <div className="flex gap-0.5 text-orange-500">
                                         {[...Array(review.rating)].map((_, i) => (
                                             <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
                                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -168,7 +168,7 @@ export default function Page() {
                             </div>
 
                             <div className="flex items-center gap-3 border-t border-gray-100 pt-3">
-                                <div className="w-10 h-10 rounded-full bg-[#fef2f2] border border-[#fecaca] text-[#FE7704] flex items-center justify-center font-bold text-xs uppercase">
+                                <div className="w-10 h-10 rounded-full bg-[#fef2f2] border border-[#fecaca] text-orange-500 flex items-center justify-center font-bold text-xs uppercase">
                                     {review.customer
                                         .split(" ")
                                         .map((name) => name[0])
@@ -194,7 +194,7 @@ export default function Page() {
                     <div className="flex justify-center mt-6 mb-10">
                         <button
                             onClick={() => setVisible((prev) => prev + 6)}
-                            className="px-6 py-3 bg-[#FE7704] text-white rounded-lg hover:bg-[#ff8c27] transition"
+                            className="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-[#ff8c27] transition"
                         >
                             View More
                         </button>
@@ -277,7 +277,7 @@ export default function Page() {
                             <input
                                 type="text"
                                 placeholder="Enter your full name"
-                                className={`input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-[#FE7704] focus:border-[#FE7704] transition-all duration-200 ${errors.name ? 'input-error' : ''}`}
+                                className={`input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 ${errors.name ? 'input-error' : ''}`}
                                 {...register("customer", { required: "Name is required" })}
                             />
                             {errors.customer && (
@@ -295,7 +295,7 @@ export default function Page() {
                             <input
                                 type="text"
                                 placeholder="Enter the product name"
-                                className={`input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-[#FE7704] focus:border-[#FE7704] transition-all duration-200 ${errors.product ? 'input-error' : ''}`}
+                                className={`input input-bordered w-full focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all duration-200 ${errors.product ? 'input-error' : ''}`}
                                 {...register("product")}
                             />
                             {errors.product && (
@@ -351,7 +351,7 @@ export default function Page() {
                             <textarea
                                 rows={4}
                                 placeholder="Write about your experience with this product..."
-                                className={`textarea textarea-bordered w-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#FE7704] focus:border-[#FE7704] leading-relaxed ${errors.review ? 'textarea-error' : ''}`}
+                                className={`textarea textarea-bordered w-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 leading-relaxed ${errors.review ? 'textarea-error' : ''}`}
                                 {...register("review", { required: "Review message is required" })}
                             />
                             {errors.review && (
@@ -376,7 +376,7 @@ export default function Page() {
                             </button>
                             <button
                                 type="submit"
-                                className="btn bg-[#FE7704] btn-sm sm:btn-md min-w-[140px] text-white tracking-wide shadow-md"
+                                className="btn bg-orange-500 btn-sm sm:btn-md min-w-[140px] text-white tracking-wide shadow-md"
                                 disabled={isSubmitting}
                             >
                                 {isSubmitting ? (

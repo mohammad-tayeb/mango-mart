@@ -41,6 +41,8 @@ function Navbar() {
     { name: 'Shop', href: '/products' },
     { name: 'Reviews', href: '/reviews' },
     { name: 'Contact Us', href: '/contact' },
+    { name: 'Track Parcel', href: '/trackParcel' },
+    { name: 'About Us', href: '/about' },
   ];
 
   return (
@@ -71,8 +73,8 @@ function Navbar() {
                     key={link.name}
                     href={link.href}
                     className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActive
-                      ? 'text-[#FE7704] font-semibold'
-                      : 'text-gray-600 hover:text-[#FE7704]'
+                      ? 'text-orange-500 font-semibold'
+                      : 'text-gray-600 hover:text-orange-500'
                       }`}
                   >
                     {link.name}
@@ -88,7 +90,7 @@ function Navbar() {
               {/* Cart Button Interceptor */}
               <button
                 onClick={() => setIsCartOpen(true)}
-                className="relative p-2 text-gray-600 hover:text-[#FE7704] transition-colors duration-200 focus:outline-none"
+                className="relative p-2 text-gray-600 hover:text-orange-500 transition-colors duration-200 focus:outline-none"
                 aria-label="Shopping Cart"
               >
                 <FaCartShopping className="text-2xl" />
@@ -106,7 +108,7 @@ function Navbar() {
                 <button
                   onClick={toggleMenu}
                   type="button"
-                  className="text-gray-600 hover:text-[#FE7704] focus:outline-none p-2"
+                  className="text-gray-600 hover:text-orange-500 focus:outline-none p-2"
                   aria-label="Toggle menu"
                 >
                   {isOpen ? (
@@ -138,8 +140,8 @@ function Navbar() {
                   key={link.name}
                   href={link.href}
                   className={`block px-3 py-2.5 rounded-md text-base font-medium transition-colors duration-150 ${isActive
-                    ? 'bg-orange-50 text-[#FE7704] font-semibold'
-                    : 'text-gray-600 hover:bg-orange-50 hover:text-[#FE7704]'
+                    ? 'bg-orange-50 text-orange-500 font-semibold'
+                    : 'text-gray-600 hover:bg-orange-50 hover:text-orange-500'
                     }`}
                   onClick={() => setIsOpen(false)}
                 >
@@ -170,7 +172,7 @@ function Navbar() {
           {/* Modal Header */}
           <div className="flex items-center justify-between px-4 py-5 border-b border-gray-100">
             <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-              <FaCartShopping className="text-[#FE7704]" /> Your Cart ({cartCount})
+              <FaCartShopping className="text-orange-500" /> Your Cart ({cartCount})
             </h2>
             <button
               onClick={() => setIsCartOpen(false)}
@@ -224,7 +226,7 @@ function Navbar() {
                         Unit Price: ৳{unitPrice.toLocaleString()}
                       </p>
 
-                      <p className="text-sm font-semibold text-[#FE7704] mt-1">
+                      <p className="text-sm font-semibold text-orange-500 mt-1">
                         ৳{itemTotal.toLocaleString()}
                       </p>
                     </div>
@@ -248,7 +250,7 @@ function Navbar() {
             <div className="border-t border-gray-100 p-4 bg-gray-50/50 space-y-4">
               <div className="flex justify-between items-center text-base font-semibold text-gray-800">
                 <span>Subtotal:</span>
-                <span className="text-[#FE7704] text-lg">৳{totalPrice.toLocaleString()}</span>
+                <span className="text-orange-500 text-lg">৳{totalPrice.toLocaleString()}</span>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <button
@@ -260,7 +262,7 @@ function Navbar() {
                 <Link
                   href="/checkout"
                   onClick={() => setIsCartOpen(false)}
-                  className="w-full bg-[#FE7704] text-white font-medium py-2.5 rounded-md text-sm text-center hover:bg-[#e06600] transition-colors shadow-md block"
+                  className="w-full bg-orange-500 text-white font-medium py-2.5 rounded-md text-sm text-center hover:bg-[#e06600] transition-colors shadow-md block"
                 >
                   Proceed
                 </Link>

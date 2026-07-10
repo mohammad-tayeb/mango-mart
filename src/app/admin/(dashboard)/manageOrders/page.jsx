@@ -2,13 +2,33 @@
 
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
-import React, { useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useMemo } from 'react';
+import toast from 'react-hot-toast';
 
 const OrdersTable = () => {
-  const [statusFilter, setStatusFilter] = useState("pending");
-  const [currentPage, setCurrentPage] = useState(1);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const statusFilter =
+    searchParams.get("status") || "pending";
+
+  const currentPage =
+    Number(searchParams.get("page")) || 1;
+
+
   const ordersPerPage = 10;
 
+  const changeFilter = (value) => {
+    router.replace(`?status=${value}&page=1`);
+  };
+
+  const changePage = (page) => {
+    router.replace(`?status=${statusFilter}&page=${page}`);
+  };
+
+
+  //loading data
   const { data: orders = [], isLoading, error, refetch } = useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
@@ -41,19 +61,9 @@ const OrdersTable = () => {
     order => order.orderStatus === "Pending"
   ).length;
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
   if (isLoading) {
     return (
-      <div className="w-full bg-white rounded-xl border border-slate-200 p-12 text-center text-slate-500 font-medium">
+      <div className="max-w-5xl mx-auto w-full bg-white rounded-xl border border-slate-200 p-12 text-center text-slate-500 font-medium">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mx-auto mb-4"></div>
         Loading orders...
       </div>
@@ -62,13 +72,19 @@ const OrdersTable = () => {
 
   if (error) {
     return (
-      <div className="w-full bg-red-50 rounded-xl border border-red-200 p-6 text-center text-red-700 font-medium">
+      <div className="max-w-5xl mx-auto w-full bg-red-50 rounded-xl border border-red-200 p-6 text-center text-red-700 font-medium">
         Error loading orders: {error.message}
       </div>
     );
   }
 
-  const handleAccept = async (id) => {
+  const handleUpdateStatus = async (id, orderStatus) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to set the status to ${orderStatus}?`
+    );
+
+    if (!confirmed) return;
+
     try {
       const res = await fetch(`/api/orders/${id}`, {
         method: "PATCH",
@@ -76,7 +92,7 @@ const OrdersTable = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          orderStatus: "Accepted",
+          orderStatus: orderStatus,
         }),
       });
 
@@ -84,16 +100,17 @@ const OrdersTable = () => {
 
       if (!res.ok) throw new Error(data.message);
 
-      refetch(); // from useQuery
+      toast.success(data.message || `Set Order Status to ${orderStatus}!`);
+      refetch();
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      toast.error(err.message || `Failed to Set Order ${orderStatus}!`);
     }
   };
 
-
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this order?"
+      "Are you sure you want to permanently delete this order?"
     );
 
     if (!confirmed) return;
@@ -107,16 +124,18 @@ const OrdersTable = () => {
 
       if (!res.ok) throw new Error(data.message);
 
+      toast.success(data.message || "Order deleted!");
       refetch();
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message || "Failed to delete order");
     }
   };
   return (
-    <div className="w-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div className="max-w-5xl mx-auto w-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
 
       {/* Table Header / Actions bar */}
-      <div className="p-5 border-b border-slate-300 flex flex-row justify-between items-start sm:items-center gap-4 bg-slate-50/50">
+      <div className="p-4 border-b border-slate-300 flex flex-row justify-between items-center gap-4 bg-slate-50/50">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md border border-slate-200">
             Total: {filteredOrders.length}
@@ -132,31 +151,30 @@ const OrdersTable = () => {
         <div className="flex flex-wrap gap-2">
           <select
             value={statusFilter}
-            onChange={(e) => {
-              setStatusFilter(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="select select-bordered select-sm w-44"
+            onChange={(e) => changeFilter(e.target.value)}
+            className="select select-bordered select-sm w-36 text-xs"
           >
             <option value="all">All Orders</option>
             <option value="pending">Pending</option>
             <option value="accepted">Accepted</option>
             <option value="deleted">Deleted</option>
+            <option value="in transit">In transit</option>
+            <option value="delivered">Delivered</option>
           </select>
         </div>
       </div>
 
       {/* Responsive Wrapper */}
       <div className="w-full overflow-x-auto">
-        <table className="w-full min-w-[1100px] text-left border-collapse">
+        <table className="w-full min-w-[1000px] text-left border-collapse">
           <thead>
             <tr className="bg-slate-50 text-slate-400 font-semibold text-xs tracking-wider uppercase border-b border-slate-200">
-              <th className="py-3 px-5">Customer Info</th>
-              <th className="py-3 px-5 w-[300px]">Ordered Products</th>
-              <th className="py-3 px-5">Payment Details</th>
-              <th className="py-3 px-5">Due</th>
-              <th className="py-3 px-5 text-center">Status</th>
-              <th className="py-3 px-5 text-right">Actions</th>
+              <th className="py-3 px-4">Customer Info</th>
+              <th className="py-3 px-4 w-[260px]">Ordered Products</th>
+              <th className="py-3 px-4">Payment Details</th>
+              <th className="py-3 px-4">Due</th>
+              <th className="py-3 px-4 text-center">Status</th>
+              <th className="py-3 px-4 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 text-sm">
@@ -168,29 +186,34 @@ const OrdersTable = () => {
               </tr>
             ) : (
               paginatedOrders.map((order) => {
-                const isPending = order.orderStatus?.toLowerCase() === 'pending';
-                const isAccepted = order.orderStatus?.toLowerCase() === 'accepted';
+                const status = order.orderStatus?.toLowerCase();
+
+                const isPending = status === "pending";
+                const isAccepted = status === "accepted";
+                const isInTransit = status === "in transit";
+                const isDelivered = status === "delivered";
+                const isDeleted = status === "deleted";
 
                 return (
                   <tr key={order._id} className="hover:bg-slate-50/70 transition-colors items-start">
 
-                    {/* 2. Customer Detail Block */}
-                    <td className="py-4 px-5 align-top">
+                    {/* Customer Detail Block */}
+                    <td className="py-3.5 px-4 align-top">
                       <p className="font-semibold text-slate-800">{order.customer?.fullName}</p>
                       <p className="text-xs text-slate-500 mt-0.5">{order.customer?.phoneNumber}</p>
-                      <p className="text-xs text-slate-400 truncate max-w-[160px]" title={order.customer?.email}>
+                      <p className="text-xs text-slate-400 truncate max-w-[150px]" title={order.customer?.email}>
                         {order.customer?.email}
                       </p>
                     </td>
 
-                    {/* 3. NEW PRODUCT DETAILS COLUMN */}
-                    <td className="py-4 px-5 align-top">
-                      <div className="space-y-3 max-h-[160px] overflow-y-auto pr-1">
+                    {/* PRODUCT DETAILS COLUMN */}
+                    <td className="py-3.5 px-4 align-top">
+                      <div className="space-y-2.5 max-h-[160px] overflow-y-auto pr-1">
                         {order.cartItems && order.cartItems.length > 0 ? (
                           order.cartItems.map((item, index) => (
-                            <div key={item.id || index} className="flex gap-2.5 items-center bg-slate-50/60 p-1.5 rounded-lg border border-slate-100">
+                            <div key={item.id || index} className="flex gap-2 items-center bg-slate-50/60 p-1.5 rounded-lg border border-slate-100">
                               {/* Thumbnail Image Wrapper */}
-                              <div className="h-10 w-10 shrink-0 bg-slate-200 rounded-md overflow-hidden border border-slate-200 flex items-center justify-center text-[10px] text-slate-400">
+                              <div className="h-9 w-9 shrink-0 bg-slate-200 rounded-md overflow-hidden border border-slate-200 flex items-center justify-center text-[10px] text-slate-400">
                                 {item.image ? (
                                   <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
                                 ) : (
@@ -215,8 +238,8 @@ const OrdersTable = () => {
                       </div>
                     </td>
 
-                    {/* 4. Payment Overview */}
-                    <td className="py-4 px-5 align-top">
+                    {/* Payment Overview */}
+                    <td className="py-3.5 px-4 align-top">
                       <div className="text-xs text-slate-700 space-y-0.5">
                         <p><span className="text-slate-400">Method:</span> <span className="capitalize font-medium">{order.payment?.method?.replace('_', ' ')}</span></p>
                         <p><span className="text-slate-400">TrxID:</span> <span className="font-mono text-slate-600 bg-slate-50 px-1 rounded">{order.payment?.trxId}</span></p>
@@ -224,50 +247,99 @@ const OrdersTable = () => {
                       </div>
                     </td>
 
-                    {/* 5. Due Amount Balance */}
-                    <td className="py-4 px-5 align-top font-bold text-slate-800">
+                    {/* Due Amount Balance */}
+                    <td className="py-3.5 px-4 align-top font-bold text-slate-800">
                       ৳{order.payment?.amountDue?.toLocaleString()}
                     </td>
 
-                    {/* 6. Context Status Badge */}
-                    <td className="py-4 px-5 align-top text-center">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${isPending
-                        ? 'bg-amber-50 text-amber-800 border-amber-200'
-                        : isAccepted
-                          ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                          : 'bg-red-500 text-white border-slate-200'
-                        }`}>
-                        <span className={`w-1.5 h-1.5 mr-1.5 rounded-full ${isPending ? 'bg-amber-500 animate-pulse' : isAccepted ? 'bg-emerald-500' : 'bg-white'}`}></span>
+                    {/* Context Status Badge */}
+                    <td className="py-3.5 px-4 align-top text-center">
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border
+      ${isPending
+                            ? "bg-amber-50 text-amber-800 border-amber-200"
+                            : isAccepted
+                              ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                              : isInTransit
+                                ? "bg-blue-50 text-blue-800 border-blue-200"
+                                : isDelivered
+                                  ? "bg-green-50 text-green-800 border-green-200"
+                                  : isDeleted
+                                    ? "bg-red-50 text-red-800 border-red-200"
+                                    : "bg-gray-50 text-gray-800 border-gray-200"
+                          }`}
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 mr-1.5 rounded-full
+        ${isPending
+                              ? "bg-amber-500 animate-pulse"
+                              : isAccepted
+                                ? "bg-emerald-500"
+                                : isInTransit
+                                  ? "bg-blue-500"
+                                  : isDelivered
+                                    ? "bg-green-500"
+                                    : isDeleted
+                                      ? "bg-red-500"
+                                      : "bg-gray-500"
+                            }`}
+                        ></span>
+
                         {order.orderStatus}
                       </span>
                     </td>
 
-                    {/* 7. Interactive Action Layout */}
-                    <td className="py-4 px-5 align-top text-right">
-                      <div className="inline-flex gap-2">
+                    {/* Interactive Action Layout */}
+                    <td className="py-3.5 px-4 align-top text-right">
+                      <div className="inline-flex flex-wrap justify-end gap-1.5">
+
+                        {/* View */}
                         <Link
-                          href={`/admin/manageOrders/${order._id}`}
-                          className="px-2.5 py-1.5 text-xs font-semibold text-amber-500 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors"
+                          href={`/admin/manageOrders/${order._id}?status=${statusFilter}&page=${currentPage}`}
+                          className="px-2.5 py-1.5 text-xs font-semibold text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors"
                         >
                           View
                         </Link>
 
+                        {/* Accept */}
                         {isPending && (
                           <button
-                            onClick={() => handleAccept(order._id)}
-                            className="px-2.5 py-1.5 text-xs font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 shadow-sm transition-colors cursor-pointer"
+                            onClick={() => handleUpdateStatus(order._id, "Accepted")}
+                            className="px-2.5 py-1.5 text-xs font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors cursor-pointer"
                           >
                             Accept
                           </button>
                         )}
-                        {filteredOrders.orderStatus === "Pending" || filteredOrders.orderStatus === "Accepted" &&
+
+                        {/* In Transit */}
+                        {isAccepted && (
+                          <button
+                            onClick={() => handleUpdateStatus(order._id, "In Transit")}
+                            className="px-2.5 py-1.5 text-xs font-semibold text-white bg-amber-500 rounded-lg hover:bg-amber-600 transition-colors cursor-pointer"
+                          >
+                            In Transit
+                          </button>
+                        )}
+
+                        {/* Delivered */}
+                        {isInTransit && (
+                          <button
+                            onClick={() => handleUpdateStatus(order._id, "Delivered")}
+                            className="px-2.5 py-1.5 text-xs font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
+                          >
+                            Delivered
+                          </button>
+                        )}
+
+                        {/* Delete */}
+                        {(isPending || isAccepted || isInTransit) && (
                           <button
                             onClick={() => handleDelete(order._id)}
                             className="px-2.5 py-1.5 text-xs font-semibold text-rose-600 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors cursor-pointer"
                           >
                             Delete
                           </button>
-                        }
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -277,6 +349,8 @@ const OrdersTable = () => {
           </tbody>
         </table>
       </div>
+
+
       <div className="flex items-center justify-between px-5 py-4 border-t border-slate-200">
         <p className="text-sm text-slate-500">
           Page {currentPage} of {totalPages || 1}
@@ -284,9 +358,9 @@ const OrdersTable = () => {
 
         <div className="flex gap-2">
           <button
-            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+            onClick={() => changePage(Math.max(currentPage - 1, 1))}
             disabled={currentPage === 1}
-            className="px-3 py-1 rounded border disabled:opacity-50"
+            className="px-3 py-1 rounded border disabled:opacity-50 text-xs"
           >
             Previous
           </button>
@@ -294,8 +368,8 @@ const OrdersTable = () => {
           {Array.from({ length: totalPages }, (_, i) => (
             <button
               key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`px-3 py-1 rounded border ${currentPage === i + 1
+              onClick={() => changePage(i + 1)}
+              className={`px-3 py-1 rounded border text-xs ${currentPage === i + 1
                 ? "bg-amber-500 text-white border-amber-500"
                 : ""
                 }`}
@@ -306,10 +380,10 @@ const OrdersTable = () => {
 
           <button
             onClick={() =>
-              setCurrentPage((p) => Math.min(p + 1, totalPages))
+              changePage(Math.min(currentPage + 1, totalPages))
             }
             disabled={currentPage === totalPages || totalPages === 0}
-            className="px-3 py-1 rounded border disabled:opacity-50"
+            className="px-3 py-1 rounded border disabled:opacity-50 text-xs"
           >
             Next
           </button>

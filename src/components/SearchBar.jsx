@@ -17,16 +17,7 @@ export default function SearchBar() {
 
     const search = watch("search");
 
-    // Replace with API data
-    const products = [
-        { id: 1, name: "LED Head Light", category: "Lighting" },
-        { id: 2, name: "Bike Horn", category: "Accessories" },
-        { id: 3, name: "LED Fog Light", category: "Lighting" },
-        { id: 4, name: "Helmet", category: "Safety" },
-    ];
-
-
-    const { data: products2 = [] } = useQuery({
+    const { data: products = [] } = useQuery({
         queryKey: ["products"],
         queryFn: async () => {
             const res = await fetch("/api/products");
@@ -34,12 +25,12 @@ export default function SearchBar() {
         },
     });
 
-    console.log(products2)
 
-
-    const filteredProducts = products2.filter((product) =>
-        product.name.toLowerCase().includes(search.toLowerCase())
-    );
+    const filteredProducts = search.trim()
+        ? products.filter((product) =>
+            product.name.toLowerCase().includes(search.toLowerCase())
+        )
+        : [];
 
     return (
         <>

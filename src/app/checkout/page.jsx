@@ -3,13 +3,16 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import locations from "@/data/bangladesh-locations.json";
 import useCartStore from '../store/cartStore';
-import { FaTrash } from 'react-icons/fa';
+import { FaPlus, FaTrash } from 'react-icons/fa';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 
 export default function Page() {
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
     const {
         register,
         handleSubmit,
@@ -20,7 +23,7 @@ export default function Page() {
     } = useForm({
     });
     const district = watch("district");
-    const [selectedMethod, setSelectedMethod] = useState('null'); // intl_send, bd_payment, bank
+    const [selectedMethod, setSelectedMethod] = useState(null); // intl_send, bd_payment, bank
     const [paymentType, setPaymentType] = useState('advance'); // advance, full
     const [trxId, setTrxId] = useState('');
 
@@ -68,55 +71,84 @@ export default function Page() {
         paymentType === "advance" ? 500 : total;
     const dueAmount = total - activeAmount;
 
-        //submission ralated
-        const onSubmit = async (data) => {
-            setLoading(true)
-            const orderData = {
-                customer: data,
+    //submission ralated
+    const onSubmit = async (data) => {
+        if (loading) return;
 
-                cartItems,
+        // Empty cart
+        if (cartItems.length === 0) {
+            toast.error("Your cart is empty");
+            return;
+        }
 
-                payment: {
-                    method: selectedMethod,
-                    type: paymentType,
-                    trxId,
-                    actualAmount: total,
-                    amountPaid: activeAmount,
-                    amountDue: dueAmount,
-                    charge,
-                },
-            };
+        // Payment method
+        if (selectedMethod === "null") {
+            toast.error("Please select a payment method");
+            return;
+        }
 
-            try {
-                const res = await fetch("/api/orders", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(orderData),
-                });
+        // Transaction ID
+        if (!trxId.trim()) {
+            toast.error("Please enter your Transaction ID");
+            return;
+        }
 
-                const result = await res.json();
+        setLoading(true);
+        const orderData = {
+            customer: data,
 
-                if (!res.ok) {
-                    throw new Error(result.message);
-                }
+            cartItems,
 
-                toast.success(result.message);
-
-                clearCart();
-                reset();
-                setSelectedMethod("null");
-                setPaymentType("advance");
-                setTrxId("");
-                setLoading(false)
-
-            } catch (error) {
-                console.error(error);
-                toast.error(error.message || "Something went wrong");
-            }
-            
+            payment: {
+                method: selectedMethod,
+                type: paymentType,
+                trxId,
+                actualAmount: total,
+                amountPaid: activeAmount,
+                amountDue: dueAmount,
+                charge,
+            },
         };
+
+        try {
+            const res = await fetch("/api/orders", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(orderData),
+            });
+
+            const result = await res.json();
+
+            if (!res.ok) {
+                throw new Error(result.message);
+            }
+
+            toast.success(result.message);
+
+
+            clearCart();
+            reset();
+            setSelectedMethod("null");
+            setPaymentType("advance");
+            setTrxId("");
+            router.push(`/order/success/${result.trackingId}`);
+
+        } catch (error) {
+            console.error(error);
+            toast.error(error.message || "Something went wrong");
+        } finally {
+            setLoading(false);
+        }
+
+    };
+
+    const isDisabled =
+        loading ||
+        cartItems.length === 0 ||
+        selectedMethod === null ||
+        !trxId.trim();
     return (
         <div className="relative bg-gray-50 pt-1 md:p-8 flex md:flex-row flex-col items-center w-full font-sans gap-10">
             {/* Left Side: Delivery Information Form */}
@@ -221,7 +253,7 @@ export default function Page() {
 
                     {/* Special Instructions */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1 font-semibold">বিশেষ অনুরোধ উল্লেখ করুন</label>
+                        <label className="block text-sm text-gray-700 mb-1 font-semibold">বিশেষ অনুরোধ উল্লেখ করুন</label>
                         <input
                             type="text"
                             placeholder="Special instructions (optional)"
@@ -538,7 +570,19 @@ export default function Page() {
 
             {/* Right Side: Order Summary Card */}
             <div className="sticky top-24 md:w-1/3 w-full bg-white rounded-xl shadow-sm border border-gray-100 p-4 self-start space-y-3">
-                <h2 className="text-base font-bold text-gray-800 border-b border-gray-100 pb-3">Order Summary</h2>
+                <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+                    <h2 className="text-base font-bold text-gray-800">
+                        Order Summary
+                    </h2>
+
+                    <Link
+                        href="/products"
+                        className="flex items-center gap-2 text-sm font-medium text-orange-600 hover:text-orange-700 transition-colors"
+                    >
+                        <FaPlus className="text-xs" />
+                        <span>Add More</span>
+                    </Link>
+                </div>
 
                 {/* Product Info Block */}
                 <div className="space-y-4">
@@ -613,82 +657,80 @@ export default function Page() {
 
                 <hr className="border-gray-100" />
 
-                {/* Pricing Calculations */}
-                <div className="space-y-3 text-sm">
-                    <div className="flex justify-between text-gray-500">
-                        <span>Subtotal</span>
-                        <span className="font-semibold text-gray-800">
-                            ৳{subtotal.toLocaleString()}
-                        </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-gray-500">Home Delivery</span>
-                        <span className="rounded bg-emerald-50 px-2 py-0.5 text-xs font-bold text-emerald-600">
-                            Free!
-                        </span>
-                    </div>
+                <div className="rounded-xl border border-gray-200 bg-white px-6 py-2">
 
-                    <div className="flex justify-between items-start gap-4 text-xs text-gray-500">
-                        <span>International Send Money charge (1.8%)</span>
+                    <h3 className="text-lg font-bold text-gray-900 mb-5">
+                        Order Summary
+                    </h3>
 
-                        <span className="whitespace-nowrap font-semibold text-gray-800">
-                            ৳{charge.toLocaleString()}
-                        </span>
-                    </div>
-
-                    {cartItems.length > 0 && paymentType === "advance" && (
-                        <div className="rounded-lg border border-blue-100 bg-blue-50 p-3 space-y-2">
-                            <div className="flex justify-between text-gray-600">
-                                <span>Pay Now</span>
-                                <span className="font-semibold text-blue-600">
-                                    ৳500
-                                </span>
-                            </div>
-
-                            <div className="flex justify-between text-gray-600">
-                                <span>Due on Delivery</span>
-                                <span className="font-semibold text-gray-800">
-                                    ৳{(total - activeAmount).toLocaleString()}
-                                </span>
-                            </div>
+                    <div className="space-y-4">
+                        {selectedMethod === 'intl_send' &&
+                            <p className="text-xs text-amber-600 bg-amber-50 border border-amber-100 rounded-md px-3 py-2">
+                                মোট টাকার সাথে বিকাশ Send Money চার্জ (১.৮%) যুক্ত করা হয়েছে।
+                            </p>
+                        }
+                        <div className="flex justify-between text-gray-600">
+                            <span>Subtotal</span>
+                            <span className="font-semibold">
+                                ৳{subtotal.toLocaleString()}
+                            </span>
                         </div>
-                    )}
-                </div>
 
-                {/* Free Shipping Alert Ribbon */}
-                <div className="bg-emerald-50 text-emerald-700 text-xs font-medium py-2 px-3 rounded-lg text-center">
-                    Delivery is free on this order.
-                </div>
+                        <div className="flex justify-between text-gray-600">
+                            <span>Delivery Charge</span>
 
-                {/* Total Display */}
-                <div className="flex justify-between items-center pt-2 border-t border-gray-100">
-                    <span className="text-base font-bold text-gray-800">
-                        Total
-                    </span>
+                            <span className="font-semibold text-emerald-600">
+                                Free
+                            </span>
+                        </div>
 
-                    {cartItems.length > 0 && <span className="text-lg font-black text-gray-900">
-                        ৳{activeAmount.toLocaleString()}
-                    </span>}
+                        {paymentType === "advance" && (
+                            <>
+                                <div className="flex justify-between text-gray-600">
+                                    <span>Advance Payment</span>
+                                    <span className="font-semibold text-orange-500">
+                                        ৳500
+                                    </span>
+                                </div>
+
+                                <div className="flex justify-between text-gray-600">
+                                    <span>Due on Delivery</span>
+                                    <span className="font-semibold">
+                                        ৳{(total - activeAmount).toLocaleString()}
+                                    </span>
+                                </div>
+                            </>
+                        )}
+
+                        <div className="border-t pt-4 flex justify-between items-center">
+
+                            <span className="text-lg font-bold">
+                                Total
+                            </span>
+
+                            <span className="text-2xl font-bold text-orange-500">
+                                ৳{activeAmount.toLocaleString()}
+                            </span>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
                 {/* Checkout Submit Trigger */}
                 <button
                     type="button"
-                    disabled={
-                        cartItems.length === 0 ||
-                        selectedMethod === "null" ||
-                        !trxId.trim()
-                    }
+                    disabled={isDisabled}
                     onClick={handleSubmit(onSubmit)}
-                    className={`w-full py-3 rounded-xl font-bold transition
-    ${cartItems.length === 0 ||
-                            selectedMethod === "null" ||
-                            !trxId.trim()
-                            ? "bg-gray-300 cursor-not-allowed"
-                            : "bg-red-500 hover:bg-red-600 text-white"
+                    className={`w-full py-3 rounded-xl font-bold transition ${isDisabled
+                        ? "bg-gray-300 cursor-not-allowed"
+                        : "bg-red-500 hover:bg-red-600 text-white"
                         }`}
                 >
-                    Confirm Order — ৳{cartItems.length > 0 && <span>{activeAmount.toLocaleString()}</span>}
+                    {loading
+                        ? "Placing Order..."
+                        : `Confirm Order — ৳${activeAmount.toLocaleString()}`}
                 </button>
             </div>
         </div>

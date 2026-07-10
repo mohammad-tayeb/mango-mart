@@ -45,7 +45,7 @@ export async function getProductById(id) {
 
 // Get featured products
 export async function getFeaturedProducts() {
-  const limit = 8
+  const limit = 4
   const productCollection = await dbConnect(
     collectionNameObj.productCollection,
   );

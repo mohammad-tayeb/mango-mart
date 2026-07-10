@@ -23,9 +23,14 @@ export async function PATCH(req, { params }) {
       {
         $set: {
           orderStatus,
-          acceptedAt: new Date(),
-          acceptedBy: session.user.email,
           updatedAt: new Date(),
+        },
+        $push: {
+          orderHistory: {
+            status: orderStatus,
+            time: new Date(),
+            updatedBy: session.user.email,
+          },
         },
       },
     );
@@ -65,9 +70,14 @@ export async function DELETE(req, { params }) {
       {
         $set: {
           orderStatus: "Deleted",
-          deletedAt: new Date(),
-          deletedBy: session.user.email,
           updatedAt: new Date(),
+        },
+        $push: {
+          orderHistory: {
+            status: "Deleted",
+            time: new Date(),
+            updatedBy: session.user.email,
+          },
         },
       },
     );

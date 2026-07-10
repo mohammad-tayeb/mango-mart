@@ -10,7 +10,7 @@ export default function Home() {
       <HeroCarousel></HeroCarousel>
       <HomeMarquee></HomeMarquee>
       <FeaturedProducts></FeaturedProducts>
-      <Link href="/products" className="btn border-[#FE7704] text-[#FE7704] hover:bg-[#FE7704] hover:text-white">সব পণ্য দেখুন</Link>
+      <Link href="/products" className="btn border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white">সব পণ্য দেখুন</Link>
       <Reviews></Reviews>
     </div>
   );
