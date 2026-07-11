@@ -70,7 +70,6 @@ export default function AddProduct() {
 
             if (res.ok) {
                 alert("✅ Product added successfully!");
-                console.log(result);
                 reset()
             } else {
                 alert(result.message || "Failed to add product");
