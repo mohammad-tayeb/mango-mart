@@ -27,7 +27,7 @@ const slides = [
 
 const HeroCarousel = () => {
   return (
-    <div className="relative w-full md:max-w-7xl mx-auto h-[165px] sm:h-[280px] md:h-[400px] lg:h-[500px] overflow-hidden bg-black">
+    <div className="relative w-full md:max-w-7xl mx-auto aspect-[12/5] h-[165px] sm:h-[280px] md:h-[400px] lg:h-[500px] overflow-hidden bg-black">
       <Swiper
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
         effect="fade"
@@ -56,7 +56,7 @@ const HeroCarousel = () => {
               alt="banner images"
               fill
               priority={slide.id === 1}
-              className="object-center md:object-cover object-contain"
+              className="object-cover object-center"
             />
           </SwiperSlide>
         ))}
