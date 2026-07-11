@@ -16,23 +16,38 @@ export async function PATCH(req, { params }) {
 
     const orderCollection = await dbConnect(collectionNameObj.orderCollection);
 
+    // Get the current order
+    const order = await orderCollection.findOne({
+      _id: new ObjectId(id),
+    });
+
+    if (!order) {
+      return NextResponse.json({ message: "Order not found" }, { status: 404 });
+    }
+
+    const updateData = {
+      $set: {
+        orderStatus,
+        updatedAt: new Date(),
+      },
+      $push: {
+        orderHistory: {
+          status: orderStatus,
+          time: new Date(),
+          updatedBy: session.user.email,
+        },
+      },
+    };
+
+    // When delivered, mark payment as fully paid
+    if (orderStatus === "Delivered") {
+      updateData.$set["payment.amountPaid"] = order.payment.actualAmount;
+      updateData.$set["payment.amountDue"] = 0;
+    }
+
     const result = await orderCollection.updateOne(
-      {
-        _id: new ObjectId(id),
-      },
-      {
-        $set: {
-          orderStatus,
-          updatedAt: new Date(),
-        },
-        $push: {
-          orderHistory: {
-            status: orderStatus,
-            time: new Date(),
-            updatedBy: session.user.email,
-          },
-        },
-      },
+      { _id: new ObjectId(id) },
+      updateData,
     );
 
     return NextResponse.json({
@@ -40,12 +55,10 @@ export async function PATCH(req, { params }) {
       modifiedCount: result.modifiedCount,
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
 
     return NextResponse.json(
-      {
-        message: "Failed to update order",
-      },
+      { message: "Failed to update order" },
       { status: 500 },
     );
   }

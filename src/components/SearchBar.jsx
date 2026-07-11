@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaSearch, FaTimes } from "react-icons/fa";
+import Image from "next/image";
 
 export default function SearchBar() {
     const [open, setOpen] = useState(false);
@@ -71,31 +72,41 @@ export default function SearchBar() {
 
                         {/* Results */}
                         {search && (
-                            <div className="mt-2 overflow-hidden rounded-2xl bg-white shadow-xl">
-
+                            <div className="mt-1.5 max-h-[60vh] overflow-y-auto rounded-xl border border-gray-100 bg-white shadow-lg divide-y divide-gray-50">
                                 {filteredProducts.length > 0 ? (
                                     filteredProducts.map((product) => (
                                         <Link
                                             key={product._id}
                                             href={`/products/${product._id}`}
                                             onClick={() => setOpen(false)}
-                                            className="block border-b last:border-none px-5 py-4 hover:bg-gray-50 transition"
+                                            className="flex items-center gap-3 border-gray-300 px-4 py-2.5 transition-colors hover:bg-gray-50/80"
                                         >
-                                            <h3 className="font-semibold">
-                                                {product.name}
-                                            </h3>
+                                            {/* Product Thumbnail */}
+                                            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md border border-gray-100 bg-gray-50">
+                                                <Image
+                                                    src={product.images?.[0] || "/placeholder.png"}
+                                                    alt={product.name}
+                                                    fill
+                                                    className="object-cover"
+                                                />
+                                            </div>
 
-                                            <p className="text-sm text-gray-500">
-                                                {product.category}
-                                            </p>
+                                            {/* Info Text */}
+                                            <div className="min-w-0 flex-1">
+                                                <h3 className="truncate text-sm font-medium text-gray-800">
+                                                    {product.name}
+                                                </h3>
+                                                <p className="truncate text-xs text-gray-400 mt-0.5">
+                                                    {product.category}
+                                                </p>
+                                            </div>
                                         </Link>
                                     ))
                                 ) : (
-                                    <div className="p-6 text-center text-gray-500">
+                                    <div className="py-8 text-center text-sm text-gray-400 font-medium">
                                         No products found
                                     </div>
                                 )}
-
                             </div>
                         )}
                     </div>

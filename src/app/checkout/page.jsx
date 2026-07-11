@@ -68,8 +68,13 @@ export default function Page() {
 
     // Amount setup based on selected states
     const activeAmount =
-        paymentType === "advance" ? 500 : total;
-    const dueAmount = total - activeAmount;
+        cartItems.length === 0
+            ? 0
+            : paymentType === "advance"
+                ? 500
+                : total;
+
+    const dueAmount = Math.max(0, total - activeAmount);
 
     //submission ralated
     const onSubmit = async (data) => {
@@ -150,7 +155,7 @@ export default function Page() {
         selectedMethod === null ||
         !trxId.trim();
     return (
-        <div className="relative bg-gray-50 pt-1 md:p-8 flex md:flex-row flex-col items-center w-full font-sans gap-10">
+        <div className="relative bg-gray-50 mb-10 pt-1 md:p-8 flex md:flex-row flex-col items-center w-full font-sans gap-10">
             {/* Left Side: Delivery Information Form */}
             <div className='md:w-2/3 w-full'>
                 {/* form */}
@@ -684,7 +689,7 @@ export default function Page() {
                             </span>
                         </div>
 
-                        {paymentType === "advance" && (
+                        {cartItems.length > 0 && paymentType === "advance" && (
                             <>
                                 <div className="flex justify-between text-gray-600">
                                     <span>Advance Payment</span>

@@ -167,8 +167,8 @@ const OrdersTable = () => {
       {/* Responsive Wrapper */}
       <div className="w-full overflow-x-auto">
         <table className="w-full min-w-[1000px] text-left border-collapse">
-          <thead>
-            <tr className="bg-slate-50 text-slate-400 font-semibold text-xs tracking-wider uppercase border-b border-slate-200">
+          <thead className='border-gray-300'>
+            <tr className="bg-slate-50 border-gray-300 text-slate-400 font-semibold text-xs tracking-wider uppercase border-b border-slate-200">
               <th className="py-3 px-4">Customer Info</th>
               <th className="py-3 px-4 w-[260px]">Ordered Products</th>
               <th className="py-3 px-4">Payment Details</th>
@@ -195,7 +195,7 @@ const OrdersTable = () => {
                 const isDeleted = status === "deleted";
 
                 return (
-                  <tr key={order._id} className="hover:bg-slate-50/70 transition-colors items-start">
+                  <tr key={order._id} className="hover:bg-slate-50/70 transition-colors items-start border border-gray-300">
 
                     {/* Customer Detail Block */}
                     <td className="py-3.5 px-4 align-top">

@@ -11,7 +11,6 @@ function ProductDetails({ product, relatedProducts }) {
     const router = useRouter();
     const addToCart = useCartStore((state) => state.addToCart);
 
-    console.log(product)
 
     // Layout State Management Hooks
     const images = product?.images || [];
@@ -238,49 +237,33 @@ function ProductDetails({ product, relatedProducts }) {
                 </div>
             </div>
             {/* Product Description */}
-            <section className="mt-14 overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.05)]">
-
+            <section className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
                 {/* Header */}
-                <div className="bg-gradient-to-r from-orange-500 to-amber-500 px-8 py-7">
-
-                    <h2 className="text-2xl font-bold text-white">
+                <div className="border-b-2 border-amber-500 bg-gray-50/70 px-5 py-4">
+                    <h2 className="text-lg font-bold text-gray-900">
                         পণ্যের বিবরণ
                     </h2>
-
-                    <p className="mt-1 text-orange-100 text-sm">
+                    <p className="mt-0.5 text-xs text-gray-500">
                         এই পণ্যের বিস্তারিত তথ্য
                     </p>
-
                 </div>
 
                 {/* Body */}
-
-                <div className="p-2">
-
-                    {details.map(([title, value], index) => (
-
+                <div className="divide-y divide-gray-100 px-2">
+                    {details.map(([title, value]) => (
                         <div
                             key={title}
-                            className={`grid md:grid-cols-[240px_1fr] gap-6 items-start rounded-2xl px-6 py-5 transition-all hover:bg-orange-50 ${index !== details.length - 1
-                                ? "border-b border-gray-100"
-                                : ""
-                                }`}
+                            className="grid gap-3 p-4 transition-colors hover:bg-amber-50/40 sm:grid-cols-[180px_1fr] sm:items-center"
                         >
-
-                            <div className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+                            <div className="text-xs font-medium text-gray-500">
                                 {title}
                             </div>
-
-                            <div className="text-gray-800 leading-7">
+                            <div className="text-sm text-gray-800 leading-6">
                                 {value}
                             </div>
-
                         </div>
-
                     ))}
-
                 </div>
-
             </section>
 
             <div className="mt-20">

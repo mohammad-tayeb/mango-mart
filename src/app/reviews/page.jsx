@@ -60,8 +60,6 @@ export default function Page() {
                 reviews.length
             ).toFixed(1)
             : 0;
-
-    console.log(reviews)
     const visibleReviews = reviews.slice(0, visible);
 
     return (

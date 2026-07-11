@@ -70,7 +70,7 @@ export default function Page() {
     return (
         <div className="mb-10">
             <div className="w-full mb-10 bg-amber-50 py-8 px-4 flex items-center justify-center">
-                <div className="max-w-6xl  w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="max-w-6xl  w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:mx-0 mx-4">
                     {contactInfo.map((card, index) => (
                         <div
                             key={index}
@@ -98,7 +98,7 @@ export default function Page() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
 
                     {/* Left Side: Contact Form Card */}
-                    <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8 flex flex-col justify-between">
+                    <div className="lg:col-span-2 md:mx-0 mx-4 bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8 flex flex-col justify-between">
                         <div>
                             <h2 className="text-2xl font-bold text-gray-900 mb-1">Send us a Message</h2>
                             <p className="text-sm text-gray-500 mb-6">
@@ -208,7 +208,7 @@ export default function Page() {
                     </div>
 
                     {/* Right Side: Social Media & Action Channels */}
-                    <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-5 md:mx-0 mx-10">
                         {/* WhatsApp Button */}
                         <a
                             href="https://wa.me/8801822-350799?text=Hello%20I%20would%20like%20to%20know%20more%20about%20your%20products."
