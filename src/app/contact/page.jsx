@@ -68,7 +68,7 @@ export default function Page() {
     ];
 
     return (
-        <div className="mb-10 min-h-screen">
+        <div className="mb-10">
             <div className="w-full mb-10 bg-amber-50 py-8 px-4 flex items-center justify-center">
                 <div className="max-w-6xl  w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:mx-0 mx-4">
                     {contactInfo.map((card, index) => (

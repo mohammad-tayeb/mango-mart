@@ -5,7 +5,7 @@ export default async function OrderSuccess({ params }) {
     const { trackingId } = await params;
 
     return (
-        <div className="max-w-2xl mx-auto py-20 px-6 min-h-screen">
+        <div className="max-w-2xl mx-auto py-20 px-6">
             <div className="rounded-2xl border bg-white shadow-lg p-8 text-center">
 
                 <div className="text-6xl mb-4">🎉</div>

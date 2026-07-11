@@ -4,7 +4,7 @@ import React from 'react';
 
 export default function AboutUs() {
     return (
-        <div className="bg-amber-50 min-h-screen text-gray-800 font-sans">
+        <div className="bg-amber-50 text-gray-800">
 
             {/* Hero Section */}
             <section className="relative bg-gradient-to-r from-amber-500 to-orange-600 text-white py-20 px-4 text-center">

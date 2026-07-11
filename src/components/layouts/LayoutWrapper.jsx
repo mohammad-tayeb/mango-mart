@@ -10,12 +10,12 @@ export default function LayoutWrapper({ children }) {
   const isAdmin = pathname.startsWith("/admin");
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       {!isAdmin && <Navbar />}
 
       {children}
 
       {!isAdmin && <Footer />}
-    </>
+    </div>
   );
 }

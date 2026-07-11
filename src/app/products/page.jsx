@@ -10,7 +10,7 @@ export default async function Products({ searchParams }) {
     const { products, totalPages } = await getProducts(page, limit);
 
     return (
-        <div className="mb-10 min-h-screen">
+        <div className="mb-10">
             <h1 className="text-start text-3xl p-6 font-semibold">
                 Our Products
             </h1>

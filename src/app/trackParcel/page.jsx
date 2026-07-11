@@ -43,7 +43,7 @@ export default function TrackParcel() {
     };
 
     return (
-        <div className="max-w-md min-h-screen mx-auto my-12 px-4 space-y-6">
+        <div className="max-w-md mx-auto my-12 px-4 space-y-6">
             {/* Search Card */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                 <h2 className="text-xl font-bold text-gray-900 tracking-tight">
