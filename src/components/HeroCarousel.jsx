@@ -27,7 +27,7 @@ const slides = [
 
 const HeroCarousel = () => {
   return (
-    <div className="relative w-full md:max-w-7xl mx-auto aspect-[12/5] h-[165px] sm:h-[280px] md:h-[400px] lg:h-[500px] overflow-hidden bg-black">
+    <div className="relative w-full md:max-w-7xl mx-auto aspect-[12/5] h-[180px] sm:h-[280px] md:h-[400px] lg:h-[500px] overflow-hidden bg-black">
       <Swiper
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
         effect="fade"
