@@ -49,7 +49,7 @@ function ProductDetails({ product, relatedProducts }) {
     ];
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:py-8 py-4 bg-white">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
 
                 {/* Left Side: Product Image Display Portfolio */}
@@ -239,7 +239,8 @@ function ProductDetails({ product, relatedProducts }) {
             {/* Product Description */}
             <section className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
                 {/* Header */}
-                <div className="border-b-2 border-amber-500 bg-gray-50/70 px-5 py-4">
+                {/* Reduced py-4 to py-2.5 on mobile, restored via sm:py-4 */}
+                <div className="border-b-2 border-amber-500 bg-gray-50/70 px-5 py-2.5 sm:py-4">
                     <h2 className="text-lg font-bold text-gray-900">
                         পণ্যের বিবরণ
                     </h2>
@@ -253,7 +254,8 @@ function ProductDetails({ product, relatedProducts }) {
                     {details.map(([title, value]) => (
                         <div
                             key={title}
-                            className="grid gap-3 p-4 transition-colors hover:bg-amber-50/40 sm:grid-cols-[180px_1fr] sm:items-center"
+                
+                            className="grid gap-1 p-2.5 transition-colors hover:bg-amber-50/40 sm:grid-cols-[180px_1fr] sm:items-center sm:gap-3 sm:p-4"
                         >
                             <div className="text-xs font-medium text-gray-500">
                                 {title}
