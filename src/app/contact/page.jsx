@@ -94,7 +94,7 @@ export default function Page() {
                     ))}
                 </div>
             </div>
-            <div className="max-w-6xl mx-auto md:px-8 bg-gray-50 min-h-screen flex items-center justify-center">
+            <div className="max-w-6xl mx-auto md:px-8  min-h-screen flex items-center justify-center">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
 
                     {/* Left Side: Contact Form Card */}

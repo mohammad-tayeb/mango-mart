@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 function Footer() {
   return (
-    <footer className="bg-white text-gray-900 font-sans">
+    <footer className="bg-gray-50 text-gray-900 font-sans">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-6">
@@ -19,7 +19,7 @@ function Footer() {
                 className="object-contain"
               />
             </div>
-            <p className="text-gray-900 text-sm font-medium ms-2">
+            <p className="text-gray-900 text-sm font-semibold ms-2">
               সেরা আম, সবার জন্য।
             </p>
             <div className="text-sm space-y-2 pt-2 leading-relaxed">
@@ -46,6 +46,11 @@ function Footer() {
               <li>
                 <Link href="/contact" className="hover:text-gray-900 transition-colors">
                   Contact Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/trackParcel" className="hover:text-gray-900 transition-colors">
+                  Track Parcel
                 </Link>
               </li>
             </ul>
@@ -105,7 +110,7 @@ function Footer() {
         </div>
 
         {/* Divider Line */}
-        <hr className="border-gray-800 my-8" />
+        <hr className="border-orange-500 border my-8" />
 
         {/* Bottom Bar: Copyright & Payment Badges */}
         <div className=' text-center'>
