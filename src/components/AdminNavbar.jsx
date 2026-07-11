@@ -11,6 +11,7 @@ import {
     FiPackage,
 } from "react-icons/fi";
 import { FaHome } from "react-icons/fa";
+import { VscDashboard } from "react-icons/vsc";
 
 function AdminDashboard({ session, children }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -18,7 +19,13 @@ function AdminDashboard({ session, children }) {
 
     const navigationItems = [
         {
-            id: 'manageOzzrders',
+            id: 'dashboard',
+            label: 'Dashboard',
+            href: '/admin/dashboard',
+            icon: <VscDashboard className="h-5 w-5"/>,
+        },
+        {
+            id: 'manageOrders',
             label: 'Manage Orders',
             href: '/admin/manageOrders',
             icon: <FiShoppingBag className="h-5 w-5" />,
