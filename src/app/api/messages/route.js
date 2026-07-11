@@ -10,6 +10,8 @@ export async function POST(req) {
 
   const result = await messageCollection.insertOne({
     ...data,
+    status: "new",
+    isRead: false,
     createdAt: new Date(),
   });
 

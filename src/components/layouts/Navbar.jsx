@@ -4,7 +4,7 @@ import useCartStore from "@/app/store/cartStore";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {  useState } from "react";
+import { useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
 import SearchBar from "../SearchBar";
@@ -96,11 +96,9 @@ function Navbar() {
                 <FaCartShopping className="text-2xl" />
 
                 {/* Badge */}
-                {cartCount > 0 && (
-                  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold leading-none text-white transform translate-x-1/3 -translate-y-1/3 bg-red-500 rounded-full min-w-[18px] h-[18px]">
-                    {cartCount}
-                  </span>
-                )}
+                <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold leading-none text-white transform translate-x-1/3 -translate-y-1/3 bg-red-500 rounded-full min-w-[18px] h-[18px]">
+                  {cartCount}
+                </span>
               </button>
 
               {/* Mobile Menu Button */}

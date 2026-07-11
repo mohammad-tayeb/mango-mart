@@ -165,9 +165,9 @@ const OrdersTable = () => {
       </div>
 
       {/* Responsive Wrapper */}
-      <div className="w-full overflow-x-auto">
-        <table className="w-full min-w-[1000px] text-left border-collapse">
-          <thead className='border-gray-300'>
+      <div className="overflow-auto max-h-[65vh]">
+        <table className="w-full min-w-[1000px] border-collapse">
+          <thead className="sticky top-0 z-10 bg-slate-50 border-gray-300">
             <tr className="bg-slate-50 border-gray-300 text-slate-400 font-semibold text-xs tracking-wider uppercase border-b border-slate-200">
               <th className="py-3 px-4">Customer Info</th>
               <th className="py-3 px-4 w-[260px]">Ordered Products</th>
@@ -290,13 +290,13 @@ const OrdersTable = () => {
                     </td>
 
                     {/* Interactive Action Layout */}
-                    <td className="py-3.5 px-4 align-top text-right">
-                      <div className="inline-flex flex-wrap justify-end gap-1.5">
+                    <td className="py-3.5 px-4 align-top">
+                      <div className="flex flex-col gap-2 w-36 ml-auto">
 
                         {/* View */}
                         <Link
                           href={`/admin/manageOrders/${order._id}?status=${statusFilter}&page=${currentPage}`}
-                          className="px-2.5 py-1.5 text-xs font-semibold text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors"
+                          className="w-full px-3 py-2 text-center text-xs font-semibold text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors"
                         >
                           View
                         </Link>
@@ -305,7 +305,7 @@ const OrdersTable = () => {
                         {isPending && (
                           <button
                             onClick={() => handleUpdateStatus(order._id, "Accepted")}
-                            className="px-2.5 py-1.5 text-xs font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors cursor-pointer"
+                            className="w-full px-3 py-2 text-xs font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors"
                           >
                             Accept
                           </button>
@@ -315,9 +315,9 @@ const OrdersTable = () => {
                         {isAccepted && (
                           <button
                             onClick={() => handleUpdateStatus(order._id, "In Transit")}
-                            className="px-2.5 py-1.5 text-xs font-semibold text-white bg-amber-500 rounded-lg hover:bg-amber-600 transition-colors cursor-pointer"
+                            className="w-full px-3 py-2 text-xs font-semibold text-white bg-amber-500 rounded-lg hover:bg-amber-600 transition-colors"
                           >
-                            In Transit
+                            Set In Transit
                           </button>
                         )}
 
@@ -325,9 +325,9 @@ const OrdersTable = () => {
                         {isInTransit && (
                           <button
                             onClick={() => handleUpdateStatus(order._id, "Delivered")}
-                            className="px-2.5 py-1.5 text-xs font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
+                            className="w-full px-3 py-2 text-xs font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
                           >
-                            Delivered
+                            Set Delivered
                           </button>
                         )}
 
@@ -335,7 +335,7 @@ const OrdersTable = () => {
                         {(isPending || isAccepted || isInTransit) && (
                           <button
                             onClick={() => handleDelete(order._id)}
-                            className="px-2.5 py-1.5 text-xs font-semibold text-rose-600 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors cursor-pointer"
+                            className="w-full px-3 py-2 text-xs font-semibold text-rose-600 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors"
                           >
                             Delete
                           </button>

@@ -376,7 +376,7 @@ export default function Page() {
                         <div className="border border-pink-500 rounded-2xl p-4 bg-pink-50/50 space-y-4 transition-all">
                             <div className="flex items-center gap-1.5 flex-wrap">
                                 <h3 className="text-sm font-black text-pink-600">বিদেশ থেকে Send Money অপশনে ট্যাপ করুন।</h3>
-                                <span className="text-xs font-bold text-gray-500">01717261260</span>
+                                <span className="text-xs font-bold text-gray-500">01822350799</span>
                             </div>
 
                             <div className="bg-white border border-emerald-500 rounded-lg p-2 flex items-center gap-2 text-xs text-emerald-700 font-semibold shadow-sm">
@@ -417,8 +417,8 @@ export default function Page() {
                                     নিচের bKash নাম্বারে {activeAmount} Send করুন, তারপর আপনার Transaction ID (TrxID) দিয়ে দিন।
                                 </p>
                                 <div className="flex items-center justify-between bg-gray-50/50 rounded-lg px-3 py-2 border border-gray-100">
-                                    <span className="text-xs font-semibold text-gray-500">Send to: <strong className="text-gray-800 ml-1 font-mono text-xs">01717261260</strong></span>
-                                    <button type="button" onClick={() => handleCopy('01717261260')} className="text-[10px] font-bold text-pink-600 border border-pink-100 rounded-md bg-white px-2.5 py-1">📋 Copy</button>
+                                    <span className="text-xs font-semibold text-gray-500">Send to: <strong className="text-gray-800 ml-1 font-mono text-xs">01822350799</strong></span>
+                                    <button type="button" onClick={() => handleCopy('01822350799')} className="text-[10px] font-bold text-pink-600 border border-pink-100 rounded-md bg-white px-2.5 py-1">📋 Copy</button>
                                 </div>
                                 <div className="flex items-center justify-between bg-gray-50/50 rounded-lg px-3 py-2 border border-gray-100">
                                     <span className="text-xs font-semibold text-gray-500">Amount: <strong className="text-gray-800 ml-1 font-black text-xs">{activeAmount}</strong></span>
@@ -438,7 +438,7 @@ export default function Page() {
                         <div className="border border-amber-600 rounded-2xl p-4 bg-amber-50/40 space-y-4 transition-all">
                             <div className="flex items-center gap-1.5 flex-wrap">
                                 <h3 className="text-sm font-black text-amber-700">দেশ থেকে Payment অপশনে ট্যাপ করুন।</h3>
-                                <span className="text-xs font-bold text-gray-500">01339900138</span>
+                                <span className="text-xs font-bold text-gray-500">01822350799</span>
                             </div>
 
                             <div className="bg-white border border-emerald-500 rounded-lg p-2 flex items-center gap-2 text-xs text-emerald-700 font-semibold shadow-sm">
@@ -485,8 +485,8 @@ export default function Page() {
                                     </p>
                                 </div>
                                 <div className="flex items-center justify-between bg-gray-50/50 rounded-lg px-3 py-2 border border-gray-100">
-                                    <span className="text-xs font-semibold text-gray-500">Send to: <strong className="text-gray-800 ml-1 font-mono text-xs">01339900138</strong></span>
-                                    <button type="button" onClick={() => handleCopy('01339900138')} className="text-[10px] font-bold text-pink-600 border border-pink-100 rounded-md bg-white px-2.5 py-1">📋 Copy</button>
+                                    <span className="text-xs font-semibold text-gray-500">Send to: <strong className="text-gray-800 ml-1 font-mono text-xs">01822350799</strong></span>
+                                    <button type="button" onClick={() => handleCopy('01822350799')} className="text-[10px] font-bold text-pink-600 border border-pink-100 rounded-md bg-white px-2.5 py-1">📋 Copy</button>
                                 </div>
                                 <div className="flex items-center justify-between bg-gray-50/50 rounded-lg px-3 py-2 border border-gray-100">
                                     <span className="text-xs font-semibold text-gray-500">Amount: <strong className="text-gray-800 ml-1 font-black text-xs">{activeAmount}</strong></span>
@@ -506,7 +506,7 @@ export default function Page() {
                         <div className="border border-amber-600 rounded-2xl p-4 bg-amber-50/40 space-y-4 transition-all">
                             <div className="flex items-center gap-1.5 flex-wrap">
                                 <h3 className="text-sm font-black text-amber-700">Bank Transfer</h3>
-                                <span className="text-xs font-bold text-gray-500">3911901019487</span>
+                                <span className="text-xs font-bold text-gray-500">01822350799</span>
                             </div>
 
                             <div className="bg-white border border-emerald-500 rounded-lg p-2 flex items-center gap-2 text-xs text-emerald-700 font-semibold shadow-sm">
@@ -546,13 +546,13 @@ export default function Page() {
                                 </div>
                                 <div className="text-xs text-amber-950 space-y-1 font-semibold">
                                     <p><span className="text-gray-400">Bank Name:</span> Pubali Bank PLC</p>
-                                    <p><span className="text-gray-400">A/C Name:</span> Mango Lovers Awal Foods</p>
+                                    <p><span className="text-gray-400">A/C Name:</span> Mango Mart BD</p>
                                     <p><span className="text-gray-400">Branch:</span> Halishahar Branch</p>
                                     <p className="mb-2"><span className="text-gray-400">Routing Number:</span> 175153161</p>
                                 </div>
                                 <div className="flex items-center justify-between bg-gray-50/50 rounded-lg px-3 py-2 border border-gray-100">
-                                    <span className="text-xs font-semibold text-gray-500">Send to: <strong className="text-gray-800 ml-1 font-mono text-xs">3911901019487</strong></span>
-                                    <button type="button" onClick={() => handleCopy('3911901019487')} className="text-[10px] font-bold text-pink-600 border border-pink-100 rounded-md bg-white px-2.5 py-1">📋 Copy</button>
+                                    <span className="text-xs font-semibold text-gray-500">Send to: <strong className="text-gray-800 ml-1 font-mono text-xs">22350799832742374</strong></span>
+                                    <button type="button" onClick={() => handleCopy('22350799832742374')} className="text-[10px] font-bold text-pink-600 border border-pink-100 rounded-md bg-white px-2.5 py-1">📋 Copy</button>
                                 </div>
                                 <div className="flex items-center justify-between bg-gray-50/50 rounded-lg px-3 py-2 border border-gray-100">
                                     <span className="text-xs font-semibold text-gray-500">Amount: <strong className="text-gray-800 ml-1 font-black text-xs">{activeAmount}</strong></span>
@@ -663,11 +663,6 @@ export default function Page() {
                 <hr className="border-gray-100" />
 
                 <div className="rounded-xl border border-gray-200 bg-white px-6 py-2">
-
-                    <h3 className="text-lg font-bold text-gray-900 mb-5">
-                        Order Summary
-                    </h3>
-
                     <div className="space-y-4">
                         {selectedMethod === 'intl_send' &&
                             <p className="text-xs text-amber-600 bg-amber-50 border border-amber-100 rounded-md px-3 py-2">
@@ -714,7 +709,7 @@ export default function Page() {
                             </span>
 
                             <span className="text-2xl font-bold text-orange-500">
-                                ৳{activeAmount.toLocaleString()}
+                                ৳{total.toLocaleString()}
                             </span>
 
                         </div>
@@ -735,7 +730,7 @@ export default function Page() {
                 >
                     {loading
                         ? "Placing Order..."
-                        : `Confirm Order — ৳${activeAmount.toLocaleString()}`}
+                        : `Confirm Order — ৳${total.toLocaleString()}`}
                 </button>
             </div>
         </div>
