@@ -40,8 +40,8 @@ function Navbar() {
     { name: 'Home', href: '/' },
     { name: 'Shop', href: '/products' },
     { name: 'Reviews', href: '/reviews' },
-    { name: 'Contact Us', href: '/contact' },
     { name: 'Track Parcel', href: '/trackParcel' },
+    { name: 'Contact Us', href: '/contact' },
     { name: 'About Us', href: '/about' },
   ];
 
