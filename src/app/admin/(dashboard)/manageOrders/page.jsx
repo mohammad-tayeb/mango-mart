@@ -132,7 +132,7 @@ const OrdersTable = () => {
     }
   };
   return (
-    <div className="max-w-5xl mx-auto w-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div className="max-w-6xl mx-auto w-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
 
       {/* Table Header / Actions bar */}
       <div className="p-4 border-b border-slate-300 flex flex-row justify-between items-center gap-4 bg-slate-50/50">

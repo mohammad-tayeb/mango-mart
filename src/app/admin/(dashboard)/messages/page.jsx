@@ -104,38 +104,34 @@ export default function MessageDashboard() {
   }
 
   return (
-    <div className="bg-slate-50 min-h-screen pb-10 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-
-        {/* Header Section */}
-        <div className="flex justify-between items-center mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">ব্যবহারকারীর মেসেজসমূহ</h1>
-          </div>
-          <span className="bg-orange-50 text-orange-600 text-xs font-semibold px-3 py-1 rounded-full border border-orange-100">
-            মোট: {filteredMessages.length} টি মেসেজ
-          </span>
-        </div>
-
+    <div className="bg-slate-50 min-h-screen pb-10">
+      <div className="max-w-6xl mx-auto">
         {/* Filter Tabs */}
-        <div className="flex flex-wrap gap-2 mb-6 bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm">
-          {[
-            { id: "All", label: "সব মেসেজ" },
-            { id: "Unread", label: "নতুন (Unread)" },
-            { id: "Read", label: "পঠিত (Read)" },
-            { id: "Deleted", label: "মুছে ফেলা (Deleted)" },
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveFilter(tab.id)}
-              className={`px-4 py-2 text-xs font-medium rounded-lg transition-all ${activeFilter === tab.id
-                ? "bg-orange-500 text-white shadow-sm"
-                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+        <div className="flex justify-between items-center gap-2 mb-6 bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm">
+          <div>
+            {[
+              { id: "All", label: "All" },
+              { id: "Unread", label: "Unread" },
+              { id: "Read", label: "Read" },
+              { id: "Deleted", label: "Deleted" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveFilter(tab.id)}
+                className={`px-4 py-2 text-xs font-medium rounded-lg transition-all ${activeFilter === tab.id
+                  ? "bg-orange-500 text-white shadow-sm"
+                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+          <div>
+            <span className="bg-orange-50 text-orange-600 text-xs font-semibold px-3 py-1 rounded-full border border-orange-100">
+              Total: {filteredMessages.length}
+            </span>
+          </div>
         </div>
 
         {/* Messages List Container */}
@@ -145,7 +141,7 @@ export default function MessageDashboard() {
               <div
                 key={msg._id}
                 className={`p-5 rounded-xl border transition-all duration-200 shadow-sm hover:shadow-md ${!msg.isRead
-                  ? "bg-orange-50/40 border-slate-200 border-l-4 border-l-orange-500"
+                  ? " border-slate-200 border-l-4 border-l-orange-500"
                   : "bg-white border-slate-200 border-l-4 border-l-transparent hover:border-l-orange-500"
                   }`}
               >
@@ -172,9 +168,9 @@ export default function MessageDashboard() {
 
                           {/* Unread Message Badge */}
                           {!msg.isRead && msg.status !== "Deleted" && (
-                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-500 text-white animate-pulse">
+                            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-500 text-white animate-pulse">
                               <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
-                              নতুন বার্তা
+                              New
                             </span>
                           )}
                         </div>
@@ -199,7 +195,7 @@ export default function MessageDashboard() {
                     <div className="flex items-center space-x-4 mt-3 pt-1 text-xs">
                       {msg.status === "Replied" ? (
                         <button className="text-green-600 font-medium transition">
-                          ✓ উত্তর দেওয়া হয়েছে
+                          ✓ Replied
                         </button>
                       ) : (
                         msg.status !== "Deleted" && (
@@ -212,7 +208,7 @@ export default function MessageDashboard() {
                             rel="noopener noreferrer"
                             className="text-orange-500 hover:text-orange-600 font-semibold transition"
                           >
-                            উত্তর দিন (Reply)
+                            Replay
                           </a>
                         )
                       )}
@@ -223,7 +219,7 @@ export default function MessageDashboard() {
                           onClick={() => updateMessageStatus(msg._id, "Deleted")}
                           className="text-slate-400 hover:text-rose-600 font-medium transition"
                         >
-                          মুছে ফেলুন (Delete)
+                          Delete
                         </button>
                       )}
                     </div>

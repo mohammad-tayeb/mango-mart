@@ -38,7 +38,8 @@ export default function SearchBar() {
             {/* Search Icon */}
             <button
                 onClick={() => setOpen(true)}
-                className="btn btn-ghost btn-circle"
+                className="relative p-2 text-gray-600 hover:text-orange-500 transition-colors duration-200 focus:outline-none"
+                aria-label="search"
             >
                 <FaSearch size={20} />
             </button>

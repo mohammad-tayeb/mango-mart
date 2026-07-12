@@ -25,11 +25,9 @@ export async function getProducts(page = 1, limit = 12) {
   );
 }
 
-
-
-
 // Get a single product by ID
 export async function getProductById(id) {
+  console.log("ID:", id);
   const productCollection = await dbConnect(
     collectionNameObj.productCollection,
   );
@@ -41,26 +39,24 @@ export async function getProductById(id) {
   return JSON.parse(JSON.stringify(product));
 }
 
-
-
 // Get featured products
 export async function getFeaturedProducts() {
-  const limit = 4
+  const limit = 4;
   const productCollection = await dbConnect(
     collectionNameObj.productCollection,
   );
 
-  const product = await productCollection.find().limit(limit).toArray();
+  const product = await productCollection.find().sort({createdAt: -1}).limit(limit).toArray();
 
   return JSON.parse(JSON.stringify(product));
 }
 
 export async function getSearchedProducts() {
   const productCollection = await dbConnect(
-    collectionNameObj.productCollection
+    collectionNameObj.productCollection,
   );
 
-  const products = await productCollection.find().toArray();
+  const products = await productCollection.find().sort({createdAt: -1}).toArray();
 
   return JSON.parse(JSON.stringify(products));
 }

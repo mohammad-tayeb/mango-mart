@@ -10,8 +10,8 @@ import {
     FiMessageSquare,
     FiPackage,
 } from "react-icons/fi";
-import { FaHome } from "react-icons/fa";
 import { VscDashboard } from "react-icons/vsc";
+import { HiHome } from "react-icons/hi2";
 
 function AdminDashboard({ session, children }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -37,7 +37,13 @@ function AdminDashboard({ session, children }) {
             icon: <FiMessageSquare className="h-5 w-5" />,
         },
         {
-            id: 'products',
+            id: 'addProducts',
+            label: 'Add Products',
+            href: '/admin/addProducts',
+            icon: <FiPackage className="h-5 w-5" />,
+        },
+        {
+            id: 'manageProducts',
             label: 'Manage Products',
             href: '/admin/manageProducts',
             icon: <FiPackage className="h-5 w-5" />,
@@ -66,7 +72,7 @@ function AdminDashboard({ session, children }) {
 
             {/* 2. SIDEBAR NAVIGATION */}
             <aside className={`
-                fixed inset-y-0 left-0 z-50 flex w-48 flex-col border-r border-slate-200 bg-white transition-transform duration-300 ease-in-out
+                fixed inset-y-0 left-0 z-50 flex w-44 flex-col border-r border-slate-200 bg-white transition-transform duration-300 ease-in-out
                 lg:static lg:translate-x-0
                 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
@@ -95,7 +101,7 @@ function AdminDashboard({ session, children }) {
                                 key={item.id}
                                 href={item.href}
                                 onClick={() => setIsSidebarOpen(false)} // Close sidebar upon mobile route change
-                                className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all cursor-pointer ${isActive
+                                className={`flex w-full items-center gap-3 rounded-xl py-3 text-sm font-medium transition-all cursor-pointer ${isActive
                                     ? 'bg-indigo-50/60 text-orange-500'
                                     : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                                     }`}
@@ -167,12 +173,12 @@ function AdminDashboard({ session, children }) {
                     <div className="flex items-center gap-4">
                         {/* Minimalist Top Bar Action Icon */}
                         <Link href="/" className="rounded-xl p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-700 cursor-pointer">
-                            <FaHome></FaHome>
+                            <HiHome></HiHome>
                         </Link>
                     </div>
                 </header>
 
-                <main className="flex-1 overflow-y-auto p-6">
+                <main className="flex-1 overflow-y-auto md:p-3 p-6">
                     {children}
                 </main>
 

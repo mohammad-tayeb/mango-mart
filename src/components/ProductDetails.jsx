@@ -34,19 +34,37 @@ function ProductDetails({ product, relatedProducts }) {
         }
     };
 
-    const details = [
-        ["আমের জাত", product.description.variety],
-        ["উৎপত্তিস্থল", product.description.origin],
-        ["স্বাদ", product.description.taste],
-        ["রং", product.description.color],
-        ["চাষের ধরন", product.description.cultivation],
-        ["রাসায়নিক ব্যবহার", product.description.chemicalFree],
-        ["প্যাকেজিং", product.description.packaging],
-        ["ডেলিভারি", product.description.delivery],
-        ["ওজন", product.description.weight],
-        ["সংরক্ষণ", product.description.storage],
-        ["বিশেষ দ্রষ্টব্য", product.description.note],
-    ];
+    const message = `
+I want to order:
+
+Product: ${product.name}
+Variant: ${selectedVariant.quantity}
+Quantity: ${quantity}
+Price: ৳${selectedVariant.offerPrice || selectedVariant.price}
+
+Product Link:
+${window.location.href}
+`;
+    const whatsappUrl = `https://wa.me/8801822350799?text=${encodeURIComponent(
+        message
+    )}`;
+
+    // ১. MongoDB থেকে আসা flat string-টি (product.description)
+    const rawDescription = product?.description || "";
+    // অথবা ডাইরেক্ট স্ট্রিং হলে: const rawDescription = "জাত: গোপালভোগ। উৎস: পুঠিয়া...";
+
+    // ২. স্ট্রিংটিকে ভেঙে `details` ২D অ্যারেতে রূপান্তর করার লজিক
+    const details = rawDescription
+        .split("।") // দাড়ি (।) দিয়ে প্রতিটি বাক্য আলাদা করা হচ্ছে
+        .map(item => item.trim())
+        .filter(item => item.includes(":")) // শুধু মাত্র কি-ভ্যালু জোড়াগুলো নেওয়া হচ্ছে
+        .map(item => {
+            const parts = item.split(":");
+            const title = parts[0].trim();
+            // যদি ভ্যালুর ভেতরেও ক্লোন থাকে, সেটির জন্য join করা হচ্ছে
+            const value = parts.slice(1).join(":").trim();
+            return [title, value];
+        });
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:py-8 py-4 bg-white">
@@ -131,7 +149,7 @@ function ProductDetails({ product, relatedProducts }) {
                                             : "border-gray-200"
                                             }`}
                                     >
-                                        {variant.quantity}
+                                        {variant.quantity}kg
                                     </button>
                                 );
                             })}
@@ -207,7 +225,7 @@ function ProductDetails({ product, relatedProducts }) {
 
                             {/* WhatsApp */}
                             <a
-                                href="https://wa.me/8801339900138"
+                                href={whatsappUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-full bg-[#25D366] text-white font-bold py-3.5 px-6 rounded-md hover:bg-[#20ba5a] flex items-center justify-center gap-2"
@@ -218,10 +236,10 @@ function ProductDetails({ product, relatedProducts }) {
 
                             {/* Call */}
                             <a
-                                href="tel:09678812525"
+                                href="tel:+8801822350799"
                                 className="w-full border-2 border-gray-900 text-gray-900 font-bold py-3.5 px-6 rounded-md hover:bg-gray-50 flex items-center justify-center gap-2"
                             >
-                                <FaPhone className="rotate-95" />
+                                <FaPhone className="rotate-90" />
                                 কল অর্ডার
                             </a>
                         </div>
@@ -239,7 +257,6 @@ function ProductDetails({ product, relatedProducts }) {
             {/* Product Description */}
             <section className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
                 {/* Header */}
-                {/* Reduced py-4 to py-2.5 on mobile, restored via sm:py-4 */}
                 <div className="border-b-2 border-amber-500 bg-gray-50/70 px-5 py-2.5 sm:py-4">
                     <h2 className="text-lg font-bold text-gray-900">
                         পণ্যের বিবরণ
@@ -254,7 +271,6 @@ function ProductDetails({ product, relatedProducts }) {
                     {details.map(([title, value]) => (
                         <div
                             key={title}
-                
                             className="grid gap-1 p-2.5 transition-colors hover:bg-amber-50/40 sm:grid-cols-[180px_1fr] sm:items-center sm:gap-3 sm:p-4"
                         >
                             <div className="text-xs font-medium text-gray-500">
@@ -265,6 +281,11 @@ function ProductDetails({ product, relatedProducts }) {
                             </div>
                         </div>
                     ))}
+
+                    {/* যদি কোন কারণে ডেটা খালি থাকে */}
+                    {details.length === 0 && (
+                        <p className="text-sm text-gray-400 text-center py-6">কোন বিবরণ পাওয়া যায়নি।</p>
+                    )}
                 </div>
             </section>
 

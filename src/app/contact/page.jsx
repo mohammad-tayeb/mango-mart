@@ -46,7 +46,7 @@ export default function Page() {
         },
         {
             label: "EMAIL",
-            value: "info@mangomartbd.com",
+            value: "official.mangomartbd@gmail.com",
             icon: (
                 <FaMailBulk className="text-orange-500"></FaMailBulk>
             ),
@@ -66,6 +66,9 @@ export default function Page() {
             ),
         },
     ];
+
+    const message = "Hello! I would like to know more about your products.";
+    const whatsappUrl = `https://wa.me/8801822350799?text=${encodeURIComponent(message)}`;
 
     return (
         <div className="mb-10">
@@ -94,6 +97,7 @@ export default function Page() {
                     ))}
                 </div>
             </div>
+
             <div className="max-w-6xl mx-auto md:px-8  min-h-screen flex items-center justify-center">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
 
@@ -211,7 +215,7 @@ export default function Page() {
                     <div className="flex flex-col gap-5 md:mx-0 mx-10">
                         {/* WhatsApp Button */}
                         <a
-                            href="https://wa.me/8801822-350799?text=Hello%20I%20would%20like%20to%20know%20more%20about%20your%20products."
+                            href={whatsappUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-4 bg-[#1FC35F] hover:bg-[#19a850] text-white p-4 rounded-2xl shadow-sm group transition-all"

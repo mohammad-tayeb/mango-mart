@@ -15,7 +15,7 @@ function HomeMarquee() {
   ];
 
   return (
-    <div className="bg-orange-500 text-white py-2 w-full">
+    <div className="bg-gradient-to-r from-amber-500 to-orange-600 text-white py-2 w-full">
       <Marquee speed={45} gradient={false}>
         {items.map((item, index) => (
           <div

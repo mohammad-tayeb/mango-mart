@@ -28,7 +28,7 @@ function ProductCard({ product }) {
 
     return (
         <div
-            className="group relative bg-white border border-gray-200 rounded-lg p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:border-gray-300"
+            className="group relative border border-gray-200 rounded-lg p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:border-gray-300"
         >
             {/* Image */}
             <div className="relative w-full aspect-square mb-4 overflow-hidden rounded-md flex items-center justify-center bg-gray-50/50">
@@ -79,7 +79,7 @@ function ProductCard({ product }) {
                                         : "border-gray-200 text-gray-600 hover:border-gray-400"
                                         }`}
                                 >
-                                    {variant.quantity}
+                                    {variant.quantity}kg
                                 </button>
                             ))}
                         </div>

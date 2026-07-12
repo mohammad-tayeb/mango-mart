@@ -25,8 +25,8 @@ function Footer() {
             <div className="text-sm space-y-2 pt-2 leading-relaxed">
               <p>Chattogram, Bangladesh 4202 Bangladesh</p>
               <p>
-                <a href="mailto:info@mangomartbd.com" className="hover:text-gray-900 transition-colors">
-                  info@mangomartbd.com
+                <a href="mailto:official.mangomartbd@gmail.com" className="hover:text-gray-900 transition-colors">
+                  official.mangomartbd@gmail.com
                 </a>
               </p>
               <p>
