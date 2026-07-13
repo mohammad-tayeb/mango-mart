@@ -1,15 +1,20 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import toast from "react-hot-toast";
+import { FiCheckCircle } from "react-icons/fi";
 
 export default function EditProductForm({ product, id }) {
+    const [uploadingIndex, setUploadingIndex] = useState(null);
     const router = useRouter();
     const {
         register,
         handleSubmit,
         control,
+        setValue,
+        watch,
         formState: { isSubmitting },
     } = useForm({
         defaultValues: product,
@@ -60,6 +65,42 @@ export default function EditProductForm({ product, id }) {
             router.refresh();
         } catch (err) {
             toast.error(err.message);
+        }
+    };
+
+    const handleImageUpload = async (e, index) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploadingIndex(index);
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+            const res = await fetch(
+                `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+
+            const data = await res.json();
+
+            if (data.success) {
+                setValue(`images.${index}`, data.data.url, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                });
+            } else {
+                alert("Image upload failed");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Image upload failed");
+        } finally {
+            setUploadingIndex(null);
         }
     };
 
@@ -120,28 +161,52 @@ export default function EditProductForm({ product, id }) {
 
                 <div className="space-y-3 pt-2">
                     {imageFields.map((field, index) => (
-                        <div key={field.id} className="flex gap-3 items-end bg-slate-50/50 p-3 rounded-lg border border-slate-100">
-                            <div className="flex-1">
-                                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
-                                    Image URL #{index + 1}
-                                </label>
+                        <div
+                            key={field.id}
+                            className="bg-slate-50/50 border border-slate-100 rounded-lg p-4 space-y-3"
+                        >
+                            <div className="flex items-center gap-3">
                                 <input
-                                    {...register(`images.${index}`)}
-                                    className="input input-bordered w-full focus:input-orange-500 bg-white text-sm h-10"
-                                    placeholder="https://example.com/image.jpg"
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => handleImageUpload(e, index)}
+                                    className="file-input file-input-bordered w-full"
                                 />
+
+                                <button
+                                    type="button"
+                                    onClick={() => removeImage(index)}
+                                    className="btn bg-red-500 btn-sm text-white"
+                                >
+                                    Remove
+                                </button>
                             </div>
-                            <button
-                                type="button"
-                                onClick={() => removeImage(index)}
-                                className="btn bg-red-500 btn-sm h-10 min-h-0 text-white rounded-lg px-4"
-                            >
-                                Remove
-                            </button>
+
+                            <input
+                                type="hidden"
+                                {...register(`images.${index}`)}
+                            />
+
+                            {uploadingIndex === index && (
+                                <div className="flex items-center gap-2 text-orange-500 text-sm">
+                                    <span className="loading loading-spinner loading-sm"></span>
+                                    Uploading image...
+                                </div>
+                            )}
+
+                            {watch(`images.${index}`) && uploadingIndex !== index && (
+                                <div className="flex items-center gap-2 text-green-600 text-sm font-medium">
+                                    <FiCheckCircle className="text-lg" />
+                                    <span>Image uploaded successfully.</span>
+                                </div>
+                            )}
                         </div>
                     ))}
+
                     {imageFields.length === 0 && (
-                        <p className="text-sm text-slate-400 text-center py-4 bg-slate-50 rounded-lg border border-dashed">No images added yet.</p>
+                        <p className="text-sm text-slate-400 text-center py-4 bg-slate-50 rounded-lg border border-dashed">
+                            No images added yet.
+                        </p>
                     )}
                 </div>
             </div>
@@ -295,11 +360,15 @@ export default function EditProductForm({ product, id }) {
             {/* Action buttons wrapper */}
             <div className="w-full pt-2">
                 <button
-                    disabled={isSubmitting}
                     type="submit"
+                    disabled={isSubmitting || uploadingIndex !== null}
                     className="btn bg-orange-500 w-full text-white hover:bg-[#e06600] "
                 >
-                    {isSubmitting ? "Saving..." : "Save Changes"}
+                    {uploadingIndex !== null
+                        ? "Uploading Image..."
+                        : isSubmitting
+                            ? "Updating Product..."
+                            : "Update Product"}
                 </button>
             </div>
         </form>

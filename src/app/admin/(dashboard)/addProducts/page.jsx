@@ -1,16 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { FiPlus, FiTrash2, FiLayers, FiImage, FiSettings, FiInfo, FiFileText } from "react-icons/fi";
+import { FiPlus, FiTrash2, FiLayers, FiImage, FiSettings, FiInfo, FiFileText, FiUploadCloud, FiCheckCircle } from "react-icons/fi";
 
 export default function AddProduct() {
-    // পরিবর্তিত ডাটা স্কিমা অনুযায়ী defaultValues সেট করা হয়েছে (description এখন একটি string)
+    const [uploadingIndex, setUploadingIndex] = useState(null);
     const {
         register,
         control,
         handleSubmit,
-        reset,
         formState: { errors, isSubmitting },
+        reset,
+        setValue,
+        watch,
     } = useForm({
         defaultValues: {
             name: "",
@@ -98,6 +101,37 @@ export default function AddProduct() {
         }
     };
 
+    const handleImageUpload = async (e, index) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploadingIndex(index);
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+            const res = await fetch(
+                `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API_KEY}`,
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+
+            const data = await res.json();
+
+            if (data.success) {
+                setValue(`images.${index}.url`, data.data.url);
+            } else {
+                alert("Upload Failed");
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setUploadingIndex(null);
+        }
+    };
     return (
         // <div></div>
         <div className="max-w-6xl mx-auto border border-gray-100 rounded-xl shadow-xl p-6 md:p-8 font-sans">
@@ -216,22 +250,50 @@ export default function AddProduct() {
                         </button>
                     </div>
 
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                         {imageFields.map((field, index) => (
-                            <div key={field.id} className="flex items-center gap-2">
+                            <div
+                                key={field.id}
+                                className="border border-gray-200 rounded-lg p-4 bg-white space-y-3"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => handleImageUpload(e, index)}
+                                        className="file-input file-input-bordered w-full"
+                                    />
+
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            imageFields.length > 1 ? removeImage(index) : null
+                                        }
+                                        className="p-2.5 text-red-500 border rounded-lg hover:bg-red-50"
+                                    >
+                                        <FiTrash2 />
+                                    </button>
+                                </div>
+
                                 <input
-                                    type="url"
-                                    placeholder="https://i.ibb.co/.../image.webp"
-                                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-orange-500"
-                                    {...register(`images.${index}.url`, { required: true })}
+                                    type="hidden"
+                                    {...register(`images.${index}.url`)}
                                 />
-                                <button
-                                    type="button"
-                                    onClick={() => (imageFields.length > 1 ? removeImage(index) : null)}
-                                    className="p-2.5 text-gray-400 hover:text-red-500 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-red-50 transition-colors"
-                                >
-                                    <FiTrash2 />
-                                </button>
+
+                                {uploadingIndex === index && (
+                                    <div className="flex items-center gap-2 text-orange-500">
+                                        <span className="loading loading-spinner loading-sm"></span>
+                                        Uploading image...
+                                    </div>
+                                )}
+
+                                {watch(`images.${index}.url`) &&
+                                    uploadingIndex !== index && (
+                                        <div className="flex items-center gap-2 text-green-600">
+                                            <FiCheckCircle />
+                                            <span>Uploaded Successfully</span>
+                                        </div>
+                                    )}
                             </div>
                         ))}
                     </div>
@@ -306,10 +368,14 @@ export default function AddProduct() {
                 <div className="pt-4">
                     <button
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || uploadingIndex !== null}
                         className="w-full bg-orange-500 text-white font-semibold py-3.5 px-4 rounded-lg shadow-md hover:bg-[#e06600] transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {isSubmitting ? "Publishing Listing..." : "Publish Product Listing"}
+                        {uploadingIndex !== null
+                            ? "Uploading Image..."
+                            : isSubmitting
+                                ? "Publishing Listing..."
+                                : "Publish Product Listing"}
                     </button>
                 </div>
             </form>
