@@ -3,16 +3,16 @@
 import useCartStore from "@/app/store/cartStore";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
 import SearchBar from "../SearchBar";
 
-
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false); // Controls Modal Visibility
+  const [isCartOpen, setIsCartOpen] = useState(false); 
+  const [shopOpen, setShopOpen] = useState(false);
 
   const cartItems = useCartStore((state) => state.cart);
 
@@ -29,20 +29,33 @@ function Navbar() {
     (state) => state.removeFromCart
   );
 
-
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Reconstruct the full path (pathname + query string) to match active links accurately
+  const currentQuery = searchParams.toString() ? `?${searchParams.toString()}` : "";
+  const fullCurrentPath = `${pathname}${currentQuery}`;
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
   const navLinks = [
-    { name: 'Home', href: '/' },
-    { name: 'Shop', href: '/products' },
-    { name: 'Reviews', href: '/reviews' },
-    { name: 'Track Parcel', href: '/trackParcel' },
-    { name: 'Contact Us', href: '/contact' },
-    { name: 'About Us', href: '/about' },
+    { name: "Home", href: "/" },
+    {
+      name: "Shop",
+      href: "/products",
+      dropdown: [
+        { name: "All Products", href: "/products" },
+        { name: "Mango", href: "/products?category=mango" },
+        { name: "Ghee", href: "/products?category=ghee" },
+        { name: "Honey", href: "/products?category=honey" },
+      ],
+    },
+    { name: "Reviews", href: "/reviews" },
+    { name: "Track Parcel", href: "/trackParcel" },
+    { name: "Contact Us", href: "/contact" },
+    { name: "About Us", href: "/about" },
   ];
 
   return (
@@ -65,17 +78,65 @@ function Navbar() {
             </div>
 
             {/* Desktop Navigation Links */}
-            <div className="hidden md:flex space-x-8 items-center">
+            <div className="hidden md:flex items-center space-x-8">
               {navLinks.map((link) => {
-                const isActive = pathname === link.href;
+                if (link.dropdown) {
+                  // Check if the current route matches any sub-item inside this dropdown
+                  const isDropdownActive = link.dropdown.some(item => fullCurrentPath === item.href);
+
+                  return (
+                    <div key={link.name} className="relative group">
+                      <Link
+                        href={link.href}
+                        className={`px-3 py-2 text-sm font-medium flex items-center gap-1 transition-colors ${
+                          isDropdownActive ? "text-orange-500 font-semibold" : "text-gray-600 hover:text-orange-500"
+                        }`}
+                      >
+                        {link.name}
+                        <svg
+                          className="w-4 h-4 transition-transform duration-200 group-hover:rotate-180"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
+                          />
+                        </svg>
+                      </Link>
+
+                      <div className="absolute left-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                        {link.dropdown.map((item) => {
+                          const isSubActive = fullCurrentPath === item.href;
+                          return (
+                            <Link
+                              key={item.name}
+                              href={item.href}
+                              className={`block px-4 py-3 text-sm transition-colors first:rounded-t-xl last:rounded-b-xl ${
+                                isSubActive ? "bg-orange-50 text-orange-600 font-semibold" : "text-gray-600 hover:bg-orange-50 hover:text-orange-500"
+                              }`}
+                            >
+                              {item.name}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                }
+
+                const isActive = fullCurrentPath === link.href;
+
                 return (
                   <Link
                     key={link.name}
                     href={link.href}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActive
-                      ? 'text-orange-500 font-semibold'
-                      : 'text-gray-600 hover:text-orange-500'
-                      }`}
+                    className={`px-3 py-2 text-sm font-medium transition-colors ${
+                      isActive ? "text-orange-500 font-semibold" : "text-gray-600 hover:text-orange-500"
+                    }`}
                   >
                     {link.name}
                   </Link>
@@ -85,8 +146,8 @@ function Navbar() {
 
             {/* Right Side Actions (Cart & Mobile Toggle) */}
             <div className="flex items-center space-x-4">
-              {/* search bar component*/}
-              <SearchBar></SearchBar>
+              <SearchBar />
+
               {/* Cart Button Interceptor */}
               <button
                 onClick={() => setIsCartOpen(true)}
@@ -94,8 +155,6 @@ function Navbar() {
                 aria-label="Shopping Cart"
               >
                 <FaCartShopping className="text-2xl" />
-
-                {/* Badge */}
                 <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold leading-none text-white transform translate-x-1/3 -translate-y-1/3 bg-red-500 rounded-full min-w-[18px] h-[18px]">
                   {cartCount}
                 </span>
@@ -109,45 +168,115 @@ function Navbar() {
                   className="text-gray-600 hover:text-orange-500 focus:outline-none p-2"
                   aria-label="Toggle menu"
                 >
-                  {isOpen ? (
-                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  ) : (
-                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                  )}
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
                 </button>
               </div>
 
             </div>
           </div>
         </div>
+      </nav>
 
-        {/* Mobile Menu Dropdown */}
+      {/* Professional Mobile Menu Drawer (Slides out from Left) */}
+      <div
+        className={`fixed inset-0 z-[100] md:hidden transition-opacity duration-300 ${
+          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+      >
+        {/* Dark Backdrop */}
         <div
-          className={`absolute left-0 top-full w-full z-40 transition-all duration-300 ease-in-out
-    ${isOpen
-              ? "opacity-100 visible translate-y-0"
-              : "opacity-0 invisible -translate-y-1"
-            }
-    md:hidden bg-white/95 backdrop-blur-md border-b border-gray-200/80 shadow-md`}
+          className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+          onClick={() => setIsOpen(false)}
+        />
+
+        {/* Drawer Panel */}
+        <div
+          className={`absolute left-0 top-0 h-full w-full max-w-[280px] bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
+            isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
         >
-          <div className="px-4 py-3 space-y-1">
+          {/* Menu Header */}
+          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+            <span className="font-bold text-gray-800 tracking-wide text-lg">Menu</span>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-gray-400 hover:text-gray-600 p-1.5 rounded-full hover:bg-gray-100 transition-colors"
+            >
+              <IoClose className="text-2xl" />
+            </button>
+          </div>
+
+          {/* Links Body */}
+          <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1.5">
             {navLinks.map((link) => {
-              const isActive = pathname === link.href;
+              if (link.dropdown) {
+                const isDropdownActive = link.dropdown.some(item => fullCurrentPath === item.href);
+
+                return (
+                  <div key={link.name} className="space-y-1">
+                    <button
+                      type="button"
+                      onClick={() => setShopOpen(!shopOpen)}
+                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+                        shopOpen || isDropdownActive ? "text-orange-500 bg-orange-50/50" : "text-gray-700 hover:bg-gray-50"
+                      }`}
+                    >
+                      <span>{link.name}</span>
+                      <svg
+                        className={`w-4 h-4 transition-transform duration-200 text-gray-400 ${
+                          shopOpen ? "rotate-180 text-orange-500" : ""
+                        }`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+
+                    {/* Dropdown Items (Accordion Style) */}
+                    <div
+                      className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                        shopOpen ? "max-h-60 opacity-100 mt-1" : "max-h-0 opacity-0"
+                      }`}
+                    >
+                      <div className="pl-4 pr-2 py-1 space-y-1 bg-gray-50/50 rounded-xl border border-gray-100/50">
+                        {link.dropdown.map((item) => {
+                          const isSubActive = fullCurrentPath === item.href;
+                          return (
+                            <Link
+                              key={item.name}
+                              href={item.href}
+                              onClick={() => {
+                                setShopOpen(false);
+                                setIsOpen(false);
+                              }}
+                              className={`block px-4 py-2.5 rounded-lg text-sm transition-all ${
+                                isSubActive ? "bg-orange-50 text-orange-600 font-semibold" : "text-gray-600 hover:text-orange-500"
+                              }`}
+                            >
+                              {item.name}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
+              const isActive = fullCurrentPath === link.href;
 
               return (
                 <Link
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
-            ${isActive
-                      ? "bg-slate-50 text-orange-500 font-semibold border-l-2 border-orange-500 rounded-l-none"
-                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                    }`}
+                  className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                    isActive ? "bg-orange-50 text-orange-600 font-semibold" : "text-gray-700 hover:bg-gray-50 hover:text-orange-500"
+                  }`}
                 >
                   {link.name}
                 </Link>
@@ -155,12 +284,13 @@ function Navbar() {
             })}
           </div>
         </div>
-      </nav>
+      </div>
 
       {/* Cart Modal Overlay Side Drawer */}
       <div
-        className={`fixed inset-0 z-[100] transition-opacity duration-300 ${isCartOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-          }`}
+        className={`fixed inset-0 z-[100] transition-opacity duration-300 ${
+          isCartOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
       >
         {/* Dark Backdrop Shadow */}
         <div
@@ -170,8 +300,9 @@ function Navbar() {
 
         {/* Drawer Container Panel */}
         <div
-          className={`absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col transition-transform duration-300 ${isCartOpen ? "translate-x-0" : "translate-x-full"
-            }`}
+          className={`absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col transition-transform duration-300 ${
+            isCartOpen ? "translate-x-0" : "translate-x-full"
+          }`}
         >
           {/* Modal Header */}
           <div className="flex items-center justify-between px-4 py-5 border-b border-gray-100">

@@ -5,9 +5,10 @@ import { getProducts } from "@/lib/getProducts";
 export default async function Products({ searchParams }) {
     const params = await searchParams;      // Read URL query parameters
     const page = Number(params.page) || 1;  // at first the url is "/products" so we are manually setting the  page number 1 and loading the data. "/products?page=2,3,4" this is created when we click the pagination buttons 
-    const limit = 8;                     
+    const category = params.category || "";
+    const limit = 8;
 
-    const { products, totalPages } = await getProducts(page, limit);
+    const { products, totalPages } = await getProducts(page, limit, category);
 
     return (
         <div className="mb-10">

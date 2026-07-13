@@ -33,12 +33,11 @@ function ProductCard({ product }) {
             {/* Image */}
             <div className="relative w-full aspect-square mb-4 overflow-hidden rounded-md flex items-center justify-center bg-gray-50/50">
                 <Link href={`/products/${product._id}`}>
-                    <Image
+                    <img
                         src={product.images?.[0] || "/placeholder.jpg"}
                         alt={product.name}
-                        width={260}
-                        height={260}
-                        className="object-contain max-h-[220px] transition-transform duration-300 group-hover:scale-105"
+                        loading="lazy"
+                        className="w-full h-full object-contain max-h-[220px] transition-transform duration-300 group-hover:scale-105"
                     />
                 </Link>
 

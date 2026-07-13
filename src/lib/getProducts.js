@@ -2,27 +2,31 @@ import { ObjectId } from "mongodb";
 import dbConnect, { collectionNameObj } from "./dbConnect";
 
 // Get all products with pagination
-export async function getProducts(page = 1, limit = 12) {
+export async function getProducts(page = 1, limit = 12, category = "") {
   const productCollection = await dbConnect(
     collectionNameObj.productCollection,
   );
 
-  const total = await productCollection.countDocuments();
+  const skip = (page - 1) * limit;
+
+  const query = {};
+
+  if (category) {
+    query.category = category;
+  }
 
   const products = await productCollection
-    .find({})
-    .skip((page - 1) * limit)
+    .find(query)
+    .skip(skip)
     .limit(limit)
     .toArray();
 
-  return JSON.parse(
-    JSON.stringify({
-      products,
-      total,
-      totalPages: Math.ceil(total / limit),
-      currentPage: page,
-    }),
-  );
+  const totalProducts = await productCollection.countDocuments(query);
+
+  return {
+    products: JSON.parse(JSON.stringify(products)),
+    totalPages: Math.ceil(totalProducts / limit),
+  };
 }
 
 // Get a single product by ID
@@ -46,7 +50,11 @@ export async function getFeaturedProducts() {
     collectionNameObj.productCollection,
   );
 
-  const product = await productCollection.find().sort({createdAt: -1}).limit(limit).toArray();
+  const product = await productCollection
+    .find()
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .toArray();
 
   return JSON.parse(JSON.stringify(product));
 }
@@ -56,7 +64,10 @@ export async function getSearchedProducts() {
     collectionNameObj.productCollection,
   );
 
-  const products = await productCollection.find().sort({createdAt: -1}).toArray();
+  const products = await productCollection
+    .find()
+    .sort({ createdAt: -1 })
+    .toArray();
 
   return JSON.parse(JSON.stringify(products));
 }

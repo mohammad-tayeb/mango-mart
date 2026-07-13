@@ -73,11 +73,11 @@ ${window.location.href}
                 {/* Left Side: Product Image Display Portfolio */}
                 <div className="flex flex-col space-y-4 md:sticky md:top-24">
                     <div className="relative aspect-square w-full rounded-2xl border bg-white p-6 shadow-sm">
-                        <Image
+                        <img
                             src={selectedImage}
-                            fill
                             alt={product.name}
-                            className="object-contain p-4"
+                            loading="lazy"
+                            className="absolute inset-0 w-full h-full object-contain p-4"
                         />
                     </div>
 
@@ -93,11 +93,10 @@ ${window.location.href}
                                     : "border-gray-200 hover:border-gray-300"
                                     }`}
                             >
-                                <Image
+                                <img
                                     src={img}
                                     alt={`${product.name} view ${index + 1}`}
-                                    width={75}
-                                    height={75}
+                                    loading="lazy"
                                     className="object-contain w-full h-full"
                                 />
                             </button>

@@ -1,3 +1,4 @@
+
 import FeaturedProducts from "@/components/FeaturedProducts";
 import HeroCarousel from "@/components/HeroCarousel";
 import HomeMarquee from "@/components/HomeMarquee";
