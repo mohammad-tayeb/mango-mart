@@ -8,13 +8,14 @@ export default async function FeaturedProducts() {
         <div className="p-6 flex flex-col items-center justify-center">
             <div className="space-y-1 text-start mb-8 flex flex-col items-center">
                 {/* Clean, Bright Order Now Badge */}
-                <div className="mb-6">
+                <div 
+                className="mb-4">
                     <Image
                         src="/order.png"
                         alt="Mango Lovers Logo"
                         width={600}
                         height={600}
-                        className="w-36 sm:w-44 md:w-52 lg:w-64 xl:w-72 h-auto object-contain"
+                        className="w-48 sm:w-52 md:w-52 lg:w-64 xl:w-72 h-auto object-contain"
                     />
                 </div>
 

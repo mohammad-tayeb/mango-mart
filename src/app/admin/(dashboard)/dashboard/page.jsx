@@ -16,6 +16,7 @@ export default function DashboardStats() {
     },
   });
 
+  console.log(dashboardData)
   if (isLoading) {
     return (
       <div className="w-full bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-500 font-medium shadow-sm">
@@ -34,17 +35,13 @@ export default function DashboardStats() {
   }
 
   return (
-    <div className="bg-slate-50 rounded-2xl border border-slate-100">
+    <div className="bg-slate-50 rounded-2xl border border-slate-100 mt-3">
       {/* Dashboard Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-3">
         <div>
           <h1 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">
             বিজনেস ওভারভিউ
           </h1>
-        </div>
-
-        <div className="self-start sm:self-center px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600 shadow-sm">
-          আজকের আপডেট
         </div>
       </div>
 
@@ -55,18 +52,40 @@ export default function DashboardStats() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
           {/* 1. Total Revenue Card */}
-          <div className="bg-white p-6 rounded-xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-200 group relative overflow-hidden flex flex-col justify-between min-h-[180px]">
+          <div className="bg-white p-6 rounded-xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-200 group relative overflow-hidden flex flex-col justify-between min-h-[220px]">
+            {/* Hover Top Border Indicator */}
             <div className="absolute top-0 left-0 right-0 h-[3px] bg-transparent group-hover:bg-emerald-500 transition-all duration-300" />
+
+            {/* Top Section: Icon */}
             <div className="flex items-center justify-between mb-4">
               <div className="p-2.5 rounded-lg border flex items-center justify-center text-emerald-600 bg-emerald-50 border-emerald-100">
                 <HiOutlineCurrencyBangladeshi className="text-2xl" />
               </div>
             </div>
-            <div>
+
+            {/* Middle Section: Main Metric (Total Sales) */}
+            <div className="mb-4">
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">মোট বিক্রি</p>
               <h3 className="text-3xl font-bold text-slate-900 mt-1.5 mb-1 tracking-tight">
                 ৳ {dashboardData?.totalRevenue ? dashboardData.totalRevenue.toLocaleString('bn-BD') : '০'}
               </h3>
+            </div>
+
+            {/* Bottom Section: Secondary Metrics (Due & Advance) */}
+            <div className="pt-3 border-t border-slate-100 grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">মোট বকেয়া</p>
+                <p className="text-base font-bold text-rose-600 mt-0.5">
+                  ৳ {dashboardData?.totalDue ? dashboardData.totalDue.toLocaleString('bn-BD') : '০'}
+                </p>
+              </div>
+
+              <div className="border-l border-slate-100 pl-4">
+                <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">অগ্রিম গ্রহণ</p>
+                <p className="text-base font-bold text-amber-600 mt-0.5">
+                  ৳ {dashboardData?.totalAdvanceReceived ? dashboardData.totalAdvanceReceived.toLocaleString('bn-BD') : '০'}
+                </p>
+              </div>
             </div>
           </div>
 

@@ -127,21 +127,27 @@ function Navbar() {
 
         {/* Mobile Menu Dropdown */}
         <div
-          className={`${isOpen ? 'block opacity-100' : 'hidden opacity-0'
-            } md:hidden bg-white border-t border-gray-100 transition-opacity duration-300 ease-in-out`}
+          className={`absolute left-0 top-full w-full z-40 transition-all duration-300 ease-in-out
+    ${isOpen
+              ? "opacity-100 visible translate-y-0"
+              : "opacity-0 invisible -translate-y-1"
+            }
+    md:hidden bg-white/95 backdrop-blur-md border-b border-gray-200/80 shadow-md`}
         >
-          <div className="px-2 pt-2 pb-4 space-y-1 sm:px-3 shadow-inner">
+          <div className="px-4 py-3 space-y-1">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
+
               return (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`block px-3 py-2.5 rounded-md text-base font-medium transition-colors duration-150 ${isActive
-                    ? 'bg-orange-50 text-orange-500 font-semibold'
-                    : 'text-gray-600 hover:bg-orange-50 hover:text-orange-500'
-                    }`}
                   onClick={() => setIsOpen(false)}
+                  className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
+            ${isActive
+                      ? "bg-slate-50 text-orange-500 font-semibold border-l-2 border-orange-500 rounded-l-none"
+                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    }`}
                 >
                   {link.name}
                 </Link>

@@ -8,8 +8,8 @@ export default async function EditProductPage({ params }) {
     const product = await getProductById(id);
 
     return (
-        <div>
-            <h1 className="text-3xl font-bold mb-2">
+        <div className="mt-2 mb-10">
+            <h1 className="md:text-3xl text-1xl font-bold mb-2">
                 Edit Product
             </h1>
 

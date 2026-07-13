@@ -12,11 +12,11 @@ export async function GET() {
   const messageCollection = await dbConnect(
     collectionNameObj.messageCollection,
   );
+  const reviewCollection = await dbConnect(collectionNameObj.reviewCollection);
 
   const productCollection = await dbConnect(
     collectionNameObj.productCollection,
   );
-  const reviewCollection = await dbConnect(collectionNameObj.reviewCollection);
 
   const pendingOrders = await orderCollection.countDocuments({
     orderStatus: "Pending",
@@ -65,13 +65,16 @@ export async function GET() {
         $group: {
           _id: null,
           totalRevenue: { $sum: "$payment.actualAmount" },
-          totalOrders: { $sum: 1 },
+          totalAdvanceReceived: { $sum: "$payment.amountPaid" },
+          totalDue: { $sum: "$payment.amountDue" },
         },
       },
     ])
     .toArray();
 
-  const totalRevenue = amounts.length ? amounts[0].totalRevenue : 0;
+  const totalRevenue = amounts[0]?.totalRevenue || 0;
+  const totalAdvanceReceived = amounts[0]?.totalAdvanceReceived || 0;
+  const totalDue = amounts[0]?.totalDue || 0;
 
   return NextResponse.json({
     pendingOrders,
@@ -85,5 +88,7 @@ export async function GET() {
     deletedOrders,
     TransitOrders,
     deliveredOrders,
+    totalAdvanceReceived,
+    totalDue,
   });
 }

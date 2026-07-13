@@ -102,7 +102,7 @@ export default function AddProduct() {
         // <div></div>
         <div className="max-w-6xl mx-auto border border-gray-100 rounded-xl shadow-xl p-6 md:p-8 font-sans">
             {/* ফর্ম হেডার */}
-            <div className="pb-4">
+            <div className="pb-2 -mt-4">
                 <h1 className="text-2xl font-bold text-gray-800">Add New Product</h1>
             </div>
 
