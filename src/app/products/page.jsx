@@ -1,6 +1,7 @@
 import Pagination from "@/components/Pagination";
 import ProductCard from "@/components/ProductCard";
 import { getProducts } from "@/lib/getProducts";
+import { Suspense } from "react";
 
 export default async function Products({ searchParams }) {
     const params = await searchParams;      // Read URL query parameters
@@ -20,11 +21,12 @@ export default async function Products({ searchParams }) {
                     />
                 ))}
             </div>
-
-            <Pagination
-                currentPage={page}
-                totalPages={totalPages}
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+                <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                />
+            </Suspense>
         </div>
     );
 }

@@ -1,6 +1,5 @@
 "use client"
 import useCartStore from "@/app/store/cartStore";
-import Image from "next/image";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { FaBagShopping, FaWhatsapp, FaPhone } from "react-icons/fa6";
@@ -10,6 +9,7 @@ import { useRouter } from "next/navigation";
 function ProductDetails({ product, relatedProducts }) {
     const router = useRouter();
     const addToCart = useCartStore((state) => state.addToCart);
+    console.log(product)
 
 
     // Layout State Management Hooks
@@ -34,6 +34,7 @@ function ProductDetails({ product, relatedProducts }) {
         }
     };
 
+    //whatsapp message
     const message = `
 I want to order:
 
@@ -49,22 +50,7 @@ ${window.location.href}
         message
     )}`;
 
-    // ১. MongoDB থেকে আসা flat string-টি (product.description)
-    const rawDescription = product?.description || "";
-    // অথবা ডাইরেক্ট স্ট্রিং হলে: const rawDescription = "জাত: গোপালভোগ। উৎস: পুঠিয়া...";
-
-    // ২. স্ট্রিংটিকে ভেঙে `details` ২D অ্যারেতে রূপান্তর করার লজিক
-    const details = rawDescription
-        .split("।") // দাড়ি (।) দিয়ে প্রতিটি বাক্য আলাদা করা হচ্ছে
-        .map(item => item.trim())
-        .filter(item => item.includes(":")) // শুধু মাত্র কি-ভ্যালু জোড়াগুলো নেওয়া হচ্ছে
-        .map(item => {
-            const parts = item.split(":");
-            const title = parts[0].trim();
-            // যদি ভ্যালুর ভেতরেও ক্লোন থাকে, সেটির জন্য join করা হচ্ছে
-            const value = parts.slice(1).join(":").trim();
-            return [title, value];
-        });
+    const description = product?.description || "";
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:py-8 py-4 bg-white">
@@ -266,23 +252,13 @@ ${window.location.href}
                 </div>
 
                 {/* Body */}
-                <div className="divide-y divide-gray-100 px-2">
-                    {details.map(([title, value]) => (
-                        <div
-                            key={title}
-                            className="grid gap-1 p-2.5 transition-colors hover:bg-amber-50/40 sm:grid-cols-[180px_1fr] sm:items-center sm:gap-3 sm:p-4"
-                        >
-                            <div className="text-xs font-medium text-gray-500">
-                                {title}
-                            </div>
-                            <div className="text-sm text-gray-800 leading-6">
-                                {value}
-                            </div>
-                        </div>
-                    ))}
+                <div className="divide-y divide-gray-100 px-2 p-4">
+                    <p className="text-gray-700 leading-8 whitespace-pre-line">
+                        {description}
+                    </p>
 
                     {/* যদি কোন কারণে ডেটা খালি থাকে */}
-                    {details.length === 0 && (
+                    {product.description.length === 0 && (
                         <p className="text-sm text-gray-400 text-center py-6">কোন বিবরণ পাওয়া যায়নি।</p>
                     )}
                 </div>
