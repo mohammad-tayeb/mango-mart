@@ -11,7 +11,10 @@ export default function Home() {
     <div className="flex flex-col items-center">
       <HeroCarousel></HeroCarousel>
       <HomeMarquee></HomeMarquee>
-      <CategorySlider></CategorySlider>
+      {/* Sticky Category Slider */}
+      <div className="sticky md:top-16.5 top-12 z-40 w-full">
+        <CategorySlider />
+      </div>
       <FeaturedProducts></FeaturedProducts>
       <Link href="/products" className="btn border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white">সব পণ্য দেখুন</Link>
       <Reviews></Reviews>
