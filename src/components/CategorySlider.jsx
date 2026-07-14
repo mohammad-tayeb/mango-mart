@@ -7,9 +7,10 @@ export default function CategorySlider() {
     const categories = [
         { id: 'all', name: 'All', image: '/all.png' },
         { id: 'mango', name: 'আম', image: '/mango.png' },
+        { id: 'ghee', name: 'ঘি', image: '/ghee.png' },
+        { id: 'honey', name: 'মধু', image: '/honey.png' },
         { id: 'dates', name: 'খেজুর', image: '/dates.png' },
         { id: 'oil', name: 'তেল', image: '/oil.png' },
-        { id: 'honey', name: 'মধু', image: '/honey.png' },
     ];
 
     const [activeCategory, setActiveCategory] = useState('all');
