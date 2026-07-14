@@ -3,7 +3,7 @@
 import useCartStore from "@/app/store/cartStore";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
@@ -30,11 +30,6 @@ function Navbar() {
   );
 
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  // Reconstruct the full path (pathname + query string) to match active links accurately
-  const currentQuery = searchParams.toString() ? `?${searchParams.toString()}` : "";
-  const fullCurrentPath = `${pathname}${currentQuery}`;
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -82,7 +77,7 @@ function Navbar() {
               {navLinks.map((link) => {
                 if (link.dropdown) {
                   // Check if the current route matches any sub-item inside this dropdown
-                  const isDropdownActive = link.dropdown.some(item => fullCurrentPath === item.href);
+                  const isDropdownActive = pathname.startsWith("/products");
 
                   return (
                     <div key={link.name} className="relative group">
@@ -110,7 +105,7 @@ function Navbar() {
 
                       <div className="absolute left-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                         {link.dropdown.map((item) => {
-                          const isSubActive = fullCurrentPath === item.href;
+                          const isSubActive = false;
                           return (
                             <Link
                               key={item.name}
@@ -128,7 +123,7 @@ function Navbar() {
                   );
                 }
 
-                const isActive = fullCurrentPath === link.href;
+                const isActive = pathname === link.href;
 
                 return (
                   <Link
@@ -212,7 +207,7 @@ function Navbar() {
           <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1.5">
             {navLinks.map((link) => {
               if (link.dropdown) {
-                const isDropdownActive = link.dropdown.some(item => fullCurrentPath === item.href);
+                const isDropdownActive = pathname.startsWith("/products");
 
                 return (
                   <div key={link.name} className="space-y-1">
@@ -244,7 +239,7 @@ function Navbar() {
                     >
                       <div className="pl-4 pr-2 py-1 space-y-1 bg-gray-50/50 rounded-xl border border-gray-100/50">
                         {link.dropdown.map((item) => {
-                          const isSubActive = fullCurrentPath === item.href;
+                          const isSubActive = false;
                           return (
                             <Link
                               key={item.name}
@@ -267,7 +262,7 @@ function Navbar() {
                 );
               }
 
-              const isActive = fullCurrentPath === link.href;
+              const isActive = pathname === link.href;
 
               return (
                 <Link
