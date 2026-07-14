@@ -45,18 +45,39 @@ export async function getProductById(id) {
 
 // Get featured products
 export async function getFeaturedProducts() {
-  const limit = 4;
+  const limit = 8;
+
   const productCollection = await dbConnect(
     collectionNameObj.productCollection,
   );
 
-  const product = await productCollection
-    .find()
-    .sort({ createdAt: -1 })
-    .limit(limit)
+  const products = await productCollection
+    .aggregate([
+      {
+        $addFields: {
+          categoryPriority: {
+            $cond: [{ $eq: ["$category", "mango"] }, 0, 1],
+          },
+        },
+      },
+      {
+        $sort: {
+          categoryPriority: 1,
+          createdAt: -1,
+        },
+      },
+      {
+        $limit: limit,
+      },
+      {
+        $project: {
+          categoryPriority: 0,
+        },
+      },
+    ])
     .toArray();
 
-  return JSON.parse(JSON.stringify(product));
+  return JSON.parse(JSON.stringify(products));
 }
 
 export async function getSearchedProducts() {

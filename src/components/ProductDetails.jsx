@@ -257,9 +257,10 @@ ${window.location.href}
                         {description}
                     </p>
 
-                    {/* যদি কোন কারণে ডেটা খালি থাকে */}
-                    {product.description.length === 0 && (
-                        <p className="text-sm text-gray-400 text-center py-6">কোন বিবরণ পাওয়া যায়নি।</p>
+                    {!description && (
+                        <p className="text-sm text-gray-400 text-center py-6">
+                            কোন বিবরণ পাওয়া যায়নি।
+                        </p>
                     )}
                 </div>
             </section>

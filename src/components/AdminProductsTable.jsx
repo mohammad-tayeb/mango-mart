@@ -1,12 +1,14 @@
 "use client"
 
 import Link from "next/link"
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { HiPencilAlt } from "react-icons/hi"
 import { HiTrash } from "react-icons/hi2"
 
 function AdminProductsTable({ products = [], refetch }) {
+    const [category, setCategory] = useState("all");
     const handleProductDelete = async (id) => {
         const confirmed = window.confirm(
             "Are you sure you want to delete this product?"
@@ -40,43 +42,58 @@ function AdminProductsTable({ products = [], refetch }) {
 
     const search = watch("search");
 
-    const filteredProducts = search.trim()
-        ? products.filter((product) =>
-            product.name?.toLowerCase().includes(search.toLowerCase())
-        )
-        : products;
+    const filteredProducts = useMemo(() => {
+        return products.filter((product) => {
+            const matchesCategory =
+                category === "all" ||
+                product.category?.toLowerCase() === category;
+
+            const matchesSearch =
+                !search.trim() ||
+                product.name?.toLowerCase().includes(search.toLowerCase());
+
+            return matchesCategory && matchesSearch;
+        });
+    }, [products, category, search]);
 
     return (
         <div className="w-full flex flex-col h-[calc(100vh-120px)] min-h-[500px] rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-            
+
             {/* 1. FIXED SEARCH BAR AREA */}
             <div className="sticky top-0 z-20 bg-white border-b border-slate-100 p-4 shrink-0">
-                <div className="max-w-md w-full">
-                    <div className="relative group">
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
-                            <svg
-                                className="w-4 h-4 text-slate-400 group-focus-within:text-orange-500 transition-colors duration-200"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                        </span>
-                        <input
-                            {...register("search")}
-                            type="text"
-                            placeholder="Search products by name, SKU, or category..."
-                            className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all duration-200"
-                        />
+                <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <div className="max-w-md w-full">
+                        <div className="relative group">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+                                {/* Search icon */}
+                            </span>
+
+                            <input
+                                {...register("search")}
+                                type="text"
+                                placeholder="Search products..."
+                                className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all duration-200"
+                            />
+                        </div>
                     </div>
+
+                    <select
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        className="select select-bordered select-sm w-full md:w-40"
+                    >
+                        <option value="all">All Products</option>
+                        <option value="mango">Mango</option>
+                        <option value="honey">Honey</option>
+                        <option value="ghee">Ghee</option>
+                    </select>
                 </div>
             </div>
 
             {/* 2. SCROLLABLE TABLE CONTAINER */}
             <div className="flex-1 overflow-auto">
                 <table className="w-full text-left border-collapse min-w-[800px]">
-                    
+
                     {/* 3. FIXED TABLE HEADERS */}
                     <thead className="sticky top-0 z-10 bg-slate-50 shadow-[0_1px_0_0_rgba(226,232,240,1)]">
                         <tr className="text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -88,7 +105,7 @@ function AdminProductsTable({ products = [], refetch }) {
                             <th className="py-3.5 px-5 font-medium text-right bg-slate-50">ACTION</th>
                         </tr>
                     </thead>
-                    
+
                     <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
                         {filteredProducts.length > 0 ? (
                             filteredProducts.map((product) => (
@@ -197,7 +214,7 @@ function AdminProductsTable({ products = [], refetch }) {
                         ) : (
                             <tr>
                                 <td colSpan="6" className="py-12 text-center text-sm text-slate-400 font-medium">
-                                     কোনো পণ্য পাওয়া যায়নি।
+                                    কোনো পণ্য পাওয়া যায়নি।
                                 </td>
                             </tr>
                         )}
