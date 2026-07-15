@@ -172,7 +172,7 @@ export default function Page() {
         (paymentMode === "online" && !trxId.trim());
 
     return (
-        <div className="relative bg-gray-50 mb-10 pt-1 md:p-8 flex md:flex-row flex-col items-center w-full font-sans gap-10">
+        <div className="relative bg-gray-50 mb-10 pt-1 md:p-8 flex md:flex-row flex-col items-center w-full gap-10">
             {/* Left Side: Delivery Information Form */}
             <div className='md:w-2/3 w-full'>
                 {/* form */}
@@ -290,7 +290,7 @@ export default function Page() {
                         />
                     </div>
                     {/* step 2 */}
-                    <div className="w-full mt-4 max-w-5xl bg-white rounded-xl shadow-sm border border-gray-100 p-5 font-sans">
+                    <div className="w-full mt-4 max-w-6xl bg-white rounded-xl shadow-sm border border-gray-100 p-4 font-sans">
                         {/* Section Title */}
                         <div className="flex items-center gap-3 mb-4">
                             <span className="w-14 h-6 rounded bg-red-500 text-white flex items-center justify-center text-sm font-bold">
@@ -348,7 +348,7 @@ export default function Page() {
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
-                                        <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-2xl">
+                                        <div className="md:h-12 md:w-12 h-6 w-6 rounded-full bg-green-100 flex items-center justify-center md:text-2xl text-xl">
                                             💵
                                         </div>
 
@@ -379,7 +379,7 @@ export default function Page() {
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
-                                        <div className="h-12 w-12 rounded-full bg-orange-100 flex items-center justify-center text-2xl">
+                                        <div className="md:h-12 md:w-12 h-6 w-6 rounded-full bg-orange-100 flex items-center justify-center md:text-2xl text-xl">
                                             💳
                                         </div>
 
@@ -410,7 +410,7 @@ export default function Page() {
                                         : "border-gray-200 hover:border-pink-300 hover:bg-pink-50/30"
                                         }`}
                                 >
-                                    <div className="w-14 h-14 flex items-center justify-center mb-2">
+                                    <div className="md:w-14 md:h-14 w-12 h-12 flex items-center justify-center mb-2">
                                         <Image
                                             src="/bkash.png"
                                             alt="bKash"
@@ -433,7 +433,7 @@ export default function Page() {
                                         : "border-gray-200 hover:border-pink-300 hover:bg-pink-50/30"
                                         }`}
                                 >
-                                    <div className="w-14 h-14 flex items-center justify-center mb-2">
+                                    <div className="md:w-14 md:h-14 w-12 h-12 flex items-center justify-center mb-2">
                                         <Image
                                             src="/bkash.png"
                                             alt="bKash"
