@@ -10,9 +10,13 @@ export async function GET() {
   return NextResponse.json(products);
 }
 
-
 //post new product
 export async function POST(req) {
+  const session = await auth();
+
+  if (!session?.user?.email) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
   try {
     // Optional: Protect admin route
     const session = await auth();

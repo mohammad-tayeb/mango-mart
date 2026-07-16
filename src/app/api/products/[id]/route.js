@@ -1,8 +1,24 @@
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
+import { auth } from "@/auth";
 
 export async function PATCH(req, { params }) {
+  const session = await auth();
+
+  if (!session?.user?.email) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  const adminCollection = await dbConnect(collectionNameObj.adminCollection);
+
+  const admin = await adminCollection.findOne({
+    email: session.user.email,
+  });
+
+  if (!admin) {
+    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+  }
   try {
     const { id } = await params;
     const body = await req.json();
@@ -40,6 +56,21 @@ export async function PATCH(req, { params }) {
 }
 
 export async function DELETE(req, { params }) {
+  const session = await auth();
+
+  if (!session?.user?.email) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  const adminCollection = await dbConnect(collectionNameObj.adminCollection);
+
+  const admin = await adminCollection.findOne({
+    email: session.user.email,
+  });
+
+  if (!admin) {
+    return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+  }
   try {
     const { id } = await params;
 

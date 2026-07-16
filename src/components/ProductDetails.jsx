@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 function ProductDetails({ product, relatedProducts }) {
     const router = useRouter();
     const addToCart = useCartStore((state) => state.addToCart);
-    console.log(product)
 
 
     // Layout State Management Hooks

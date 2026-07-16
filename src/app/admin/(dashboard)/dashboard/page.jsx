@@ -15,8 +15,6 @@ export default function DashboardStats() {
       return res.json();
     },
   });
-
-  console.log(dashboardData)
   if (isLoading) {
     return (
       <div className="w-full bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-500 font-medium shadow-sm">

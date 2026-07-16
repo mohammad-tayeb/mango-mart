@@ -123,10 +123,10 @@ export default function Page() {
                 method: paymentMode === "cod" ? "cod" : selectedMethod,
                 type: paymentMode === "online" ? paymentType : null,
                 trxId: paymentMode === "online" ? trxId : null,
-                actualAmount: total,
-                amountPaid: activeAmount,
-                amountDue: dueAmount,
-                charge,
+                // actualAmount: total,
+                // amountPaid: activeAmount,
+                // amountDue: dueAmount,
+                // charge,
             },
         };
 
@@ -708,7 +708,7 @@ export default function Page() {
                     </div>
                 </div>
             ) : (
-                <div className="sticky top-24 md:w-1/3 w-full bg-white rounded-xl shadow-sm border border-gray-100 p-4 self-start space-y-3">
+                <div className="sticky top-24 md:w-1/3 w-full bg-white rounded-xl shadow-sm border border-gray-100 md:p-4 p-8 self-start space-y-3">
                     <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                         <h2 className="text-base font-bold text-gray-800">
                             Order Summary

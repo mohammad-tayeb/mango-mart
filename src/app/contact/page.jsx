@@ -294,14 +294,6 @@ export default function Page() {
                                 >
                                     <FaFacebook></FaFacebook>
                                 </a>
-
-                                {/* Instagram */}
-                                <a
-                                    href="#"
-                                    className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 text-orange-500 hover:bg-rose-50 hover:scale-105 transition duration-200"
-                                >
-                                    <FaInstagram></FaInstagram>
-                                </a>
                             </div>
                         </div>
                     </div>

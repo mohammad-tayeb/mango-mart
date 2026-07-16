@@ -95,15 +95,6 @@ function Footer() {
               >
                 <FaFacebookF className="text-lg" />
               </a>
-
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-orange-500 text-white hover:bg-pink-600 hover:text-white transition-all duration-300"
-              >
-                <FaInstagram className="text-lg" />
-              </a>
             </div>
           </div>
 

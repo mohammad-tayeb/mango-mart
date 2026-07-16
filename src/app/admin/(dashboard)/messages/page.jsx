@@ -140,9 +140,9 @@ export default function MessageDashboard() {
             {filteredMessages.map((msg) => (
               <div
                 key={msg._id}
-                className={`p-5 rounded-xl border transition-all duration-200 shadow-sm hover:shadow-md ${!msg.isRead
-                  ? " border-slate-200 border-l-4 border-l-orange-500"
-                  : "bg-white border-slate-200 border-l-4 border-l-transparent hover:border-l-orange-500"
+                className={`p-5 rounded-xl border transition-all duration-200 ${!msg.isRead
+                  ? " border-slate-200"
+                  : "bg-white border-slate-200 "
                   }`}
               >
                 <div className="flex items-start space-x-4">
@@ -202,7 +202,7 @@ export default function MessageDashboard() {
                           <a
                             onClick={() => updateMessageStatus(msg._id, "Replied")}
                             href={`https://wa.me/88${msg.phone}?text=${encodeURIComponent(
-                              `Hello ${msg.name},\n\nThank you for contacting Mango Lovers.\n\n`
+                              `Hello ${msg.name},\n\nThank you for contacting Mango Mart BD.\n\n`
                             )}`}
                             target="_blank"
                             rel="noopener noreferrer"

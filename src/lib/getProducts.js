@@ -31,7 +31,6 @@ export async function getProducts(page = 1, limit = 12, category = "") {
 
 // Get a single product by ID
 export async function getProductById(id) {
-  console.log("ID:", id);
   const productCollection = await dbConnect(
     collectionNameObj.productCollection,
   );

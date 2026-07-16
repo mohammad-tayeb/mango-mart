@@ -12,7 +12,24 @@ export async function PATCH(req, { params }) {
     }
 
     const { id } = await params;
+    if (!ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { message: "Invalid order ID" },
+        { status: 400 },
+      );
+    }
     const { orderStatus } = await req.json();
+    const allowedStatuses = [
+      "Pending",
+      "Accepted",
+      "In Transit",
+      "Delivered",
+      "Cancelled",
+    ];
+
+    if (!allowedStatuses.includes(orderStatus)) {
+      return NextResponse.json({ message: "Invalid status" }, { status: 400 });
+    }
 
     const orderCollection = await dbConnect(collectionNameObj.orderCollection);
 
@@ -23,6 +40,13 @@ export async function PATCH(req, { params }) {
 
     if (!order) {
       return NextResponse.json({ message: "Order not found" }, { status: 404 });
+    }
+
+    if (order.orderStatus === "Deleted") {
+      return NextResponse.json(
+        { message: "Order already deleted" },
+        { status: 400 },
+      );
     }
 
     const updateData = {
@@ -49,6 +73,7 @@ export async function PATCH(req, { params }) {
       { _id: new ObjectId(id) },
       updateData,
     );
+    
 
     return NextResponse.json({
       success: true,
@@ -73,7 +98,12 @@ export async function DELETE(req, { params }) {
     }
 
     const { id } = await params;
-
+    if (!ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { message: "Invalid order ID" },
+        { status: 400 },
+      );
+    }
     const orderCollection = await dbConnect(collectionNameObj.orderCollection);
 
     const result = await orderCollection.updateOne(

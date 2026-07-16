@@ -1,3 +1,4 @@
+import Count from '@/components/Count';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -95,27 +96,7 @@ export default function AboutUs() {
                 </div>
             </section>
 
-            {/* Stats Section */}
-            <section className="max-w-5xl mx-auto px-4 py-16 text-center">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 bg-amber-500 text-white p-8 rounded-2xl shadow-lg">
-                    <div>
-                        <p className="text-3xl md:text-4xl font-extrabold">৫,০০০+</p>
-                        <p className="text-sm opacity-80 mt-1">সন্তুষ্ট গ্রাহক</p>
-                    </div>
-                    <div>
-                        <p className="text-3xl md:text-4xl font-extrabold">১০+ টন</p>
-                        <p className="text-sm opacity-80 mt-1">আম সরবরাহ</p>
-                    </div>
-                    <div>
-                        <p className="text-3xl md:text-4xl font-extrabold">১৫+</p>
-                        <p className="text-sm opacity-80 mt-1">আমের জাত</p>
-                    </div>
-                    <div>
-                        <p className="text-3xl md:text-4xl font-extrabold">১০০%</p>
-                        <p className="text-sm opacity-80 mt-1">খাঁটি হওয়ার গ্যারান্টি</p>
-                    </div>
-                </div>
-            </section>
+            <Count></Count>
 
             {/* Call to Action */}
             <section className="max-w-4xl mx-auto px-4 pb-20 text-center">
