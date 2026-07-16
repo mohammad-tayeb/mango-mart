@@ -17,7 +17,7 @@ export default function CategorySlider() {
 
     return (
         <div className="w-full max-w-md mx-auto px-2 sm:px-4 py-2 sm:py-3">
-            <div className="bg-amber-50 rounded-full shadow-md border border-gray-100 px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-center gap-3 sm:gap-5 overflow-x-auto scrollbar-none">
+            <div className="bg-amber-50/90 rounded-full shadow-md border border-gray-100 px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-center gap-3 sm:gap-5 overflow-x-auto scrollbar-none">
                 {categories.map((category) => {
                     const isActive = activeCategory === category.id;
 
@@ -30,11 +30,11 @@ export default function CategorySlider() {
                                     : `/products?category=${category.id}`
                             }
                             onClick={() => setActiveCategory(category.id)}
-                            className="flex flex-col items-center flex-shrink-0 group transition-all duration-300 hover:scale-105 active:scale-95"
+                            className="flex flex-col items-center shrink-0 group transition-all duration-300 hover:scale-105 active:scale-95"
                         >
                             {/* Image */}
                             <div
-                                className={`relative w-9 h-9 sm:w-12 sm:h-12 rounded-full overflow-hidden transition-all duration-300 ${isActive
+                                className={`relative w-9 h-9 rounded-full overflow-hidden transition-all duration-300 ${isActive
                                         ? "ring-2 ring-orange-500 ring-offset-2"
                                         : "group-hover:ring-2 group-hover:ring-orange-500 group-hover:ring-offset-2"
                                     }`}

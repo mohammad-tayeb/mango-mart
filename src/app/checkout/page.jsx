@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import locations from "@/data/bangladesh-locations.json";
 import useCartStore from '../store/cartStore';
-import { FaPlus, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaShoppingCart, FaTrash } from 'react-icons/fa';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
@@ -172,125 +172,128 @@ export default function Page() {
         (paymentMode === "online" && !trxId.trim());
 
     return (
-        <div className="relative bg-gray-50 mb-10 pt-1 md:p-8 flex md:flex-row flex-col items-center w-full gap-10">
+        <div className="relative bg-gray-50 mb-10 pt-1 md:p-8 p-0 flex md:flex-row flex-col items-center w-full gap-10">
             {/* Left Side: Delivery Information Form */}
             <div className='md:w-2/3 w-full'>
                 {/* form */}
-                <form onSubmit={handleSubmit(onSubmit)} className="md:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
-
-                    {/* Section Title */}
-                    <div className="flex items-center gap-3">
-                        <span className="w-14 h-6 rounded bg-red-500 text-white flex items-center justify-center text-sm font-bold">
-                            Step: 1
-                        </span>
-                        <h2 className="text-lg font-bold text-gray-800">Delivery Information</h2>
-                    </div>
-
-                    {/* Full Name */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
-                        <input
-                            type="text"
-                            placeholder='Your Full Name'
-                            {...register('fullName', { required: 'Full name is required' })}
-                            className="w-full px-3 py-2 bg-blue-50/40 border border-blue-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800"
-                        />
-                        {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName.message}</p>}
-                    </div>
-
-                    {/* Phone & Email Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
-                            <input
-                                type="tel"
-                                placeholder='Your Phone Number'
-                                {...register("phoneNumber", {
-                                    required: "Phone number is required",
-                                    pattern: {
-                                        value: /^01[3-9]\d{8}$/,
-                                        message: "Enter a valid Bangladeshi phone number"
-                                    }
-                                })}
-                                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800"
-                            />
-                            {errors.phoneNumber && <p className="text-red-500 text-xs mt-1">{errors.phoneNumber.message}</p>}
+                <form onSubmit={handleSubmit(onSubmit)} className="md:col-span-2 md:px-4 px-2 space-y-6">
+                    <div className='w-full max-w-6xl bg-white rounded-xl shadow-sm border border-gray-100 p-4 '>
+                        {/* Section Title */}
+                        <h1 className='md:text-2xl text-center mb-4 mt-2 text-xl font-semibold'>Checkout</h1>
+                        <div className="flex items-center gap-3 mb-5">
+                            <span className="w-14 h-6 rounded bg-red-500 text-white flex items-center justify-center text-sm font-bold">
+                                Step: 1
+                            </span>
+                            <h2 className="text-lg font-bold text-gray-800">Delivery Information</h2>
                         </div>
+
+                        {/* Full Name */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Email (optional)</label>
+                            <label className="block text-sm font-medium text-gray-700 my-1">Full Name *</label>
                             <input
-                                type="email"
-                                placeholder='Your Email'
-                                {...register('email')}
+                                type="text"
+                                placeholder='Your Full Name'
+                                {...register('fullName', { required: 'Full name is required' })}
                                 className="w-full px-3 py-2 bg-blue-50/40 border border-blue-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800"
                             />
+                            {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName.message}</p>}
                         </div>
-                    </div>
 
-                    {/* Delivery Address */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Delivery Address *</label>
-                        <textarea
-                            rows={3}
-                            placeholder='Detailed Delivery Address'
-                            {...register('deliveryAddress', { required: 'Address is required' })}
-                            className="w-full px-3 py-2 bg-blue-50/40 border border-blue-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 resize-none"
-                        />
-                        {errors.deliveryAddress && <p className="text-red-500 text-xs mt-1">{errors.deliveryAddress.message}</p>}
-                    </div>
-
-                    {/* District & Thana/Upazila Dropdowns */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">District * *</label>
-                            <select
-                                {...register("district", {
-                                    required: "জেলা নির্বাচন করুন",
-                                })}
-                                className="select select-bordered w-full"
-                            >
-                                <option value="">জেলা নির্বাচন করুন</option>
-
-                                {Object.keys(locations).map((district) => (
-                                    <option key={district} value={district}>
-                                        {district}
-                                    </option>
-                                ))}
-                            </select>
+                        {/* Phone & Email Grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 my-1">Phone Number *</label>
+                                <input
+                                    type="tel"
+                                    placeholder='Your Phone Number'
+                                    {...register("phoneNumber", {
+                                        required: "Phone number is required",
+                                        pattern: {
+                                            value: /^01[3-9]\d{8}$/,
+                                            message: "Enter a valid Bangladeshi phone number"
+                                        }
+                                    })}
+                                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800"
+                                />
+                                {errors.phoneNumber && <p className="text-red-500 text-xs mt-1">{errors.phoneNumber.message}</p>}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 my-1">Email (optional)</label>
+                                <input
+                                    type="email"
+                                    placeholder='Your Email'
+                                    {...register('email')}
+                                    className="w-full px-3 py-2 bg-blue-50/40 border border-blue-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800"
+                                />
+                            </div>
                         </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Thana / Upazila * *</label>
-                            <select
-                                {...register("thana", {
-                                    required: "থানা নির্বাচন করুন",
-                                })}
-                                className="select select-bordered w-full"
-                                disabled={!district}
-                            >
-                                <option value="">থানা নির্বাচন করুন</option>
 
-                                {district &&
-                                    locations[district].map((thana) => (
-                                        <option key={thana} value={thana}>
-                                            {thana}
+                        {/* Delivery Address */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 my-1">Delivery Address *</label>
+                            <textarea
+                                rows={3}
+                                placeholder='Detailed Delivery Address'
+                                {...register('deliveryAddress', { required: 'Address is required' })}
+                                className="w-full px-3 py-2 bg-blue-50/40 border border-blue-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 resize-none"
+                            />
+                            {errors.deliveryAddress && <p className="text-red-500 text-xs mt-1">{errors.deliveryAddress.message}</p>}
+                        </div>
+
+                        {/* District & Thana/Upazila Dropdowns */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 my-1">District * *</label>
+                                <select
+                                    {...register("district", {
+                                        required: "জেলা নির্বাচন করুন",
+                                    })}
+                                    className="select select-bordered w-full"
+                                >
+                                    <option value="">জেলা নির্বাচন করুন</option>
+
+                                    {Object.keys(locations).map((district) => (
+                                        <option key={district} value={district}>
+                                            {district}
                                         </option>
                                     ))}
-                            </select>
+                                </select>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Thana / Upazila * *</label>
+                                <select
+                                    {...register("thana", {
+                                        required: "থানা নির্বাচন করুন",
+                                    })}
+                                    className="select select-bordered w-full"
+                                    disabled={!district}
+                                >
+                                    <option value="">থানা নির্বাচন করুন</option>
+
+                                    {district &&
+                                        locations[district].map((thana) => (
+                                            <option key={thana} value={thana}>
+                                                {thana}
+                                            </option>
+                                        ))}
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* Special Instructions */}
+                        <div>
+                            <label className="block text-sm text-gray-700 my-1 font-semibold">বিশেষ অনুরোধ উল্লেখ করুন</label>
+                            <input
+                                type="text"
+                                placeholder="Special instructions (optional)"
+                                {...register('specialInstructions')}
+                                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 placeholder-gray-400"
+                            />
                         </div>
                     </div>
 
-                    {/* Special Instructions */}
-                    <div>
-                        <label className="block text-sm text-gray-700 mb-1 font-semibold">বিশেষ অনুরোধ উল্লেখ করুন</label>
-                        <input
-                            type="text"
-                            placeholder="Special instructions (optional)"
-                            {...register('specialInstructions')}
-                            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 placeholder-gray-400"
-                        />
-                    </div>
                     {/* step 2 */}
-                    <div className="w-full mt-4 max-w-6xl bg-white rounded-xl shadow-sm border border-gray-100 p-4 font-sans">
+                    <div className="w-full mt-4 max-w-6xl bg-white rounded-xl shadow-sm border border-gray-100 p-4 ">
                         {/* Section Title */}
                         <div className="flex items-center gap-3 mb-4">
                             <span className="w-14 h-6 rounded bg-red-500 text-white flex items-center justify-center text-sm font-bold">
@@ -315,7 +318,7 @@ export default function Page() {
                     </div>
 
                     {/* step 3 */}
-                    <div className="w-full mt-4 bg-white rounded-2xl shadow-sm border border-gray-100 p-5 font-sans text-gray-800">
+                    <div className="w-full mt-4 bg-white rounded-2xl shadow-sm border border-gray-100 p-5  text-gray-800">
 
                         {/* 1. Header Section */}
                         <div className="flex items-center gap-3 mb-5">
@@ -342,7 +345,7 @@ export default function Page() {
                                         setPaymentType(null);
                                         setTrxId("");
                                     }}
-                                    className={`rounded-2xl border p-4 text-left transition-all ${paymentMode === "cod"
+                                    className={`rounded-2xl border p-3 text-left transition-all ${paymentMode === "cod"
                                         ? "border-orange-500 bg-orange-50 ring-2 ring-orange-200"
                                         : "border-gray-200 hover:border-orange-300 hover:bg-orange-50/40"
                                         }`}
@@ -373,7 +376,7 @@ export default function Page() {
                                         setSelectedMethod(null);
                                         setTrxId("");
                                     }}
-                                    className={`rounded-2xl border p-4 text-left transition-all ${paymentMode === "online"
+                                    className={`rounded-2xl border p-3 text-left transition-all ${paymentMode === "online"
                                         ? "border-orange-500 bg-orange-50 ring-2 ring-orange-200"
                                         : "border-gray-200 hover:border-orange-300 hover:bg-orange-50/40"
                                         }`}
@@ -680,167 +683,193 @@ export default function Page() {
             </div>
 
             {/* Right Side: Order Summary Card */}
-            <div className="sticky top-24 md:w-1/3 w-full bg-white rounded-xl shadow-sm border border-gray-100 p-4 self-start space-y-3">
-                <div className="flex items-center justify-between border-b border-gray-100 pb-3">
-                    <h2 className="text-base font-bold text-gray-800">
-                        Order Summary
-                    </h2>
+            {cartItems.length === 0 ? (
+                <div className="flex items-center justify-center sticky top-24 md:w-1/3 w-full bg-white rounded-xl shadow-sm border border-gray-100 p-4 self-start space-y-3">
+                    <div className="flex items-center border-b border-gray-100 pb-3">
+                        <div className="flex flex-col items-center justify-center py-10 text-center">
+                            <FaShoppingCart className="text-5xl text-gray-300 mb-4" />
 
-                    <Link
-                        href="/products"
-                        className="flex items-center gap-2 text-sm font-medium text-orange-600 hover:text-orange-700 transition-colors"
-                    >
-                        <FaPlus className="text-xs" />
-                        <span>Add More</span>
-                    </Link>
+                            <h3 className="text-lg font-semibold text-gray-700">
+                                No products selected
+                            </h3>
+
+                            <p className="text-sm text-gray-500 mt-1">
+                                Your cart is empty. Add some products to continue.
+                            </p>
+
+                            <Link
+                                href="/products"
+                                className="mt-5 inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-5 py-2 rounded-lg transition"
+                            >
+                                <FaPlus className="text-xs" />
+                                Browse Products
+                            </Link>
+                        </div>
+                    </div>
                 </div>
+            ) : (
+                <div className="sticky top-24 md:w-1/3 w-full bg-white rounded-xl shadow-sm border border-gray-100 p-4 self-start space-y-3">
+                    <div className="flex items-center justify-between border-b border-gray-100 pb-3">
+                        <h2 className="text-base font-bold text-gray-800">
+                            Order Summary
+                        </h2>
 
-                {/* Product Info Block */}
-                <div className="space-y-4">
-                    {cartItems.map((item) => (
-                        <div
-                            key={`${item._id}-${item.variant.quantity}`}
-                            className="flex items-start justify-between gap-4"
+                        <Link
+                            href="/products"
+                            className="flex items-center gap-2 text-sm font-medium text-orange-600 hover:text-orange-700 transition-colors"
                         >
-                            <div className="flex gap-3">
-                                <Image
-                                    src={item.image}
-                                    alt={item.name}
-                                    width={56}
-                                    height={56}
-                                    className="rounded-lg border object-cover"
-                                />
+                            <FaPlus className="text-xs" />
+                            <span>Add More</span>
+                        </Link>
+                    </div>
+
+                    {/* Product Info Block */}
+                    <div className="space-y-4">
+                        {cartItems.map((item) => (
+                            <div
+                                key={`${item._id}-${item.variant.quantity}`}
+                                className="flex items-start justify-between gap-4"
+                            >
+                                <div className="flex gap-3">
+                                    <Image
+                                        src={item.image}
+                                        alt={item.name}
+                                        width={56}
+                                        height={56}
+                                        className="rounded-lg border object-cover"
+                                    />
 
 
-                                <div className="space-y-1">
-                                    <h4 className="text-sm font-bold text-gray-800">
-                                        {item.name}
-                                    </h4>
+                                    <div className="space-y-1">
+                                        <h4 className="text-sm font-bold text-gray-800">
+                                            {item.name}
+                                        </h4>
 
-                                    <p className="text-xs text-gray-500">
-                                        {item.variant.quantity}Kg
-                                    </p>
+                                        <p className="text-xs text-gray-500">
+                                            {item.variant.quantity}Kg
+                                        </p>
 
-                                    <div className="flex items-center gap-2 mt-1">
-                                        <button
-                                            onClick={() =>
-                                                decreaseQuantity(item._id, item.variant.quantity)
-                                            }
-                                            type="button"
-                                            className="w-6 h-6 border rounded"
-                                        >
-                                            -
-                                        </button>
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <button
+                                                onClick={() =>
+                                                    decreaseQuantity(item._id, item.variant.quantity)
+                                                }
+                                                type="button"
+                                                className="w-6 h-6 border rounded"
+                                            >
+                                                -
+                                            </button>
 
-                                        <span className="text-xs font-semibold">
-                                            {item.quantity}
-                                        </span>
+                                            <span className="text-xs font-semibold">
+                                                {item.quantity}
+                                            </span>
 
-                                        <button
-                                            onClick={() =>
-                                                increaseQuantity(item._id, item.variant.quantity)
-                                            }
-                                            type="button"
-                                            className="w-6 h-6 border rounded"
-                                        >
-                                            +
-                                        </button>
+                                            <button
+                                                onClick={() =>
+                                                    increaseQuantity(item._id, item.variant.quantity)
+                                                }
+                                                type="button"
+                                                className="w-6 h-6 border rounded"
+                                            >
+                                                +
+                                            </button>
 
-                                        <button
-                                            onClick={() =>
-                                                removeFromCart(item._id, item.variant.quantity)
-                                            }
-                                            type="button"
-                                            className="w-6 h-6 text-red-600"
-                                        >
-                                            <FaTrash></FaTrash>
-                                        </button>
+                                            <button
+                                                onClick={() =>
+                                                    removeFromCart(item._id, item.variant.quantity)
+                                                }
+                                                type="button"
+                                                className="w-6 h-6 text-red-600"
+                                            >
+                                                <FaTrash></FaTrash>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
+
+                                <div className="text-sm font-bold text-gray-800">
+                                    ৳{(item.price * item.quantity).toLocaleString()}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <hr className="border-gray-100" />
+
+                    <div className="rounded-xl border border-gray-200 bg-white px-6 py-2">
+                        <div className="space-y-4">
+                            {selectedMethod === 'intl_send' &&
+                                <p className="text-xs text-amber-600 bg-amber-50 border border-amber-100 rounded-md px-3 py-2">
+                                    মোট টাকার সাথে বিকাশ Send Money চার্জ (১.৮%) যুক্ত করা হয়েছে।
+                                </p>
+                            }
+                            <div className="flex justify-between text-gray-600">
+                                <span>Subtotal</span>
+                                <span className="font-semibold">
+                                    ৳{subtotal.toLocaleString()}
+                                </span>
                             </div>
 
-                            <div className="text-sm font-bold text-gray-800">
-                                ৳{(item.price * item.quantity).toLocaleString()}
+                            <div className="flex justify-between text-gray-600">
+                                <span>Delivery Charge</span>
+
+                                <span className="font-semibold text-emerald-600">
+                                    Free
+                                </span>
                             </div>
-                        </div>
-                    ))}
-                </div>
 
-                <hr className="border-gray-100" />
+                            {cartItems.length > 0 &&
+                                paymentMode === "online" &&
+                                paymentType === "advance250" && (
+                                    <>
+                                        <div className="flex justify-between text-gray-600">
+                                            <span>Advance Payment</span>
+                                            <span className="font-semibold text-orange-500">
+                                                ৳250
+                                            </span>
+                                        </div>
 
-                <div className="rounded-xl border border-gray-200 bg-white px-6 py-2">
-                    <div className="space-y-4">
-                        {selectedMethod === 'intl_send' &&
-                            <p className="text-xs text-amber-600 bg-amber-50 border border-amber-100 rounded-md px-3 py-2">
-                                মোট টাকার সাথে বিকাশ Send Money চার্জ (১.৮%) যুক্ত করা হয়েছে।
-                            </p>
-                        }
-                        <div className="flex justify-between text-gray-600">
-                            <span>Subtotal</span>
-                            <span className="font-semibold">
-                                ৳{subtotal.toLocaleString()}
-                            </span>
-                        </div>
+                                        <div className="flex justify-between text-gray-600">
+                                            <span>Due on Delivery</span>
+                                            <span className="font-semibold">
+                                                ৳{dueAmount.toLocaleString()}
+                                            </span>
+                                        </div>
+                                    </>
+                                )}
 
-                        <div className="flex justify-between text-gray-600">
-                            <span>Delivery Charge</span>
+                            <div className="border-t pt-4 flex justify-between items-center">
 
-                            <span className="font-semibold text-emerald-600">
-                                Free
-                            </span>
-                        </div>
+                                <span className="text-lg font-bold">
+                                    Total
+                                </span>
 
-                        {cartItems.length > 0 &&
-                            paymentMode === "online" &&
-                            paymentType === "advance250" && (
-                                <>
-                                    <div className="flex justify-between text-gray-600">
-                                        <span>Advance Payment</span>
-                                        <span className="font-semibold text-orange-500">
-                                            ৳250
-                                        </span>
-                                    </div>
+                                <span className="text-2xl font-bold text-orange-500">
+                                    ৳{total.toLocaleString()}
+                                </span>
 
-                                    <div className="flex justify-between text-gray-600">
-                                        <span>Due on Delivery</span>
-                                        <span className="font-semibold">
-                                            ৳{dueAmount.toLocaleString()}
-                                        </span>
-                                    </div>
-                                </>
-                            )}
-
-                        <div className="border-t pt-4 flex justify-between items-center">
-
-                            <span className="text-lg font-bold">
-                                Total
-                            </span>
-
-                            <span className="text-2xl font-bold text-orange-500">
-                                ৳{total.toLocaleString()}
-                            </span>
+                            </div>
 
                         </div>
 
                     </div>
 
+                    {/* Checkout Submit Trigger */}
+                    <button
+                        type="button"
+                        disabled={isDisabled}
+                        onClick={handleSubmit(onSubmit)}
+                        className={`w-full py-3 rounded-xl font-bold transition ${isDisabled
+                            ? "bg-gray-300 cursor-not-allowed"
+                            : "bg-red-500 hover:bg-red-600 text-white"
+                            }`}
+                    >
+                        {loading
+                            ? "Placing Order..."
+                            : `Place Order — ৳${total.toLocaleString()}`}
+                    </button>
                 </div>
-
-                {/* Checkout Submit Trigger */}
-                <button
-                    type="button"
-                    disabled={isDisabled}
-                    onClick={handleSubmit(onSubmit)}
-                    className={`w-full py-3 rounded-xl font-bold transition ${isDisabled
-                        ? "bg-gray-300 cursor-not-allowed"
-                        : "bg-red-500 hover:bg-red-600 text-white"
-                        }`}
-                >
-                    {loading
-                        ? "Placing Order..."
-                        : `Place Order — ৳${total.toLocaleString()}`}
-                </button>
-            </div>
+            )}
         </div>
     )
 }

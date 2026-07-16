@@ -4,15 +4,31 @@ import useCartStore from "@/app/store/cartStore";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { IoClose } from "react-icons/io5";
 import SearchBar from "../SearchBar";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false); 
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const cartItems = useCartStore((state) => state.cart);
 
@@ -45,6 +61,8 @@ function Navbar() {
         { name: "Mango", href: "/products?category=mango" },
         { name: "Ghee", href: "/products?category=ghee" },
         { name: "Honey", href: "/products?category=honey" },
+        { name: "Date", href: "/products?category=date" },
+        { name: "Oil", href: "/products?category=oil" },
       ],
     },
     { name: "Reviews", href: "/reviews" },
@@ -55,12 +73,28 @@ function Navbar() {
 
   return (
     <>
-      <nav className="bg-white shadow-md w-full sticky top-0 z-50 md:py-2">
+      {/* 
+        Container: 
+        Only shrinks padding (py) and increases shadow on desktop (md:) when scrolled.
+      */}
+      <nav
+        className={`bg-white shadow-md w-full sticky top-0 z-50 transition-all duration-300 ${isScrolled ? "md:py-0 md:shadow-lg" : "md:py-2"
+          }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
+          {/* 
+            Nav Bar Row: 
+            Height remains static at h-16 on mobile.
+            Only shrinks to md:h-14 on desktop when scrolled.
+          */}
+          <div
+            className={`flex justify-between items-center transition-all duration-300 h-16 ${isScrolled ? "md:h-14" : ""
+              }`}
+          >
 
-            {/* Logo Section */}
-            <div className="shrink-0 flex items-center">
+            {/* Logo: Only scales down on desktop (md:) when scrolled */}
+            <div className={`shrink-0 flex items-center transition-transform duration-300 origin-left ${isScrolled ? "md:scale-90 scale-100" : "scale-100"
+              }`}>
               <Link href="/" className="flex items-center">
                 <Image
                   src="/logo2.png"
@@ -76,16 +110,14 @@ function Navbar() {
             <div className="hidden md:flex items-center space-x-8">
               {navLinks.map((link) => {
                 if (link.dropdown) {
-                  // Check if the current route matches any sub-item inside this dropdown
                   const isDropdownActive = pathname.startsWith("/products");
 
                   return (
                     <div key={link.name} className="relative group">
                       <Link
                         href={link.href}
-                        className={`px-3 py-2 text-sm font-medium flex items-center gap-1 transition-colors ${
-                          isDropdownActive ? "text-orange-500 font-semibold" : "text-gray-600 hover:text-orange-500"
-                        }`}
+                        className={`px-3 py-2 text-sm font-medium flex items-center gap-1 transition-colors ${isDropdownActive ? "text-orange-500 font-semibold" : "text-gray-600 hover:text-orange-500"
+                          }`}
                       >
                         {link.name}
                         <svg
@@ -110,9 +142,8 @@ function Navbar() {
                             <Link
                               key={item.name}
                               href={item.href}
-                              className={`block px-4 py-3 text-sm transition-colors first:rounded-t-xl last:rounded-b-xl ${
-                                isSubActive ? "bg-orange-50 text-orange-600 font-semibold" : "text-gray-600 hover:bg-orange-50 hover:text-orange-500"
-                              }`}
+                              className={`block px-4 py-3 text-sm transition-colors first:rounded-t-xl last:rounded-b-xl ${isSubActive ? "bg-orange-50 text-orange-600 font-semibold" : "text-gray-600 hover:bg-orange-50 hover:text-orange-500"
+                                }`}
                             >
                               {item.name}
                             </Link>
@@ -129,9 +160,8 @@ function Navbar() {
                   <Link
                     key={link.name}
                     href={link.href}
-                    className={`px-3 py-2 text-sm font-medium transition-colors ${
-                      isActive ? "text-orange-500 font-semibold" : "text-gray-600 hover:text-orange-500"
-                    }`}
+                    className={`px-3 py-2 text-sm font-medium transition-colors ${isActive ? "text-orange-500 font-semibold" : "text-gray-600 hover:text-orange-500"
+                      }`}
                   >
                     {link.name}
                   </Link>
@@ -176,9 +206,8 @@ function Navbar() {
 
       {/* Professional Mobile Menu Drawer (Slides out from Left) */}
       <div
-        className={`fixed inset-0 z-[100] md:hidden transition-opacity duration-300 ${
-          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 z-[100] md:hidden transition-opacity duration-300 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
       >
         {/* Dark Backdrop */}
         <div
@@ -188,9 +217,8 @@ function Navbar() {
 
         {/* Drawer Panel */}
         <div
-          className={`absolute left-0 top-0 h-full w-full max-w-[280px] bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
-            isOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+          className={`absolute left-0 top-0 h-full w-full max-w-[280px] bg-white shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
         >
           {/* Menu Header */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
@@ -214,15 +242,13 @@ function Navbar() {
                     <button
                       type="button"
                       onClick={() => setShopOpen(!shopOpen)}
-                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                        shopOpen || isDropdownActive ? "text-orange-500 bg-orange-50/50" : "text-gray-700 hover:bg-gray-50"
-                      }`}
+                      className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-colors ${shopOpen || isDropdownActive ? "text-orange-500 bg-orange-50/50" : "text-gray-700 hover:bg-gray-50"
+                        }`}
                     >
                       <span>{link.name}</span>
                       <svg
-                        className={`w-4 h-4 transition-transform duration-200 text-gray-400 ${
-                          shopOpen ? "rotate-180 text-orange-500" : ""
-                        }`}
+                        className={`w-4 h-4 transition-transform duration-200 text-gray-400 ${shopOpen ? "rotate-180 text-orange-500" : ""
+                          }`}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -233,9 +259,8 @@ function Navbar() {
 
                     {/* Dropdown Items (Accordion Style) */}
                     <div
-                      className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                        shopOpen ? "max-h-60 opacity-100 mt-1" : "max-h-0 opacity-0"
-                      }`}
+                      className={`overflow-hidden transition-all duration-300 ease-in-out ${shopOpen ? "max-h-60 opacity-100 mt-1" : "max-h-0 opacity-0"
+                        }`}
                     >
                       <div className="pl-4 pr-2 py-1 space-y-1 bg-gray-50/50 rounded-xl border border-gray-100/50">
                         {link.dropdown.map((item) => {
@@ -248,9 +273,8 @@ function Navbar() {
                                 setShopOpen(false);
                                 setIsOpen(false);
                               }}
-                              className={`block px-4 py-2.5 rounded-lg text-sm transition-all ${
-                                isSubActive ? "bg-orange-50 text-orange-600 font-semibold" : "text-gray-600 hover:text-orange-500"
-                              }`}
+                              className={`block px-4 py-2.5 rounded-lg text-sm transition-all ${isSubActive ? "bg-orange-50 text-orange-600 font-semibold" : "text-gray-600 hover:text-orange-500"
+                                }`}
                             >
                               {item.name}
                             </Link>
@@ -269,9 +293,8 @@ function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                    isActive ? "bg-orange-50 text-orange-600 font-semibold" : "text-gray-700 hover:bg-gray-50 hover:text-orange-500"
-                  }`}
+                  className={`block px-4 py-3 rounded-xl text-sm font-medium transition-all ${isActive ? "bg-orange-50 text-orange-600 font-semibold" : "text-gray-700 hover:bg-gray-50 hover:text-orange-500"
+                    }`}
                 >
                   {link.name}
                 </Link>
@@ -283,9 +306,8 @@ function Navbar() {
 
       {/* Cart Modal Overlay Side Drawer */}
       <div
-        className={`fixed inset-0 z-[100] transition-opacity duration-300 ${
-          isCartOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 z-[100] transition-opacity duration-300 ${isCartOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          }`}
       >
         {/* Dark Backdrop Shadow */}
         <div
@@ -295,9 +317,8 @@ function Navbar() {
 
         {/* Drawer Container Panel */}
         <div
-          className={`absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col transition-transform duration-300 ${
-            isCartOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+          className={`absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col transition-transform duration-300 ${isCartOpen ? "translate-x-0" : "translate-x-full"
+            }`}
         >
           {/* Modal Header */}
           <div className="flex items-center justify-between px-4 py-5 border-b border-gray-100">

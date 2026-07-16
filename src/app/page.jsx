@@ -12,7 +12,7 @@ export default function Home() {
       <HeroCarousel></HeroCarousel>
       <HomeMarquee></HomeMarquee>
       {/* Sticky Category Slider */}
-      <div className="sticky md:top-16.5 top-12 z-40 w-full">
+      <div className="sticky md:top-12 top-14 z-40 w-full">
         <CategorySlider />
       </div>
       <FeaturedProducts></FeaturedProducts>
