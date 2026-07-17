@@ -1,9 +1,11 @@
 import { getOrderById } from '@/lib/getOrders';
 import React from 'react';
+import ReceiptButton from '@/components/ReceiptButton';
 
 export default async function OrderDetails({ params }) {
     const { id } = await params
     const order = await getOrderById(id)
+    console.log(order)
     if (!order) {
         notFound();
     }
@@ -30,23 +32,24 @@ export default async function OrderDetails({ params }) {
                 <div className="flex flex-col items-start md:items-end gap-2">
                     {/* Dynamic Status Badge */}
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${order.orderStatus?.toLowerCase() === 'pending'
-                            ? 'bg-amber-100 text-amber-800 border-amber-200'
-                            : order.orderStatus?.toLowerCase() === 'accepted'
-                                ? 'bg-emerald-100 text-emerald-800 border-emerald-200'
-                                : order.orderStatus?.toLowerCase() === 'deleted'
-                                    ? 'bg-rose-100 text-rose-800 border-rose-200'
-                                    : 'bg-gray-100 text-gray-800 border-gray-200'
+                        ? 'bg-amber-100 text-amber-800 border-amber-200'
+                        : order.orderStatus?.toLowerCase() === 'accepted'
+                            ? 'bg-emerald-100 text-emerald-800 border-emerald-200'
+                            : order.orderStatus?.toLowerCase() === 'deleted'
+                                ? 'bg-rose-100 text-rose-800 border-rose-200'
+                                : 'bg-gray-100 text-gray-800 border-gray-200'
                         }`}>
                         <span className={`w-2 h-2 mr-2 rounded-full ${order.orderStatus?.toLowerCase() === 'pending'
-                                ? 'bg-amber-500 animate-pulse'
-                                : order.orderStatus?.toLowerCase() === 'accepted'
-                                    ? 'bg-emerald-500'
-                                    : order.orderStatus?.toLowerCase() === 'deleted'
-                                        ? 'bg-rose-500'
-                                        : 'bg-gray-400'
+                            ? 'bg-amber-500 animate-pulse'
+                            : order.orderStatus?.toLowerCase() === 'accepted'
+                                ? 'bg-emerald-500'
+                                : order.orderStatus?.toLowerCase() === 'deleted'
+                                    ? 'bg-rose-500'
+                                    : 'bg-gray-400'
                             }`}></span>
                         {order.orderStatus}
                     </span>
+                    <ReceiptButton order={order} />
 
                     {/* Meta Info Panel for Accepted Orders */}
                     {order.orderStatus?.toLowerCase() === 'accepted' && (order.acceptedBy || order.acceptedAt) && (

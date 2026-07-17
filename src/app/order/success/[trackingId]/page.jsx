@@ -1,5 +1,5 @@
-// app/order-success/page.jsx (বা আপনার ফাইলের সঠিক পাথ)
-import CopyButton from "@/components/CopyButton"; // বাটনের পাথ অনুযায়ী ইমপোর্ট করুন
+import CopyButton from "@/components/CopyButton";
+import Image from "next/image";
 
 export default async function OrderSuccess({ params }) {
     const { trackingId } = await params;
@@ -8,7 +8,15 @@ export default async function OrderSuccess({ params }) {
         <div className="max-w-2xl mx-auto py-20 px-6">
             <div className="rounded-2xl border bg-white shadow-lg p-8 text-center">
 
-                <div className="text-6xl mb-4">🎉</div>
+                <div className="flex items-center justify-center">
+                    <Image
+                        src="/icon.gif"
+                        alt="Order Success"
+                        width={96}
+                        height={96}
+                        className="object-contain select-none"
+                    />
+                </div>
 
                 <h1 className="text-3xl font-bold">
                     Order Placed Successfully
@@ -28,7 +36,7 @@ export default async function OrderSuccess({ params }) {
                         <p className="text-xl font-bold text-orange-500 font-mono select-all">
                             {trackingId}
                         </p>
-                        
+
                         {/* শুধু এই অংশটুকু ক্লায়েন্ট সাইডে রিঅ্যাক্ট করবে */}
                         <CopyButton text={trackingId} />
                     </div>
