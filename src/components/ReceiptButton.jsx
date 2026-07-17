@@ -3,8 +3,8 @@
 import jsPDF from "jspdf";
 
 export default function ReceiptButton({ order }) {
-    const formatDate = (dateString) =>
-        new Date(dateString).toLocaleDateString("en-US", {
+    const formatDate = (date) =>
+        new Date(date).toLocaleString("en-US", {
             year: "numeric",
             month: "long",
             day: "numeric",
@@ -36,15 +36,14 @@ export default function ReceiptButton({ order }) {
         const measureRow = () => { calcY += 5; };
 
         // Header simulation
-        measureCenter(); // MANGO MART
-        calcY += 2;
-        measureLine();
+        calcY += 20;
         measureCenter(); // Order Receipt
         measureLine();
 
         // Meta simulation
         measureRow(); // Tracking
-        measureRow(); // Date
+        measureRow(); // Order Date
+        measureRow(); // Print Date
         measureLine();
 
         // Customer simulation
@@ -129,91 +128,101 @@ export default function ReceiptButton({ order }) {
         };
 
         // Header Section
-        center("MANGO MART BD", 16);
-        y += 1;
-        center("Order Receipt", 11);
-        line();
+        const logo = new Image();
+        logo.src = "/logo2.png";
 
-        // Order Meta
-        row("Tracking", order.trackingId);
-        row("Date", formatDate(order.createdAt)); // Fixed line placement
-        line();
+        logo.onload = () => {
+            // Center the logo
+            doc.addImage(logo, "PNG", 25, y - 3, 30, 18);
 
-        // Customer Section
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.text("CUSTOMER", left, y);
-        doc.setFont("helvetica", "normal");
-        y += 5;
+            y += 20;
 
-        row("Name", order.customer.fullName);
-        row("Phone", order.customer.phoneNumber);
-        row(
-            "Location",
-            `${order.customer.thana}, ${order.customer.district}`
-        );
+            center("Order Receipt", 11);
+            line();
+            // center("Order Receipt", 11);
 
-        doc.setFontSize(9);
-        doc.text("Address:", left, y);
-        y += 4;
+            // Order Meta
+            row("Tracking", order.trackingId);
+            row("Date", formatDate(order.createdAt)); // Fixed line placement
+            row("Printed", formatDate(new Date()));
+            line();
 
-        const realAddressLines = doc.splitTextToSize(order.customer.deliveryAddress || "", 70);
-        doc.text(realAddressLines, left, y);
-        y += (realAddressLines.length * 4) + 8;
-        line();
-
-        // Items Section
-        row("Total Items", String(order.cartItems.length));
-
-        order.cartItems.forEach((item, index) => {
-            const name = item.name.includes("|") ? item.name.split("|")[1].trim() : item.name;
-            doc.setFontSize(9);
+            // Customer Section
+            doc.setFontSize(10);
+            doc.setFont("helvetica", "bold");
+            doc.text("CUSTOMER", left, y);
             doc.setFont("helvetica", "normal");
+            y += 5;
 
-            const itemTitleLines = doc.splitTextToSize(`${index + 1}. ${name}`, 55);
-            doc.text(itemTitleLines, left, y);
-            y += (itemTitleLines.length * 4) + 5;
+            row("Name", order.customer.fullName);
+            row("Phone", order.customer.phoneNumber);
+            row(
+                "Location",
+                `${order.customer.thana}, ${order.customer.district}`
+            );
 
-            doc.text(`Qty: ${item.quantity} x ${item.variant.quantity} KG`, left + 2, y);
-            doc.text(`Tk ${item.variant.offerPrice || item.variant.price}`, right, y, { align: "right" });
-            y += 7;
-        });
+            doc.setFontSize(9);
+            doc.text("Address:", left, y);
+            y += 4;
 
-        // Payment Details Section
-        line();
-        doc.setFontSize(10);
-        doc.setFont("helvetica", "bold");
-        doc.text("PAYMENT", left, y);
-        y += 6;
+            const realAddressLines = doc.splitTextToSize(order.customer.deliveryAddress || "", 70);
+            doc.text(realAddressLines, left, y);
+            y += (realAddressLines.length * 4) + 8;
+            line();
 
-        row("Method", paymentMethod[order.payment.method] || order.payment.method);
-        row("Subtotal", `Tk ${order.payment.actualAmount}`);
-        row("Paid", `Tk ${order.payment.amountPaid}`);
-        line();
+            // Items Section
+            row("Total Items", String(order.cartItems.length));
 
-        row("TOTAL DUE", `Tk ${order.payment.amountDue}`, true);
+            order.cartItems.forEach((item, index) => {
+                const name = item.name.includes("|") ? item.name.split("|")[1].trim() : item.name;
+                doc.setFontSize(9);
+                doc.setFont("helvetica", "normal");
 
-        // Special Instructions
-        if (order.customer.specialInstructions) {
+                const itemTitleLines = doc.splitTextToSize(`${index + 1}. ${name}`, 55);
+                doc.text(itemTitleLines, left, y);
+                y += (itemTitleLines.length * 4) + 5;
+
+                doc.text(`Qty: ${item.quantity} x ${item.variant.quantity} KG`, left + 2, y);
+                doc.text(`Tk ${item.variant.offerPrice || item.variant.price}`, right, y, { align: "right" });
+                y += 7;
+            });
+
+            // Payment Details Section
             line();
             doc.setFontSize(10);
             doc.setFont("helvetica", "bold");
-            doc.text("NOTE", left, y);
-            y += 5;
+            doc.text("PAYMENT", left, y);
+            y += 6;
 
-            doc.setFontSize(9);
-            doc.setFont("helvetica", "normal");
-            const realNoteLines = doc.splitTextToSize(order.customer.specialInstructions, 70);
-            doc.text(realNoteLines, left, y);
-            y += (realNoteLines.length * 4) + 10;
-        }
+            row("Method", paymentMethod[order.payment.method] || order.payment.method);
+            row("Subtotal", `Tk ${order.payment.actualAmount}`);
+            row("Paid", `Tk ${order.payment.amountPaid}`);
+            line();
 
-        // Footer Section
-        line();
-        center("Thank you for shopping with us!", 10);
-        center("www.mangomartbd.shop", 9);
+            row("TOTAL DUE", `Tk ${order.payment.amountDue}`, true);
 
-        doc.save(`Receipt-${order.trackingId}.pdf`);
+            // Special Instructions
+            if (order.customer.specialInstructions) {
+                line();
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "bold");
+                doc.text("NOTE", left, y);
+                y += 5;
+
+                doc.setFontSize(9);
+                doc.setFont("helvetica", "normal");
+                const realNoteLines = doc.splitTextToSize(order.customer.specialInstructions, 70);
+                doc.text(realNoteLines, left, y);
+                y += (realNoteLines.length * 4) + 10;
+            }
+
+            // Footer Section
+            line();
+            center("Thank you for shopping with us!", 10);
+            center("www.mangomartbd.shop", 9);
+
+            doc.save(`Receipt-${order.trackingId}.pdf`);
+        };
     };
 
     return (
