@@ -135,6 +135,7 @@ export default function EditProductForm({ product, id }) {
                         <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Unit Price Per Kg</label>
                         <input
                             type="number"
+                            step="any"
                             {...register("unitPricePerKg", {
                                 valueAsNumber: true,
                             })}
@@ -241,6 +242,7 @@ export default function EditProductForm({ product, id }) {
                             <div className="flex flex-col gap-1.5">
                                 <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Quantity Group</label>
                                 <input
+                                    step="any"
                                     type="number"
                                     {...register(`variants.${index}.quantity`, {
                                         valueAsNumber: true,
@@ -254,6 +256,7 @@ export default function EditProductForm({ product, id }) {
                                 <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Regular Price</label>
                                 <input
                                     type="number"
+                                    step="any"
                                     {...register(`variants.${index}.price`, {
                                         valueAsNumber: true,
                                     })}
@@ -266,6 +269,7 @@ export default function EditProductForm({ product, id }) {
                                 <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Offer Price</label>
                                 <input
                                     type="number"
+                                    step="any"
                                     {...register(`variants.${index}.offerPrice`, {
                                         valueAsNumber: true,
                                     })}
