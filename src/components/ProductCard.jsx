@@ -28,13 +28,13 @@ function ProductCard({ product }) {
     return (
         <div className="group relative border border-gray-200 rounded-lg p-2 sm:p-4 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:border-gray-300">
             {/* Image */}
-            <div className="relative w-full aspect-square mb-2 sm:mb-3 overflow-hidden rounded-md flex items-center justify-center bg-gray-50/50">
-                <Link href={`/products/${product._id}`}>
+            <div className="relative w-full aspect-square mb-2 sm:mb-3 overflow-hidden rounded-md bg-gray-50/50">
+                <Link href={`/products/${product._id}`} className="block w-full h-full">
                     <img
                         src={product.images?.[0] || "/placeholder.jpg"}
                         alt={product.name}
                         loading="lazy"
-                        className="w-full h-full object-contain max-h-[115px] sm:max-h-[190px] transition-transform duration-300 group-hover:scale-105"
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                 </Link>
 
@@ -72,11 +72,10 @@ function ProductCard({ product }) {
                                     key={index}
                                     type="button"
                                     onClick={() => setSelectedVariant(variant)}
-                                    className={`px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[11px] font-medium border rounded-full transition-all ${
-                                        selectedVariant?.quantity === variant.quantity
+                                    className={`px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[11px] font-medium border rounded-full transition-all ${selectedVariant?.quantity === variant.quantity
                                             ? "border-orange-500 bg-orange-500/10 text-orange-500"
                                             : "border-gray-200 text-gray-600 hover:border-gray-400"
-                                    }`}
+                                        }`}
                                 >
                                     {variant.quantity}kg
                                 </button>
