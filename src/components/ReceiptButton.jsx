@@ -142,9 +142,9 @@ export default function ReceiptButton({ order }) {
             // center("Order Receipt", 11);
 
             // Order Meta
-            row("Tracking", order.trackingId);
-            row("Date", formatDate(order.createdAt)); // Fixed line placement
-            row("Printed", formatDate(new Date()));
+            row("Tracking Id", order.trackingId);
+            row("Ordered At", formatDate(order.createdAt)); // Fixed line placement
+            row("Printed At", formatDate(new Date()));
             line();
 
             // Customer Section
