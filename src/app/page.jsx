@@ -6,6 +6,8 @@ import HomeMarquee from "@/components/HomeMarquee";
 import Reviews from "@/components/Reviews";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <div className="flex flex-col items-center">

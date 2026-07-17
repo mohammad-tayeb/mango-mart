@@ -6,7 +6,6 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 
 function ProductCard({ product }) {
-    console.log(product)
     const [selectedVariant, setSelectedVariant] = useState(
         product.variants?.[0] || null
     );

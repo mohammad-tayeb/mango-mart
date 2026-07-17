@@ -5,6 +5,8 @@ import { getProducts } from "@/lib/getProducts";
 import { Suspense } from "react";
 import Breadcrumb from "@/components/Breadcrumb";
 
+export const dynamic = "force-dynamic";
+
 export default async function Products({ searchParams }) {
     const params = await searchParams;
     const page = Number(params.page) || 1;
