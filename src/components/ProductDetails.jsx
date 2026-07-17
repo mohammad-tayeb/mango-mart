@@ -52,7 +52,7 @@ ${window.location.href}
     const description = product?.description || "";
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:py-8 py-4 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:py-8 py-4 bg-white mb-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
 
                 {/* Left Side: Product Image Display Portfolio */}
@@ -268,7 +268,7 @@ ${window.location.href}
                 <h2 className="text-2xl font-bold mb-6">
                     Related Products
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-6 sm:px-6">
                     {relatedProducts.map((product) => (
                         <ProductCard key={product._id} product={product}></ProductCard>
                     ))}
