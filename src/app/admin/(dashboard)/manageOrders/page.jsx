@@ -3,12 +3,13 @@
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
 const OrdersTable = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [search, setSearch] = useState("");
 
   const statusFilter =
     searchParams.get("status") || "pending";
@@ -42,13 +43,28 @@ const OrdersTable = () => {
 
 
   const filteredOrders = useMemo(() => {
-    if (statusFilter === "all") return orders;
+    const query = search.toLowerCase().trim();
 
-    return orders.filter(
-      (order) =>
-        order.orderStatus?.toLowerCase() === statusFilter.toLowerCase()
-    );
-  }, [orders, statusFilter]);
+    return orders.filter((order) => {
+      // Status filter
+      const statusMatch =
+        statusFilter === "all" ||
+        order.orderStatus?.toLowerCase() === statusFilter.toLowerCase();
+
+      // Search filter
+      const searchMatch =
+        query === "" ||
+        order.customer?.fullName?.toLowerCase().includes(query) ||
+        order.customer?.phoneNumber?.toLowerCase().includes(query) ||
+        order.customer?.email?.toLowerCase().includes(query) ||
+        order.trackingId?.toLowerCase() === query ||
+        order.cartItems?.some((item) =>
+          item.name?.toLowerCase().includes(query)
+        );
+
+      return statusMatch && searchMatch;
+    });
+  }, [orders, statusFilter, search]);
 
   const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
 
@@ -135,32 +151,50 @@ const OrdersTable = () => {
     <div className="max-w-6xl mx-auto w-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
 
       {/* Table Header / Actions bar */}
-      <div className="p-4 border-b border-slate-300 flex flex-row justify-between items-center gap-4 bg-slate-50/50">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md border border-slate-200">
-            Total: {filteredOrders.length}
-          </span>
+      <div className="p-4 border-b border-slate-300 bg-slate-50/50">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
-          {pendingCount > 0 && (
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 bg-red-500 text-white rounded-md">
-              <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-              {pendingCount} Pending
+          {/* Left Side */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md border border-slate-200">
+              Total: {filteredOrders.length}
             </span>
-          )}
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <select
-            value={statusFilter}
-            onChange={(e) => changeFilter(e.target.value)}
-            className="select select-bordered select-sm w-36 text-xs"
-          >
-            <option value="all">All Orders</option>
-            <option value="pending">Pending</option>
-            <option value="accepted">Accepted</option>
-            <option value="deleted">Deleted</option>
-            <option value="in transit">In transit</option>
-            <option value="delivered">Delivered</option>
-          </select>
+
+            {pendingCount > 0 && (
+              <button
+                type="button"
+                className="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+              >
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                {pendingCount} Pending
+              </button>
+            )}
+          </div>
+
+          {/* Right Side */}
+          <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto">
+            <input
+              type="text"
+              placeholder="Search customer, phone, email, tracking ID..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="input input-bordered input-sm w-full sm:flex-1 lg:w-72 text-xs"
+            />
+
+            <select
+              value={statusFilter}
+              onChange={(e) => changeFilter(e.target.value)}
+              className="select select-bordered select-sm w-full sm:w-40 text-xs"
+            >
+              <option value="all">All Orders</option>
+              <option value="pending">Pending</option>
+              <option value="accepted">Accepted</option>
+              <option value="deleted">Deleted</option>
+              <option value="in transit">In transit</option>
+              <option value="delivered">Delivered</option>
+            </select>
+          </div>
+
         </div>
       </div>
 

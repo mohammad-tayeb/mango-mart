@@ -23,13 +23,14 @@ export default async function OrderDetails({ params }) {
     return (
         <div className="max-w-4xl mx-auto bg-gray-50  font-sans">
             {/* Header Summary */}
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-6 flex flex-col md:flex-row justify-between gap-4">
                 <div>
                     <h1 className="text-xl font-bold text-gray-800">Order Details</h1>
                     <p className="text-sm text-gray-500 mt-1">ID: <span className="font-mono text-xs bg-gray-100 px-1.5 py-0.5 rounded">{order._id}</span></p>
+                    <p className="text-sm text-gray-500 mt-1">ID: <span className="font-mono text-xs bg-gray-100 px-1.5 py-0.5 rounded">{order.trackingId}</span></p>
                     <p className="text-xs text-gray-400 mt-0.5">Placed on: {formatDate(order.createdAt)}</p>
                 </div>
-                <div className="flex flex-col items-start md:items-end gap-2">
+                <div className="flex sm:flex-col flex-row sm:items-start justify-between sm:justify-end md:items-end gap-2">
                     {/* Dynamic Status Badge */}
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${order.orderStatus?.toLowerCase() === 'pending'
                         ? 'bg-amber-100 text-amber-800 border-amber-200'

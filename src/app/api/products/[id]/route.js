@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
 import { auth } from "@/auth";
+import { revalidatePath } from "next/cache";
 
 export async function PATCH(req, { params }) {
   const session = await auth();
@@ -37,6 +38,11 @@ export async function PATCH(req, { params }) {
         },
       },
     );
+
+    // Refresh cached pages
+    revalidatePath("/");
+    revalidatePath("/products");
+    revalidatePath(`/products/${id}`);
 
     return NextResponse.json({
       success: true,
@@ -88,6 +94,11 @@ export async function DELETE(req, { params }) {
         { status: 404 },
       );
     }
+
+    // Refresh cached pages
+    revalidatePath("/");
+    revalidatePath("/products");
+    revalidatePath(`/products/${id}`);
 
     return NextResponse.json({
       success: true,

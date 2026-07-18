@@ -1,10 +1,8 @@
 import { ObjectId } from "mongodb";
 import dbConnect, { collectionNameObj } from "./dbConnect";
-import { unstable_noStore as noStore } from "next/cache";
 
 // Get all products with pagination
 export async function getProducts(page = 1, limit = 12, category = "") {
-  noStore();
   const productCollection = await dbConnect(
     collectionNameObj.productCollection,
   );
@@ -33,7 +31,6 @@ export async function getProducts(page = 1, limit = 12, category = "") {
 
 // Get a single product by ID
 export async function getProductById(id) {
-  noStore();
   const productCollection = await dbConnect(
     collectionNameObj.productCollection,
   );
@@ -47,7 +44,6 @@ export async function getProductById(id) {
 
 // Get featured products
 export async function getFeaturedProducts() {
-  noStore();
   const limit = 8;
 
   const productCollection = await dbConnect(

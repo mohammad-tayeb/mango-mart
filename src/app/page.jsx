@@ -1,12 +1,10 @@
-
+export const revalidate = 60;
 import CategorySlider from "@/components/CategorySlider";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import HeroCarousel from "@/components/HeroCarousel";
 import HomeMarquee from "@/components/HomeMarquee";
 import Reviews from "@/components/Reviews";
 import Link from "next/link";
-
-export const dynamic = "force-dynamic";
 
 export default function Home() {
   return (

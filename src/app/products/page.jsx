@@ -1,11 +1,10 @@
+export const revalidate = 60;
 import { FaBoxOpen } from "react-icons/fa6";
 import Pagination from "@/components/Pagination";
 import ProductCard from "@/components/ProductCard";
 import { getProducts } from "@/lib/getProducts";
 import { Suspense } from "react";
 import Breadcrumb from "@/components/Breadcrumb";
-
-export const dynamic = "force-dynamic";
 
 export default async function Products({ searchParams }) {
     const params = await searchParams;

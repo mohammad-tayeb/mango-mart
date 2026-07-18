@@ -1,3 +1,4 @@
+export const revalidate = 60;
 import ProductDetails from "@/components/ProductDetails";
 import { getProductById } from "@/lib/getProducts";
 import { getRelatedProducts } from "@/lib/getRelatedProducts";
