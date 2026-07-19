@@ -12,7 +12,7 @@ export default function ReceiptButton({ order }) {
             minute: "2-digit",
         });
 
-    const downloadReceipt = () => {
+    const downloadThermalReceipt = () => {
         const receiptWidth = 80; // Standard 80mm thermal receipt width
         const left = 5;
         const right = receiptWidth - 5;
@@ -225,12 +225,206 @@ export default function ReceiptButton({ order }) {
         };
     };
 
+    const downloadA4Invoice = () => {
+        const docA = new jsPDF({
+            orientation: "portrait",
+            unit: "mm",
+            format: "a4",
+        });
+        const left = 15;
+        const right = 195;
+        const width = right - left; // 180mm printable width
+
+        // Payment lookup mapper
+        const paymentMethod = {
+            cod: "Cash on Delivery",
+            bkash: "bKash",
+            nagad: "Nagad",
+            rocket: "Rocket",
+            bank: "Bank Transfer",
+            intl_send: "bKash Send Money",
+            bd_payment: "bKash Payment"
+        };
+
+        let y = 20;
+
+        const line = (thickness = 0.2, grayValue = 180) => {
+            docA.setLineWidth(thickness);
+            docA.setDrawColor(grayValue);
+            docA.line(left, y, right, y);
+            y += 4;
+        };
+
+        // Header Section
+        const logo = new Image();
+        logo.src = "/logo2.png";
+
+        logo.onload = () => {
+            // 1. Company Logo & Title Block
+            docA.addImage(logo, "PNG", left, y, 35, 21);
+
+            docA.setFontSize(22);
+            docA.setFont("helvetica", "bold");
+            docA.text("INVOICE", right, y + 8, { align: "right" });
+
+            docA.setFontSize(9);
+            docA.setFont("helvetica", "normal");
+            docA.text("www.mangomartbd.shop", right, y + 14, { align: "right" });
+
+            y += 28;
+            line(0.4, 120);
+
+            // 2. Invoice Meta & Customer Info Block (Side-by-Side A4 Layout)
+            const metaYStart = y;
+
+            // Left Column: Customer Bill To
+            docA.setFontSize(10);
+            docA.setFont("helvetica", "bold");
+            docA.text("BILL TO:", left, y);
+
+            docA.setFontSize(9);
+            docA.setFont("helvetica", "normal");
+            y += 5;
+            docA.text(String(order.customer.fullName), left, y);
+            y += 4.5;
+            docA.text(String(order.customer.phoneNumber), left, y);
+            y += 4.5;
+            docA.text(`${order.customer.thana}, ${order.customer.district}`, left, y);
+            y += 4.5;
+
+            const addressLines = docA.splitTextToSize(order.customer.deliveryAddress || "", 85);
+            docA.text(addressLines, left, y);
+            const customerBlockHeight = y + (addressLines.length * 4.5);
+
+            // Right Column: Invoice Details
+            y = metaYStart;
+            const rightColX = 130;
+
+            docA.setFontSize(9);
+            docA.setFont("helvetica", "bold"); docA.text("Tracking ID:", rightColX, y);
+            docA.setFont("helvetica", "normal"); docA.text(String(order.trackingId), right, y, { align: "right" });
+            y += 5;
+
+            docA.setFont("helvetica", "bold"); docA.text("Order Date:", rightColX, y);
+            docA.setFont("helvetica", "normal"); docA.text(formatDate(order.createdAt), right, y, { align: "right" });
+            y += 5;
+
+            docA.setFont("helvetica", "bold"); docA.text("Print Date:", rightColX, y);
+            docA.setFont("helvetica", "normal"); docA.text(formatDate(new Date()), right, y, { align: "right" });
+            y += 5;
+
+            docA.setFont("helvetica", "bold"); docA.text("Payment Method:", rightColX, y);
+            docA.setFont("helvetica", "normal"); docA.text(paymentMethod[order.payment.method] || order.payment.method, right, y, { align: "right" });
+
+            // Set y to whichever column went further down
+            y = Math.max(customerBlockHeight, y) + 8;
+
+            // 3. Tabular Items Grid
+            docA.setFontSize(9);
+            docA.setFont("helvetica", "bold");
+
+            // Table Headers setup
+            const colDescX = left + 5;
+            const colQtyX = left + 110;
+            const colPriceX = left + 140;
+
+            docA.text("#", left, y);
+            docA.text("Item Description", colDescX, y);
+            docA.text("Qty", colQtyX, y, { align: "center" });
+            docA.text("Unit Price", colPriceX, y, { align: "right" });
+            docA.text("Total", right, y, { align: "right" });
+
+            y += 3;
+            line(0.3, 150);
+            y += 2;
+
+            docA.setFont("helvetica", "normal");
+            order.cartItems.forEach((item, index) => {
+                const name = item.name.includes("|") ? item.name.split("|")[1].trim() : item.name;
+                const fullDescription = `${name} (${item.variant.quantity} KG)`;
+
+                const itemTitleLines = docA.splitTextToSize(fullDescription, 95);
+                const qtyText = String(item.quantity);
+                const unitPrice = item.variant.offerPrice || item.variant.price;
+                const itemTotal = `Tk ${unitPrice * item.quantity}`;
+
+                // Check for page overflow inside loops for long lists
+                if (y > 270) {
+                    docA.addPage();
+                    y = 20;
+                }
+
+                docA.text(String(index + 1), left, y);
+                docA.text(itemTitleLines, colDescX, y);
+                docA.text(qtyText, colQtyX, y, { align: "center" });
+                docA.text(`Tk ${unitPrice}`, colPriceX, y, { align: "right" });
+                docA.text(itemTotal, right, y, { align: "right" });
+
+                y += (itemTitleLines.length * 4.5) + 3;
+            });
+
+            y += 2;
+            line(0.4, 120);
+            y += 2;
+
+            // 4. Financial Summary Block (Shifted Right)
+            const summaryX = 130;
+
+            const summaryRow = (label, value, isTotal = false) => {
+                docA.setFont("helvetica", isTotal ? "bold" : "normal");
+                docA.setFontSize(isTotal ? 10 : 9);
+                docA.text(label, summaryX, y);
+                docA.text(String(value), right, y, { align: "right" });
+                y += 5.5;
+            };
+
+            summaryRow("Subtotal:", `Tk ${order.payment.actualAmount}`);
+            summaryRow("Paid Amount:", `Tk ${order.payment.amountPaid}`);
+            line(0.2, 180);
+            y += 2;
+            summaryRow("TOTAL DUE:", `Tk ${order.payment.amountDue}`, true);
+
+            // 5. Special Instructions / Notes
+            if (order.customer.specialInstructions) {
+                y += 5;
+                docA.setFontSize(9);
+                docA.setFont("helvetica", "bold");
+                docA.text("Notes / Special Instructions:", left, y);
+                y += 4.5;
+
+                docA.setFont("helvetica", "normal");
+                const noteLines = docA.splitTextToSize(order.customer.specialInstructions, 110);
+                docA.text(noteLines, left, y);
+            }
+
+            // 6. Professional Footer Fixed at the absolute bottom
+            docA.setFontSize(9);
+            docA.setFont("helvetica", "normal");
+            docA.setDrawColor(200);
+            docA.line(left, 275, right, 275);
+
+            docA.text("Thank you for shopping with us!", 105, 281, { align: "center" });
+            docA.setFont("helvetica", "oblique");
+            docA.text("If you have any questions about this invoice, please contact us.", 105, 285, { align: "center" });
+
+            docA.save(`Invoice-${order.trackingId}.pdf`);
+        };
+    };
+
     return (
-        <button
-            onClick={downloadReceipt}
-            className="btn btn-sm md:btn-md bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
-        >
-            Download Receipt
-        </button>
+        <div className="flex gap-2">
+            <button
+                onClick={downloadThermalReceipt}
+                className="btn btn-xs md:btn-md bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+            >
+                Download Receipt
+            </button>
+            <button
+                onClick={downloadA4Invoice}
+                className="btn btn-xs md:btn-md bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+            >
+                Download Invoice(A4)
+            </button>
+        </div>
     );
 }

@@ -5,7 +5,6 @@ import ReceiptButton from '@/components/ReceiptButton';
 export default async function OrderDetails({ params }) {
     const { id } = await params
     const order = await getOrderById(id)
-    console.log(order)
     if (!order) {
         notFound();
     }
