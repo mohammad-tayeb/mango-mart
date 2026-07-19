@@ -404,8 +404,18 @@ export default function ReceiptButton({ order }) {
             docA.line(left, 275, right, 275);
 
             docA.text("Thank you for shopping with us!", 105, 281, { align: "center" });
+
             docA.setFont("helvetica", "oblique");
-            docA.text("If you have any questions about this invoice, please contact us.", 105, 285, { align: "center" });
+            docA.text(
+                "If you have any questions about this invoice, please contact us.",
+                105,
+                285,
+                { align: "center" }
+            );
+
+            // Phone number
+            docA.setFont("helvetica", "bold");
+            docA.text("Phone: 01822-350799", 105, 289, { align: "center" });
 
             docA.save(`Invoice-${order.trackingId}.pdf`);
         };
