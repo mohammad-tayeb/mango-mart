@@ -12,6 +12,7 @@ import {
 } from "react-icons/fi";
 import { VscDashboard } from "react-icons/vsc";
 import { HiHome } from "react-icons/hi2";
+import { MdPhotoLibrary } from "react-icons/md";
 
 function AdminDashboard({ session, children }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -23,6 +24,12 @@ function AdminDashboard({ session, children }) {
             label: 'Dashboard',
             href: '/admin/dashboard',
             icon: <VscDashboard className="h-5 w-5"/>,
+        },
+        {
+            id: 'changeHomeBanner',
+            label: 'Change Banner',
+            href: '/admin/changeBanners',
+            icon: <MdPhotoLibrary className="h-5 w-5" />,
         },
         {
             id: 'manageOrders',

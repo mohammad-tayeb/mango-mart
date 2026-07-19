@@ -8,7 +8,8 @@ export const collectionNameObj = {
   reviewCollection: "reviews",
   messageCollection: "messages",
   adminCollection: "admins",
-  orderCollection: "orders"
+  orderCollection: "orders",
+  bannerCollection: "banners"
 };
 
 const client = new MongoClient(process.env.MONGO_URI, {

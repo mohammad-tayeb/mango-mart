@@ -9,23 +9,28 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
-
-const slides = [
-  {
-    id: 1,
-    image: "/banner2.jpg",
-  },
-  {
-    id: 2,
-    image: "/banner1.jpg",
-  },
-  {
-    id: 3,
-    image: "/banner3.jpg",
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { getBanners } from "@/lib/getBanners";
 
 const HeroCarousel = () => {
+  const {
+    data: slides = [],
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["banners"],
+    queryFn: getBanners,
+  });
+  if (isLoading) {
+    return (
+      <div className="w-full h-[180px] sm:h-[280px] md:h-[400px] lg:h-[500px] bg-gray-200 animate-pulse rounded-lg" />
+    );
+  }
+  if (isError) {
+    return <p>Failed to load banners.</p>;
+  }
+
+  console.log(slides)
   return (
     <div className="relative w-full md:max-w-7xl mx-auto aspect-[12/5] h-[180px] sm:h-[280px] md:h-[400px] lg:h-[500px] overflow-hidden bg-black">
       <Swiper
@@ -50,12 +55,12 @@ const HeroCarousel = () => {
         className="w-full h-full"
       >
         {slides.map((slide) => (
-          <SwiperSlide key={slide.id} className="relative w-full h-full">
+          <SwiperSlide key={slide._id} className="relative w-full h-full">
             <Image
               src={slide.image}
               alt="banner images"
               fill
-              priority={slide.id === 1}
+              priority={slide._id === 1}
               className="object-cover object-center"
             />
           </SwiperSlide>

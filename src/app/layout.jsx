@@ -81,10 +81,42 @@ export const metadata = {
   },
 };
 
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Mango Mart BD",
+  url: "https://mangomartbd.shop",
+  logo: "https://mangomartbd.shop/logo.png",
+  email: "official.mangomartbd@gmail.com",
+  sameAs: [
+    "https://www.facebook.com/mangomartbd11/?locale=en_GB",
+  ],
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Mango Mart BD",
+  url: "https://mangomartbd.shop",
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="light">
       <body className={manrope.className}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteSchema),
+          }}
+        />
         <QueryProvider>
           <LayoutWrapper>
             {children}

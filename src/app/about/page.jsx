@@ -3,6 +3,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
+export const metadata = {
+  title: "About Us | Mango Mart BD",
+  description:
+    "Learn about Mango Mart BD and our commitment to delivering fresh mangoes across Bangladesh.",
+};
+
 export default function AboutUs() {
     return (
         <div className="bg-amber-50 text-gray-800">

@@ -6,6 +6,17 @@ import { getProducts } from "@/lib/getProducts";
 import { Suspense } from "react";
 import Breadcrumb from "@/components/Breadcrumb";
 
+export async function generateMetadata({ searchParams }) {
+    const params = await searchParams;
+    const category = params.category || "Products";
+    const formattedCategory = category.charAt(0).toUpperCase() + category.slice(1);
+
+    return {
+        title: `Premium ${formattedCategory} | Mango Mart BD`,
+        description: `Buy fresh ${formattedCategory} online in Bangladesh. Best quality guaranteed.`,
+    };
+}
+
 export default async function Products({ searchParams }) {
     const params = await searchParams;
     const page = Number(params.page) || 1;
