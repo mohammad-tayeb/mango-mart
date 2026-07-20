@@ -204,7 +204,7 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* Professional Mobile Menu Drawer (Slides out from Left) */}
+      {/* Mobile Menu Drawer (Slides out from Left) */}
       <div
         className={`fixed inset-0 z-[100] md:hidden transition-opacity duration-300 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
           }`}
@@ -259,7 +259,7 @@ function Navbar() {
 
                     {/* Dropdown Items (Accordion Style) */}
                     <div
-                      className={`overflow-hidden transition-all duration-300 ease-in-out ${shopOpen ? "max-h-60 opacity-100 mt-1" : "max-h-0 opacity-0"
+                      className={`overflow-hidden transition-all duration-300 ease-in-out ${shopOpen ? "max-h-screen opacity-100 mt-1" : "max-h-0 opacity-0"
                         }`}
                     >
                       <div className="pl-4 pr-2 py-1 space-y-1 bg-gray-50/50 rounded-xl border border-gray-100/50">
