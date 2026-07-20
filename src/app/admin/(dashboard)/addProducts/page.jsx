@@ -21,7 +21,7 @@ export default function AddProduct() {
             category: "",
             variants: [{ quantity: "", price: "", offerPrice: "" }],
             images: [{ url: "" }],
-            description: "", // অবজেক্ট থেকে একক স্ট্রিং-এ পরিবর্তন
+            description: "",
             stock: {
                 quantity: "",
                 unit: "kg",
@@ -56,7 +56,6 @@ export default function AddProduct() {
             "Are you sure you want to Add this product?"
         );
         if (!confirmed) return;
-        // ব্যাকএন্ডে পাঠানোর জন্য ডাটা ফরম্যাটিং করা হচ্ছে
         const product = {
             name: data.name,
             unitPricePerKg: Number(data.unitPricePerKg),
@@ -69,7 +68,7 @@ export default function AddProduct() {
             images: data.images
                 .map((img) => img.url)
                 .filter((url) => url.trim() !== ""),
-            description: data.description, // সরাসরি স্ট্রিং ডাটা পাঠানো হচ্ছে
+            description: data.description,
             stock: {
                 quantity: Number(data.stock.quantity),
                 unit: data.stock.unit,

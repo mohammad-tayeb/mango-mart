@@ -32,11 +32,23 @@ export default function EditBannerForm() {
 
     return (
         <div className="max-w-5xl mx-auto pb-6 space-y-6">
+            {/* Banner Upload Instructions */}
+            <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+                <h2 className="text-base font-semibold text-amber-800">
+                    Guidelines
+                </h2>
+
+                <ul className="mt-2 space-y-1 text-sm text-amber-700">
+                    <li>• <strong>Recommended Size:</strong> 1920 × 800 px</li>
+                    <li>• <strong>Format:</strong> WebP, JPG or PNG</li>
+                    <li>• <strong>Recommended File Size:</strong> Under 300 KB</li>
+                </ul>
+            </div>
             <div className="space-y-4">
                 {sortedBanners.map((bannerItem) => (
                     <BannerFormItem
-                        key={bannerItem._id} 
-                        banner={bannerItem} 
+                        key={bannerItem._id}
+                        banner={bannerItem}
                     />
                 ))}
 

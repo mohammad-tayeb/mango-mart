@@ -204,7 +204,7 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile Menu Drawer (Slides out from Left) */}
+      {/* Professional Mobile Menu Drawer (Slides out from Left) */}
       <div
         className={`fixed inset-0 z-[100] md:hidden transition-opacity duration-300 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
           }`}

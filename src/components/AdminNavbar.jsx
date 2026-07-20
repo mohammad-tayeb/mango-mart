@@ -79,7 +79,7 @@ function AdminDashboard({ session, children }) {
 
             {/* 2. SIDEBAR NAVIGATION */}
             <aside className={`
-                fixed inset-y-0 left-0 z-50 flex w-44 flex-col border-r border-slate-200 bg-white transition-transform duration-300 ease-in-out
+                fixed inset-y-0 left-0 z-50 flex w-48 flex-col border-r border-slate-200 bg-white transition-transform duration-300 ease-in-out
                 lg:static lg:translate-x-0
                 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>

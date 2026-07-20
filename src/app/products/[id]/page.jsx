@@ -7,6 +7,41 @@ export async function generateMetadata({ params }) {
   const { id } = await params;
 
   const product = await getProductById(id);
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+
+    name: product.name,
+    description: product.description,
+    image: product.images,
+    sku: product._id.toString(),
+    category: product.category,
+
+    brand: {
+      "@type": "Brand",
+      name: "Mango Mart BD",
+    },
+
+    offers: product.variants.map((variant) => ({
+      "@type": "Offer",
+      url: `https://mangomartbd.shop/products/${id}`,
+
+      priceCurrency: "BDT",
+      price: variant.offerPrice ?? variant.price,
+
+      availability:
+        product.stock.status === "out_of_stock"
+          ? "https://schema.org/OutOfStock"
+          : "https://schema.org/InStock",
+
+      itemCondition: "https://schema.org/NewCondition",
+
+      seller: {
+        "@type": "Organization",
+        name: "Mango Mart BD",
+      },
+    })),
+  };
 
   if (!product) {
     return {
@@ -64,9 +99,18 @@ export default async function Page({ params }) {
 
 
   return (
-    <ProductDetails
-      product={product}
-      relatedProducts={relatedProducts}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(productSchema),
+        }}
+      />
+
+      <ProductDetails
+        product={product}
+        relatedProducts={relatedProducts}
+      />
+    </>
   );
 }
