@@ -10,11 +10,6 @@ const OrdersTable = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [search, setSearch] = useState("");
-  const [fraudData, setFraudData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [loadingOrderId, setLoadingOrderId] = useState(null);
-  const [showFraudModal, setShowFraudModal] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const statusFilter =
     searchParams.get("status") || "pending";
@@ -153,35 +148,6 @@ const OrdersTable = () => {
     }
   };
 
-
-  //fruad check
-  const handleFraudCheck = async (phone, order) => {
-    setLoading(true);
-    setLoadingOrderId(order._id);
-    setSelectedOrder(order);
-
-    try {
-      const res = await fetch("/api/fraud-check", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ phone }),
-      });
-
-      const data = await res.json();
-
-      setFraudData(data);
-      setShowFraudModal(true);
-    } catch (error) {
-      toast.error("Fraud check failed");
-    } finally {
-      setLoading(false);
-      setLoadingOrderId(null);
-    }
-  };
-
-  console.log(fraudData)
   return (
     <div className="max-w-6xl mx-auto w-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
 
@@ -365,32 +331,16 @@ const OrdersTable = () => {
                         {/* View */}
                         <Link
                           href={`/admin/manageOrders/${order._id}?status=${statusFilter}&page=${currentPage}`}
-                          className="btn btn-xs text-center text-xs font-semibold text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors"
+                          className="btn btn-sm text-center text-xs font-semibold text-indigo-600 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors"
                         >
                           View
                         </Link>
-                        <button
-                          onClick={() =>
-                            handleFraudCheck(order.customer.phoneNumber, order)
-                          }
-                          disabled={loadingOrderId === order._id}
-                          className="btn btn-warning btn-xs min-w-27.5"
-                        >
-                          {loadingOrderId === order._id ? (
-                            <>
-                              <span className="loading loading-spinner loading-xs"></span>
-                              Checking...
-                            </>
-                          ) : (
-                            "Fraud Check"
-                          )}
-                        </button>
 
                         {/* Accept */}
                         {isPending && (
                           <button
                             onClick={() => handleUpdateStatus(order._id, "Accepted")}
-                            className="btn btn-xs text-xs font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors"
+                            className="btn btn-sm text-xs font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors"
                           >
                             Accept
                           </button>
@@ -400,7 +350,7 @@ const OrdersTable = () => {
                         {isAccepted && (
                           <button
                             onClick={() => handleUpdateStatus(order._id, "In Transit")}
-                            className="btn btn-xs text-xs font-semibold text-white bg-amber-500 rounded-lg hover:bg-amber-600 transition-colors"
+                            className="btn btn-sm text-xs font-semibold text-white bg-amber-500 rounded-lg hover:bg-amber-600 transition-colors"
                           >
                             Set In Transit
                           </button>
@@ -410,7 +360,7 @@ const OrdersTable = () => {
                         {isInTransit && (
                           <button
                             onClick={() => handleUpdateStatus(order._id, "Delivered")}
-                            className="btn btn-xs text-xs font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+                            className="btn btn-sm text-xs font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
                           >
                             Set Delivered
                           </button>
@@ -420,7 +370,7 @@ const OrdersTable = () => {
                         {(isPending || isAccepted || isInTransit) && (
                           <button
                             onClick={() => handleDelete(order._id)}
-                            className="btn btn-xs text-xs font-semibold text-rose-600 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors"
+                            className="btn btn-sm text-xs font-semibold text-rose-600 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors"
                           >
                             Delete
                           </button>
@@ -474,198 +424,6 @@ const OrdersTable = () => {
           </button>
         </div>
       </div>
-
-
-      {/* modal */}
-      {showFraudModal && (
-        <dialog className="modal modal-open backdrop-blur-xs">
-          <div className="modal-box max-w-5xl p-0 overflow-hidden rounded-2xl border border-base-200 shadow-2xl bg-base-100">
-
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-base-200 px-6 pt-4 bg-base-100">
-              <div>
-                <h3 className="text-lg font-bold text-base-content flex items-center gap-2">
-                  Fraud Check Insights
-                </h3>
-                <p className="text-xs text-base-content/60 mt-0.5">
-                  Customer Phone: <span className="font-medium text-base-content">{selectedOrder?.customer?.phoneNumber || "N/A"}</span>
-                </p>
-              </div>
-
-              <button
-                type="button"
-                className="btn btn-sm btn-circle btn-ghost text-base-content/60 hover:text-base-content"
-                onClick={() => setShowFraudModal(false)}
-              >
-                ✕
-              </button>
-            </div>
-
-            {/* Body Container */}
-            <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
-
-              {/* Summary Metric Cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-
-                {/* Total Orders */}
-                <div className="bg-base-200/50 rounded-xl p-4 border border-base-200/60">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-base-content/50">
-                    Total Orders
-                  </p>
-                  <h2 className="text-2xl font-black text-base-content mt-1">
-                    {fraudData?.data?.totalSummary?.total ?? 0}
-                  </h2>
-                </div>
-
-                {/* Delivered */}
-                <div className="bg-success/5 rounded-xl p-4 border border-success/20">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-success">
-                    Delivered
-                  </p>
-                  <h2 className="text-2xl font-black text-success mt-1">
-                    {fraudData?.data?.totalSummary?.success ?? 0}
-                  </h2>
-                </div>
-
-                {/* Cancelled */}
-                <div className="bg-error/5 rounded-xl p-4 border border-error/20">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-error">
-                    Cancelled
-                  </p>
-                  <h2 className="text-2xl font-black text-error mt-1">
-                    {fraudData?.data?.totalSummary?.cancel ?? 0}
-                  </h2>
-                </div>
-
-                {/* Delivery Score */}
-                <div className="bg-base-200/50 rounded-xl p-4 border border-base-200/60 flex flex-col justify-between">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-base-content/50">
-                    Delivery Score
-                  </p>
-                  <div className="mt-1">
-                    <span
-                      className={`badge sm:badge-md badge-sm font-semibold gap-1.5 py-3 px-3 ${(fraudData?.data?.totalSummary?.cancelRate ?? 0) < 5
-                          ? "badge-success text-success-content"
-                          : (fraudData?.data?.totalSummary?.cancelRate ?? 0) < 15
-                            ? "badge-warning text-warning-content"
-                            : "badge-error text-error-content"
-                        }`}
-                    >
-                      {fraudData?.data?.totalSummary?.successRate ?? 0}% Success
-                    </span>
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Courier Table Section */}
-              <div className="border border-base-200 rounded-xl overflow-hidden bg-base-100">
-                <div className="overflow-x-auto">
-                  <table className="table table-zebra-zebra w-full text-sm">
-                    <thead>
-                      <tr className="text-xs uppercase text-base-content/50 border-b border-base-200">
-                        <th className="bg-transparent py-3">Courier</th>
-                        <th className="bg-transparent text-center py-3">Orders</th>
-                        <th className="bg-transparent text-center py-3">Delivered</th>
-                        <th className="bg-transparent text-center py-3">Cancelled</th>
-                        <th className="bg-transparent text-center py-3">Success Rate</th>
-                      </tr>
-                    </thead>
-
-                    <tbody className="divide-y divide-base-200">
-                      {Object.entries(fraudData?.data?.Summaries || {}).map(
-                        ([name, courier]) => {
-                          const total = courier?.total || 0;
-                          const success = courier?.success || 0;
-                          const rate = total > 0 ? ((success / total) * 100).toFixed(0) : 0;
-
-                          return (
-                            <tr key={name} className="hover:bg-base-200/40 transition-colors">
-
-                              {/* Courier Name & Logo */}
-                              <td className="py-3">
-                                <div className="flex items-center gap-3">
-                                  <div className="w-10 h-10 rounded-lg bg-base-200 p-1.5 flex items-center justify-center shrink-0 border border-base-200">
-                                    <img
-                                      src={courier?.logo}
-                                      alt={name}
-                                      className="max-w-full max-h-full object-contain"
-                                      onError={(e) => {
-                                        // Fallback display if image fails to load
-                                        e.currentTarget.style.display = 'none';
-                                      }}
-                                    />
-                                  </div>
-                                  <div>
-                                    <h4 className="font-semibold text-base-content capitalize leading-tight">
-                                      {name}
-                                    </h4>
-                                    <p className="text-[11px] text-base-content/50 mt-0.5">
-                                      {courier?.data_type || "Standard"}
-                                    </p>
-                                  </div>
-                                </div>
-                              </td>
-
-                              {/* Orders */}
-                              <td className="text-center font-medium text-base-content/80">
-                                {total}
-                              </td>
-
-                              {/* Delivered */}
-                              <td className="text-center font-semibold text-success">
-                                {courier?.success ?? 0}
-                              </td>
-
-                              {/* Cancelled */}
-                              <td className="text-center font-semibold text-error">
-                                {courier?.cancel ?? 0}
-                              </td>
-
-                              {/* Success Rate Badge */}
-                              <td className="text-center">
-                                <span
-                                  className={`badge badge-sm font-bold ${rate >= 90
-                                      ? "badge-success"
-                                      : rate >= 75
-                                        ? "badge-warning"
-                                        : "badge-error"
-                                    }`}
-                                >
-                                  {rate}%
-                                </span>
-                              </td>
-
-                            </tr>
-                          );
-                        }
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Footer Actions */}
-            <div className="flex justify-end px-6 py-3.5 bg-base-200/40 border-t border-base-200">
-              <button
-                type="button"
-                className="btn btn-sm btn-ghost px-5"
-                onClick={() => setShowFraudModal(false)}
-              >
-                Close
-              </button>
-            </div>
-
-          </div>
-
-          {/* Backdrop */}
-          <form method="dialog" className="modal-backdrop bg-black/40">
-            <button onClick={() => setShowFraudModal(false)}>close</button>
-          </form>
-        </dialog>
-      )}
     </div>
   );
 };
