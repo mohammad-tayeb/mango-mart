@@ -104,6 +104,13 @@ export default function AddProduct() {
         const file = e.target.files[0];
         if (!file) return;
 
+        const MAX_FILE_SIZE = 300 * 1024; // 300 KB
+
+        if (file.size > MAX_FILE_SIZE) {
+            alert("For optimal performance, select an image smaller than 300 KB.");
+            return;
+        }
+
         setUploadingIndex(index);
 
         const formData = new FormData();
@@ -196,7 +203,7 @@ export default function AddProduct() {
                         {variantFields.map((field, index) => (
                             <div key={field.id} className="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-white p-3 border border-gray-200 rounded-lg items-end shadow-sm">
                                 <div>
-                                    <label className="block text-[11px] font-semibold text-gray-500 mb-1">Quantity (e.g., 5)</label>
+                                    <label className="block text-[11px] font-semibold text-gray-500 mb-1">Quantity (e.g., 0.5kg/ 5kg)</label>
                                     <input
                                         type="text"
                                         placeholder="5"

@@ -86,6 +86,10 @@ export async function GET() {
       "stock.status": "in_stock",
     });
 
+    const noOfStockOutProducts = await productCollection.countDocuments({
+      "stock.status": "out_of_stock",
+    });
+
     const amounts = await orderCollection
       .aggregate([
         {
@@ -116,6 +120,7 @@ export async function GET() {
       deliveredOrders,
       totalAdvanceReceived,
       totalDue,
+      noOfStockOutProducts,
     });
   } catch (error) {
     console.error(error);

@@ -57,7 +57,7 @@ export default function SearchBar() {
                                 {...register("search")}
                                 autoFocus
                                 placeholder="Search products..."
-                                className="h-16 w-full rounded-2xl bg-white pl-14 pr-14 text-lg shadow-xl outline-none"
+                                className="h-16 w-full rounded-2xl bg-white pl-14 pr-14 text-lg shadow-xl outline-none ring-2 ring-orange-500 focus:ring-4 focus:ring-orange-500 transition duration-150 ease-in-out"
                             />
 
                             <button

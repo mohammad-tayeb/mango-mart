@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { FiShoppingBag, FiMessageSquare, FiTruck } from 'react-icons/fi';
+import { FiShoppingBag, FiMessageSquare, FiTruck, FiPackage } from 'react-icons/fi';
 import { HiOutlineShoppingCart, HiOutlineArrowUpRight, HiOutlineClock, HiOutlineCheckCircle, HiOutlineXCircle } from 'react-icons/hi2';
 import { HiOutlineCurrencyBangladeshi, HiStar, HiOutlineDocumentText } from 'react-icons/hi';
 import Link from 'next/link';
@@ -162,16 +162,50 @@ export default function DashboardStats() {
 
           {/* Total Products */}
           <div className="bg-white p-5 rounded-xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all duration-200 group relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-[3px] bg-transparent group-hover:bg-amber-500 transition-all duration-300" />
-            <div className="flex items-center justify-between mb-4">
-              <div className="p-2.5 rounded-lg border flex items-center justify-center text-amber-600 bg-amber-50 border-amber-100">
-                <FiShoppingBag className="text-xl" />
+            {/* Hover accent bar */}
+            <div className="absolute top-0 left-0 right-0 h-[3px] bg-transparent group-hover:bg-gradient-to-r group-hover:from-green-500 group-hover:to-red-500 transition-all duration-300" />
+
+            <div className="grid grid-cols-2 gap-4">
+              {/* Live Products */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="p-2.5 rounded-lg border flex items-center justify-center text-green-600 bg-green-50 border-green-100">
+                    <FiShoppingBag className="text-xl" />
+                  </div>
+                </div>
+
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  লাইভ পণ্য
+                </p>
+
+                <h3 className="text-2xl font-bold text-slate-900 mt-1.5 mb-1 tracking-tight">
+                  {dashboardData?.totalProducts
+                    ? dashboardData.totalProducts.toLocaleString("bn-BD")
+                    : "০"}{" "}
+                  টি
+                </h3>
+              </div>
+
+              {/* Out of Stock */}
+              <div className="pl-4 border-l border-slate-100">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="p-2.5 rounded-lg border flex items-center justify-center text-red-600 bg-red-50 border-red-100">
+                    <FiPackage className="text-xl" />
+                  </div>
+                </div>
+
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  স্টক শেষ
+                </p>
+
+                <h3 className="text-2xl font-bold text-slate-900 mt-1.5 mb-1 tracking-tight">
+                  {dashboardData?.noOfStockOutProducts
+                    ? dashboardData.noOfStockOutProducts.toLocaleString("bn-BD")
+                    : "০"}{" "}
+                  টি
+                </h3>
               </div>
             </div>
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">মোট পণ্য (লাইভ)</p>
-            <h3 className="text-2xl font-bold text-slate-900 mt-1.5 mb-1 tracking-tight">
-              {dashboardData?.totalProducts ? dashboardData.totalProducts.toLocaleString('bn-BD') : '০'} টি
-            </h3>
           </div>
 
           {/* Ratings & Reviews Summary */}

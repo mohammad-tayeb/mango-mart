@@ -71,6 +71,12 @@ export default function EditProductForm({ product, id }) {
     const handleImageUpload = async (e, index) => {
         const file = e.target.files[0];
         if (!file) return;
+        const MAX_FILE_SIZE = 300 * 1024; // 300 KB
+
+        if (file.size > MAX_FILE_SIZE) {
+            alert("For optimal performance, select an image smaller than 300 KB.");
+            return;
+        }
 
         setUploadingIndex(index);
 
