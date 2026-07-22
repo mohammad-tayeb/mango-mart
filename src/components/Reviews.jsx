@@ -123,18 +123,29 @@ export default function Reviews() {
                 </Link>
 
                 {/* Bottom Banner Section */}
-                <div className="mt-14 bg-orange-500 text-white rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-left">
-                    <div>
-                        <h3 className="text-lg sm:text-xl font-bold mb-1">
-                            Love Our Products?
-                        </h3>
-                        <p className="text-sm text-red-100">
-                            Share your experience and help others discover our products.
-                        </p>
+                <div className="mt-14 rounded-3xl border border-orange-100 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-lg sm:p-8">
+                    <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+                        <div className="max-w-2xl">
+                            <span className="inline-flex items-center rounded-full bg-orange-50 px-3 py-1 text-xs font-semibold text-orange-600">
+                                💬 গ্রাহকের মতামত
+                            </span>
+
+                            <h3 className="mt-4 text-2xl font-bold text-gray-900">
+                                আপনার অভিজ্ঞতা শেয়ার করুন
+                            </h3>
+
+                            <p className="mt-3 text-sm leading-7 text-gray-600">
+                                আমাদের কাছ থেকে কেনাকাটার অভিজ্ঞতা কেমন ছিল? একটি রিভিউ লিখে জানান। আপনার মূল্যবান মতামত আমাদের সেবার মান উন্নত করতে এবং নতুন ক্রেতাদের সঠিক সিদ্ধান্ত নিতে সহায়তা করবে।
+                            </p>
+                        </div>
+
+                        <Link
+                            href="/reviews"
+                            className="inline-flex items-center justify-center rounded-xl bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-orange-600 hover:shadow-lg"
+                        >
+                            রিভিউ লিখুন
+                        </Link>
                     </div>
-                    <Link href="/reviews" className="whitespace-nowrap px-6 py-2.5 bg-white text-orange-500 rounded-full font-semibold text-sm hover:bg-red-50 transition-colors focus:outline-none shadow-sm">
-                        Write a Review
-                    </Link>
                 </div>
             </div>
         </section>

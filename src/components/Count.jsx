@@ -4,7 +4,7 @@ import CountUp from "react-countup"
 function Count() {
     return (
         <section className="max-w-5xl mx-auto px-4 py-16 text-center">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 bg-amber-500 text-white p-8 rounded-2xl shadow-lg">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 bg-orange-500 text-white p-8 rounded-2xl shadow-lg">
 
                 <div>
                     <p className="text-3xl md:text-4xl font-extrabold">

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FaStar } from "react-icons/fa6";
+import CountUp from "react-countup"
 
 export default function Page() {
     const [visible, setVisible] = useState(6);
@@ -64,80 +65,89 @@ export default function Page() {
 
     return (
         <div>
-            <section className="w-full bg-gradient-to-r from-orange-500 via-[#f3780c] to-[#fa7a0a] text-white py-12 px-4 text-center select-none font-sans">
-                <div className="max-w-4xl mx-auto flex flex-col items-center">
-                    {/* Main Heading */}
-                    <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
-                        Customer Reviews
-                    </h2>
+            <section className="relative overflow-hidden bg-gradient-to-r from-orange-500 to-[#f67b11] text-white py-10">
+                {/* Decorative Blurs */}
+                <div className="absolute -top-20 -left-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+                <div className="absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-yellow-300/10 blur-3xl" />
 
-                    {/* Subtitle */}
-                    <p className="text-sm sm:text-base text-red-100/90 font-medium max-w-xl mb-8">
-                        Real feedback from real customers who love our products
-                    </p>
+                <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
 
-                    {/* Stats Grid */}
-                    <div className="flex items-center justify-center gap-6 sm:gap-12 mb-8">
-                        {/* Reviews Counter */}
-                        <div className="text-center min-w-[70px]">
-                            <div className="text-xl sm:text-2xl font-bold">{reviews.length}</div>
-                            <div className="text-[10px] sm:text-xs font-bold tracking-wider text-red-200 uppercase mt-1">
-                                Reviews
+                    <div className="overflow-hidden">
+
+                        <div className="py-2 sm:py-4">
+
+                            {/* Header */}
+                            <div className="text-center">
+                                <h2 className="text-2xl font-bold tracking-tight sm:text-4xl">
+                                    আমাদের গ্রাহকদের অভিজ্ঞতা
+                                </h2>
+
+                                <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-orange-100 sm:text-base sm:leading-7">
+                                    আমাদের পণ্য ও সেবা সম্পর্কে প্রকৃত গ্রাহকদের মূল্যবান মতামত।
+                                    আপনার অভিজ্ঞতাও শেয়ার করুন এবং অন্যদের সঠিক সিদ্ধান্ত নিতে সহায়তা করুন।
+                                </p>
                             </div>
-                        </div>
 
-                        {/* Divider */}
-                        <div className="h-8 w-[1px] bg-red-400/50" />
+                            {/* Stats */}
+                            <div className="mt-10 grid grid-cols-3 gap-4 sm:mt-12 sm:gap-5">
 
-                        {/* Average Rating */}
-                        <div className="text-center min-w-[90px]">
-                            <div className="flex items-center justify-center gap-1.5 text-xl sm:text-2xl font-bold">
-                                {/* Star Icon */}
-                                <svg
-                                    className="w-5 h-5 fill-[#facc15] text-[#facc15]"
-                                    viewBox="0 0 20 20"
+                                <div className="rounded-2xl border border-white/15 bg-white/10 px-5 py-6 text-center sm:px-6 sm:py-7">
+                                    <h3 className="text-3xl font-bold sm:text-4xl">
+                                        <CountUp end={reviews.length} duration={2} />
+                                    </h3>
+
+                                    <p className="mt-2 sm:text-sm text-xs text-orange-100">
+                                        মোট রিভিউ
+                                    </p>
+                                </div>
+
+                                <div className="rounded-2xl border border-white/15 bg-white/10 px-5 py-6 text-center sm:px-6 sm:py-7">
+                                    <div className="flex items-center justify-center gap-2">
+                                        <span className="text-xl sm:text-2xl">⭐</span>
+
+                                        <h3 className="text-3xl font-bold sm:text-4xl">
+                                            <CountUp
+                                                end={Number(averageRating)}
+                                                decimals={1}
+                                                duration={2}
+                                            />
+                                        </h3>
+                                    </div>
+
+                                    <p className="mt-2 sm:text-sm text-xs text-orange-100">
+                                        গড় রেটিং
+                                    </p>
+                                </div>
+
+                                <div className="rounded-2xl border border-white/15 bg-white/10 px-5 py-6 text-center sm:px-6 sm:py-7">
+                                    <h3 className="text-3xl font-bold sm:text-4xl">
+                                        <CountUp end={100} duration={2} />%
+                                    </h3>
+
+                                    <p className="mt-2 sm:text-sm text-xs text-orange-100">
+                                        যাচাইকৃত রিভিউ
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            {/* CTA */}
+                            <div className="mt-10 flex justify-center sm:mt-12">
+                                <button
+                                    onClick={() =>
+                                        document.getElementById("review_modal").showModal()
+                                    }
+                                    className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-orange-600 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-orange-50 hover:shadow-xl"
                                 >
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                                <span>{averageRating}</span>
+                                    ✍️
+                                    আপনার মতামত লিখুন
+                                </button>
                             </div>
-                            <div className="text-[10px] sm:text-xs font-bold tracking-wider text-red-200 uppercase mt-1">
-                                Average Rating
-                            </div>
+
                         </div>
 
-                        {/* Divider */}
-                        <div className="h-8 w-[1px] bg-red-400/50" />
-
-                        {/* Verified Counter */}
-                        <div className="text-center min-w-[70px]">
-                            <div className="text-xl sm:text-2xl font-bold">100%</div>
-                            <div className="text-[10px] sm:text-xs font-bold tracking-wider text-red-200 uppercase mt-1">
-                                Verified
-                            </div>
-                        </div>
                     </div>
 
-                    {/* CTA Button */}
-                    <button
-                        onClick={() => document.getElementById("review_modal").showModal()}
-                        className="inline-flex items-center gap-2 px-6 py-3 border border-white/50 bg-white/10 hover:bg-white/20 active:bg-white/30 rounded-full font-bold text-sm tracking-wide transition-all focus:outline-none shadow-sm backdrop-blur-sm group">
-                        {/* Edit/Pencil Icon */}
-                        <svg
-                            className="w-4 h-4 text-white group-hover:scale-105 transition-transform"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2.5"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                            />
-                        </svg>
-                        Share Your Experience
-                    </button>
                 </div>
             </section>
 

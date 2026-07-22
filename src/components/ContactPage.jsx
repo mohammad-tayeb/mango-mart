@@ -3,7 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FaMailBulk } from "react-icons/fa";
-import { FaClock, FaFacebook, FaMapLocation, FaPhone } from "react-icons/fa6";
+import { FaClock, FaMapLocation, FaPhone } from "react-icons/fa6";
 function ContactPage() {
     const {
         register,
@@ -70,7 +70,8 @@ function ContactPage() {
     const whatsappUrl = `https://wa.me/8801822350799?text=${encodeURIComponent(message)}`;
     return (
         <div className="mb-10">
-            <div className="w-full mb-10 bg-amber-50 py-8 px-4 flex items-center justify-center">
+            <div className="w-full mb-10 bg-orange-500  text-white py-8 px-4 flex items-center justify-center flex-col">
+                <h2 className="text-3xl font-extrabold mb-6">Contact Us</h2>
                 <div className="max-w-6xl  w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:mx-0 mx-4">
                     {contactInfo.map((card, index) => (
                         <div
@@ -276,23 +277,6 @@ function ContactPage() {
                             <p className="leading-snug">
                                 We typically respond within <span className="font-semibold text-gray-800">a few hours</span> during business hours.
                             </p>
-                        </div>
-
-                        {/* Follow Us Card */}
-                        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-                            <h4 className="text-xs font-bold text-gray-400 tracking-wider uppercase mb-4">
-                                Follow Us
-                            </h4>
-                            <div className="flex gap-4">
-                                {/* Facebook */}
-                                <a
-                                    href="https://www.facebook.com/mangomartbd11"
-                                    target="_blank"
-                                    className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 text-orange-500 hover:bg-rose-50 hover:scale-105 transition duration-200"
-                                >
-                                    <FaFacebook></FaFacebook>
-                                </a>
-                            </div>
                         </div>
                     </div>
                 </div>
