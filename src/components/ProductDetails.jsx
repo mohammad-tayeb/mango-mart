@@ -51,6 +51,16 @@ ${window.location.href}
 
     const description = product?.description || "";
 
+    const discountPercentage =
+        selectedVariant?.offerPrice &&
+            selectedVariant.price > selectedVariant.offerPrice
+            ? Math.round(
+                ((selectedVariant.price - selectedVariant.offerPrice) /
+                    selectedVariant.price) *
+                100
+            )
+            : null;
+
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 md:py-8 py-4 bg-white mb-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
@@ -108,10 +118,14 @@ ${window.location.href}
                         <span className="text-3xl font-bold text-orange-500">
                             ৳{" "}
                             {(selectedVariant?.offerPrice || selectedVariant?.price).toLocaleString()}
-                        </span>
-                    </div>
 
-                    <hr className="border-gray-100" />
+                        </span>
+                        {discountPercentage && (
+                            <span className="rounded-full bg-[#34be82] px-2 py-1 text-xs font-bold text-white shadow-md">
+                                Save {discountPercentage}%
+                            </span>
+                        )}
+                    </div>
 
                     {/* Weight Variant Option Chips */}
                     <div>
@@ -146,7 +160,7 @@ ${window.location.href}
                         <p className="text-sm font-medium text-gray-700 mb-2">
                             আপনি কতটি{" "}
                             <span className="font-semibold text-orange-500">
-                                {selectedVariant?.quantity}
+                                {selectedVariant?.quantity} kg
                             </span>{" "}
                             বক্স নিতে চান?
                         </p>
@@ -251,7 +265,7 @@ ${window.location.href}
                 </div>
 
                 {/* Body */}
-                <div className="divide-y divide-gray-100 px-2 p-4">
+                <div className="divide-y divide-gray-100  sm:p-10 p-4">
                     <p className="text-gray-700 leading-8 whitespace-pre-line">
                         {description}
                     </p>

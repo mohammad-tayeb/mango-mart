@@ -25,11 +25,25 @@ function ProductCard({ product }) {
         );
     };
 
+    const discountPercentage =
+        selectedVariant?.offerPrice &&
+            selectedVariant.price > selectedVariant.offerPrice
+            ? Math.round(
+                ((selectedVariant.price - selectedVariant.offerPrice) /
+                    selectedVariant.price) *
+                100
+            )
+            : null;
     return (
         <div className="group relative border border-gray-200 rounded-lg p-2 sm:p-4 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:border-gray-300">
             {/* Image */}
             <div className="relative w-full aspect-square mb-2 sm:mb-3 overflow-hidden rounded-md bg-gray-50/50">
                 <Link href={`/products/${product._id}`} className="block w-full h-full">
+                    {discountPercentage && (
+                        <div className="absolute top-2 right-2 z-20 rounded-full bg-[#34be82] px-2 py-1 text-[10px] sm:text-xs font-bold text-white shadow-md">
+                            Save {discountPercentage}%
+                        </div>
+                    )}
                     <img
                         src={product.images?.[0] || "/placeholder.jpg"}
                         alt={product.name}
@@ -73,8 +87,8 @@ function ProductCard({ product }) {
                                     type="button"
                                     onClick={() => setSelectedVariant(variant)}
                                     className={`px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-[9px] sm:text-[11px] font-medium border rounded-full transition-all ${selectedVariant?.quantity === variant.quantity
-                                            ? "border-orange-500 bg-orange-500/10 text-orange-500"
-                                            : "border-gray-200 text-gray-600 hover:border-gray-400"
+                                        ? "border-orange-500 bg-orange-500/10 text-orange-500"
+                                        : "border-gray-200 text-gray-600 hover:border-gray-400"
                                         }`}
                                 >
                                     {variant.quantity}kg

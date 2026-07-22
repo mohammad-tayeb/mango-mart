@@ -43,6 +43,7 @@ export default function CategorySlider() {
                                     src={category.image}
                                     alt={category.name}
                                     fill
+                                    sizes="36px"
                                     className="object-cover rounded-full transition-transform duration-300 group-hover:scale-110"
                                 />
                             </div>
