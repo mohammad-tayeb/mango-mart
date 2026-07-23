@@ -121,7 +121,7 @@ export default function Page() {
 
                                 <div className="rounded-2xl border border-white/15 bg-white/10 px-5 py-6 text-center sm:px-6 sm:py-7">
                                     <h3 className="text-3xl font-bold sm:text-4xl">
-                                        <CountUp end={100} duration={2} />%
+                                        <CountUp end={100} duration={2} /><span className="text-xl">%</span>
                                     </h3>
 
                                     <p className="mt-2 sm:text-sm text-xs text-orange-100">

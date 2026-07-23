@@ -132,7 +132,7 @@ function ProductCard({ product }) {
                     <button
                         onClick={handleAddToCart}
                         disabled={!selectedVariant}
-                        className="w-full border border-orange-500 text-orange-500 font-medium pb-1.5 sm:py-2 text-xs sm:text-sm rounded-md hover:bg-orange-500 hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full border border-orange-500 text-orange-500 font-medium py-1.5 sm:py-2 text-xs sm:text-sm rounded-md hover:bg-orange-500 hover:text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Add To Cart
                     </button>

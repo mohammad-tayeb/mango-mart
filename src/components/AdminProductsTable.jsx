@@ -6,9 +6,26 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { HiPencilAlt } from "react-icons/hi"
 import { HiTrash } from "react-icons/hi2"
+import { useSearchParams, useRouter } from "next/navigation";
 
 function AdminProductsTable({ products = [], refetch }) {
-    const [category, setCategory] = useState("all");
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
+    const category = searchParams.get("category") || "all";
+
+    const handleCategoryChange = (value) => {
+        const params = new URLSearchParams(searchParams.toString());
+
+        if (value === "all") {
+            params.delete("category");
+        } else {
+            params.set("category", value);
+        }
+
+        router.replace(`?${params.toString()}`);
+    };
+
     const handleProductDelete = async (id) => {
         const confirmed = window.confirm(
             "Are you sure you want to delete this product?"
@@ -79,7 +96,7 @@ function AdminProductsTable({ products = [], refetch }) {
 
                     <select
                         value={category}
-                        onChange={(e) => setCategory(e.target.value)}
+                        onChange={(e) => handleCategoryChange(e.target.value)}
                         className="select select-bordered select-sm w-full md:w-40"
                     >
                         <option value="all">All Products</option>
@@ -194,7 +211,7 @@ function AdminProductsTable({ products = [], refetch }) {
                                     <td className="py-4 px-5 align-middle text-right">
                                         <div className="flex items-center justify-end gap-2">
                                             <Link
-                                                href={`/admin/manageProducts/${product._id}`}
+                                                href={`/admin/manageProducts/${product._id}?category=${category}`}
                                                 className="p-2 rounded-lg border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 hover:text-indigo-600 hover:border-indigo-200 transition-all duration-150 shadow-sm"
                                                 title="Edit Product"
                                             >

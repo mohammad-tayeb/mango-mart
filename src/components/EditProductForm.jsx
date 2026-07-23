@@ -1,14 +1,18 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FiCheckCircle } from "react-icons/fi";
+import { useRouter, useSearchParams } from "next/navigation";
+
 
 export default function EditProductForm({ product, id }) {
     const [uploadingIndex, setUploadingIndex] = useState(null);
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const category = searchParams.get("category") || "all";
+
     const {
         register,
         handleSubmit,
@@ -61,7 +65,7 @@ export default function EditProductForm({ product, id }) {
 
             toast.success("Product updated successfully!");
 
-            router.push("/admin/manageProducts");
+            router.push(`/admin/manageProducts?category=${category}`);
             router.refresh();
         } catch (err) {
             toast.error(err.message);
