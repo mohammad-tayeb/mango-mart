@@ -28,106 +28,150 @@ export async function GET() {
       );
     }
 
-    const orderCollection = await dbConnect(
-      collectionNameObj.orderCollection
-    );
-    const messageCollection = await dbConnect(
-      collectionNameObj.messageCollection
-    );
-    const reviewCollection = await dbConnect(
-      collectionNameObj.reviewCollection
-    );
-    const productCollection = await dbConnect(
-      collectionNameObj.productCollection
-    );
+    const [
+      orderCollection,
+      messageCollection,
+      reviewCollection,
+      productCollection,
+    ] = await Promise.all([
+      dbConnect(collectionNameObj.orderCollection),
+      dbConnect(collectionNameObj.messageCollection),
+      dbConnect(collectionNameObj.reviewCollection),
+      dbConnect(collectionNameObj.productCollection),
+    ]);
 
-    const pendingOrders = await orderCollection.countDocuments({
-      orderStatus: "Pending",
-    });
-
-    const deliveredOrders = await orderCollection.countDocuments({
-      orderStatus: "Delivered",
-    });
-
-    const TransitOrders = await orderCollection.countDocuments({
-      orderStatus: "In Transit",
-    });
-
-    const deletedOrders = await orderCollection.countDocuments({
-      orderStatus: "Deleted",
-    });
-
-    const totalOrders = await orderCollection.countDocuments();
-
-    const toatlReview = await reviewCollection.countDocuments();
-
-    const result = await reviewCollection
-      .aggregate([
-        {
-          $group: {
-            _id: null,
-            averageRating: { $avg: "$rating" },
-            totalReviews: { $sum: 1 },
+    const [
+      orderStats,
+      reviewStats,
+      productStats,
+      unreadMessages,
+    ] = await Promise.all([
+      orderCollection
+        .aggregate([
+          {
+            $facet: {
+              statusCounts: [
+                {
+                  $group: {
+                    _id: "$orderStatus",
+                    count: { $sum: 1 },
+                  },
+                },
+              ],
+              revenue: [
+                {
+                  $group: {
+                    _id: null,
+                    totalRevenue: {
+                      $sum: "$payment.actualAmount",
+                    },
+                    totalAdvanceReceived: {
+                      $sum: "$payment.amountPaid",
+                    },
+                    totalDue: {
+                      $sum: "$payment.amountDue",
+                    },
+                    totalOrders: {
+                      $sum: 1,
+                    },
+                  },
+                },
+              ],
+            },
           },
-        },
-      ])
-      .toArray();
+        ])
+        .toArray(),
 
-    const averageRating = result.length
-      ? Number(result[0].averageRating.toFixed(1))
-      : 0;
-
-    const unreadMessages = await messageCollection.countDocuments({
-      isRead: false,
-      status: "New",
-    });
-
-    const totalProducts = await productCollection.countDocuments({
-      "stock.status": "in_stock",
-    });
-
-    const noOfStockOutProducts = await productCollection.countDocuments({
-      "stock.status": "out_of_stock",
-    });
-
-    const amounts = await orderCollection
-      .aggregate([
-        {
-          $group: {
-            _id: null,
-            totalRevenue: { $sum: "$payment.actualAmount" },
-            totalAdvanceReceived: { $sum: "$payment.amountPaid" },
-            totalDue: { $sum: "$payment.amountDue" },
+      reviewCollection
+        .aggregate([
+          {
+            $group: {
+              _id: null,
+              totalReviews: { $sum: 1 },
+              averageRating: { $avg: "$rating" },
+            },
           },
-        },
-      ])
-      .toArray();
+        ])
+        .toArray(),
 
-    const totalRevenue = amounts[0]?.totalRevenue || 0;
-    const totalAdvanceReceived = amounts[0]?.totalAdvanceReceived || 0;
-    const totalDue = amounts[0]?.totalDue || 0;
+      productCollection
+        .aggregate([
+          {
+            $group: {
+              _id: "$stock.status",
+              count: { $sum: 1 },
+            },
+          },
+        ])
+        .toArray(),
+
+      messageCollection.countDocuments({
+        isRead: false,
+        status: "New",
+      }),
+    ]);
+
+    // ---------------- Orders ----------------
+
+    const revenue = orderStats[0]?.revenue?.[0] || {};
+
+    const statusMap = {};
+
+    orderStats[0]?.statusCounts?.forEach((item) => {
+      statusMap[item._id] = item.count;
+    });
+
+    // ---------------- Reviews ----------------
+
+    const reviews = reviewStats[0] || {};
+
+    // ---------------- Products ----------------
+
+    const productMap = {};
+
+    productStats.forEach((item) => {
+      productMap[item._id] = item.count;
+    });
 
     return NextResponse.json({
-      pendingOrders,
-      totalOrders,
+      pendingOrders: statusMap["Pending"] || 0,
+      deliveredOrders: statusMap["Delivered"] || 0,
+      TransitOrders: statusMap["In Transit"] || 0,
+      deletedOrders: statusMap["Deleted"] || 0,
+
+      totalOrders: revenue.totalOrders || 0,
+
+      totalRevenue: revenue.totalRevenue || 0,
+      totalAdvanceReceived:
+        revenue.totalAdvanceReceived || 0,
+      totalDue: revenue.totalDue || 0,
+
       unreadMessages,
-      totalProducts,
-      toatlReview,
-      averageRating,
-      totalRevenue,
-      deletedOrders,
-      TransitOrders,
-      deliveredOrders,
-      totalAdvanceReceived,
-      totalDue,
-      noOfStockOutProducts,
+
+      totalProducts:
+        productMap["in_stock"] || 0,
+
+      noOfStockOutProducts:
+        productMap["out_of_stock"] || 0,
+
+      toatlReview:
+        reviews.totalReviews || 0,
+
+      averageRating:
+        reviews.averageRating
+          ? Number(reviews.averageRating.toFixed(1))
+          : 0,
     });
   } catch (error) {
     console.error(error);
 
     return NextResponse.json(
-      { message: "Internal Server Error" },
-      { status: 500 }
+      {
+        message: "Internal Server Error",
+      },
+      {
+        status: 500,
+      }
     );
   }
 }

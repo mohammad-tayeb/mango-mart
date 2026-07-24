@@ -107,7 +107,7 @@ export default function MessageDashboard() {
     <div className="bg-slate-50 min-h-screen pb-10">
       <div className="max-w-6xl mx-auto">
         {/* Filter Tabs */}
-        <div className="flex justify-between items-center gap-2 mb-6 bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm">
+        <div className="flex justify-between items-center gap-2 mb-3 bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm">
           <div>
             {[
               { id: "All", label: "All" },

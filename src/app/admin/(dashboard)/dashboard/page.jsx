@@ -17,9 +17,86 @@ export default function DashboardStats() {
   });
   if (isLoading) {
     return (
-      <div className="w-full bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-500 font-medium shadow-sm">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mx-auto mb-4"></div>
-        ড্যাশবোর্ড ডাটা লোড হচ্ছে...
+      <div className="bg-slate-50 rounded-2xl border border-slate-100 mt-3 animate-pulse">
+        {/* Header */}
+        <div className="mb-3">
+          <div className="h-8 w-56 rounded-lg bg-slate-200"></div>
+        </div>
+
+        <div className="space-y-6">
+          {/* Top Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            {/* Revenue Card */}
+            <div className="bg-white rounded-xl border border-slate-200 p-6 min-h-[220px]">
+              <div className="h-12 w-12 rounded-lg bg-slate-200 mb-6"></div>
+
+              <div className="h-3 w-24 rounded bg-slate-200 mb-3"></div>
+              <div className="h-9 w-44 rounded bg-slate-200 mb-8"></div>
+
+              <div className="border-t border-slate-100 pt-4 grid grid-cols-2 gap-4">
+                <div>
+                  <div className="h-3 w-16 rounded bg-slate-200 mb-2"></div>
+                  <div className="h-6 w-20 rounded bg-slate-200"></div>
+                </div>
+
+                <div className="border-l border-slate-100 pl-4">
+                  <div className="h-3 w-16 rounded bg-slate-200 mb-2"></div>
+                  <div className="h-6 w-20 rounded bg-slate-200"></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Order Card */}
+            <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 p-6">
+              <div className="flex justify-between items-center pb-4 border-b border-slate-100">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-lg bg-slate-200"></div>
+                  <div>
+                    <div className="h-4 w-32 rounded bg-slate-200 mb-2"></div>
+                    <div className="h-3 w-24 rounded bg-slate-200"></div>
+                  </div>
+                </div>
+
+                <div className="h-4 w-20 rounded bg-slate-200"></div>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+                {[...Array(4)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="bg-slate-50 border border-slate-100 rounded-lg p-3"
+                  >
+                    <div className="h-3 w-16 rounded bg-slate-200 mb-3"></div>
+                    <div className="h-7 w-12 rounded bg-slate-200"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[...Array(4)].map((_, card) => (
+              <div
+                key={card}
+                className="bg-white rounded-xl border border-slate-200 p-5"
+              >
+                <div className="grid grid-cols-2 gap-4">
+                  {[...Array(2)].map((_, item) => (
+                    <div
+                      key={item}
+                      className={item ? "pl-4 border-l border-slate-100" : ""}
+                    >
+                      <div className="h-10 w-10 rounded-lg bg-slate-200 mb-4"></div>
+                      <div className="h-3 w-16 rounded bg-slate-200 mb-2"></div>
+                      <div className="h-7 w-20 rounded bg-slate-200"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }

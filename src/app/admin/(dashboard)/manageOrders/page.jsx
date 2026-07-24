@@ -179,7 +179,7 @@ const OrdersTable = () => {
               placeholder="Search customer, phone, email, tracking ID..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="input input-bordered input-sm w-full sm:flex-1 lg:w-72 text-xs"
+              className="input input-bordered input-sm w-full sm:flex-1 lg:w-72 text-xs border-orange-200 rounded shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] text-slate-800 placeholder-slate-600 focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all duration-200"
             />
 
             <select

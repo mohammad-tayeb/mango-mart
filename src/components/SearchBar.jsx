@@ -51,13 +51,13 @@ export default function SearchBar() {
 
                         {/* Search Input */}
                         <div className="relative">
-                            <FaSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
+                            <FaSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-orange-500 text-xl" />
 
                             <input
                                 {...register("search")}
                                 autoFocus
                                 placeholder="Search products..."
-                                className="h-16 w-full rounded-2xl bg-white pl-14 pr-14 text-lg shadow-xl outline-none ring-2 ring-orange-500 focus:ring-4 focus:ring-orange-500 transition duration-150 ease-in-out"
+                                className="h-16 w-full rounded-2xl bg-white pl-14 pr-14 text-lg shadow-xl outline-none"
                             />
 
                             <button

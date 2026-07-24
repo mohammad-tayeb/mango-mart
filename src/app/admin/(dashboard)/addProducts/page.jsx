@@ -141,15 +141,10 @@ export default function AddProduct() {
     return (
         // <div></div>
         <div className="max-w-6xl mx-auto border border-gray-100 rounded-xl shadow-xl p-6 md:p-8 font-sans">
-            {/* ফর্ম হেডার */}
-            <div className="pb-2 -mt-4">
-                <h1 className="text-2xl font-bold text-gray-800">Add New Product</h1>
-            </div>
-
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
                 {/* ১. প্রাথমিক তথ্য (Basic Info) */}
-                <div className="bg-gray-50/50 p-5 rounded-xl border border-gray-100 space-y-4">
+                <div className="bg-gray-50/50 sm:p-5 p-0 rounded-xl border border-gray-100 space-y-4">
                     <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
                         <FiInfo className="text-orange-500" /> Basic Information
                     </h2>
@@ -185,7 +180,7 @@ export default function AddProduct() {
                 </div>
 
                 {/* ২. ডাইনামিক ভেরিয়েন্ট (Variants Array) */}
-                <div className="bg-gray-50/50 p-5 rounded-xl border border-gray-100 space-y-4">
+                <div className="bg-gray-50/50 sm:p-5 p-0 rounded-xl border border-gray-100 space-y-4">
                     <div className="flex items-center justify-between">
                         <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
                             <FiLayers className="text-orange-500" /> Custom Pack Variants
@@ -242,10 +237,10 @@ export default function AddProduct() {
                 </div>
 
                 {/* ৩. ডাইনামিক ইমেজ লিংক (Images Array) */}
-                <div className="bg-gray-50/50 p-5 rounded-xl border border-gray-100 space-y-4">
+                <div className="bg-gray-50/50 sm:p-5 p-0 rounded-xl border border-gray-100 space-y-4">
                     <div className="flex items-center justify-between">
                         <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
-                            <FiImage className="text-orange-500" /> Product Images (URLs)
+                            <FiImage className="text-orange-500" /> Product Images
                         </h2>
                         <button
                             type="button"
@@ -306,7 +301,7 @@ export default function AddProduct() {
                 </div>
 
                 {/* ৪. নতুন একক বিবরণ ফিল্ড (Single Description Field) */}
-                <div className="bg-gray-50/50 p-5 rounded-xl border border-gray-100 space-y-4">
+                <div className="bg-gray-50/50 sm:p-5 p-0 rounded-xl border border-gray-100 space-y-4">
                     <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
                         <FiFileText className="text-orange-500" /> Product Description
                     </h2>
@@ -325,7 +320,7 @@ export default function AddProduct() {
                 </div>
 
                 {/* ৫. স্টক ইনফরমেশন (Nested Stock Object) */}
-                <div className="bg-gray-50/50 p-5 rounded-xl border border-gray-100 space-y-4">
+                <div className="bg-gray-50/50 sm:p-5 p-0 rounded-xl border border-gray-100 space-y-4">
                     <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
                         <FiSettings className="text-orange-500" /> Stock & Operations
                     </h2>

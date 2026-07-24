@@ -4,6 +4,7 @@ import { useState } from "react";
 import useCartStore from "@/app/store/cartStore";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { FaFireFlameCurved } from "react-icons/fa6";
 
 function ProductCard({ product }) {
     const [selectedVariant, setSelectedVariant] = useState(
@@ -39,9 +40,18 @@ function ProductCard({ product }) {
             {/* Image */}
             <div className="relative w-full aspect-square mb-2 sm:mb-3 overflow-hidden rounded-md bg-gray-50/50">
                 <Link href={`/products/${product._id}`} className="block w-full h-full">
+                    {/* Discount */}
                     {discountPercentage && (
-                        <div className="absolute top-2 right-2 z-20 rounded-full bg-[#34be82] px-2 py-1 text-[10px] sm:text-xs font-bold text-white shadow-md">
+                        <div className="absolute top-2 right-2 z-20 rounded-md bg-[#34be82] px-1.5 py-0.5 sm:px-2 sm:py-1 text-[9px] sm:text-xs font-bold text-white shadow-md">
                             Save {discountPercentage}%
+                        </div>
+                    )}
+
+                    {/* Best Selling */}
+                    {product.isBestSelling && (
+                        <div className="absolute top-2 left-2 z-20 flex items-center gap-1 rounded-md bg-red-500 px-1.5 py-0.5 sm:px-2 sm:py-1 text-[9px] sm:text-xs font-bold text-white shadow-md">
+                            <FaFireFlameCurved className="text-[9px] sm:text-xs" />
+                            <span>Best Selling</span>
                         </div>
                     )}
                     <img
@@ -51,15 +61,6 @@ function ProductCard({ product }) {
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                 </Link>
-
-                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
-                    <Link
-                        href={`/products/${product._id}`}
-                        className="bg-white text-gray-900 font-medium px-3 py-1.5 sm:px-4 sm:py-2 rounded-md text-xs shadow-md transition-transform duration-200 transform translate-y-2 group-hover:translate-y-0 hover:bg-orange-500 hover:text-white"
-                    >
-                        View Details
-                    </Link>
-                </div>
             </div>
 
             {/* Product Info */}

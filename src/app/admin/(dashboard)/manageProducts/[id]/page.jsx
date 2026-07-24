@@ -9,7 +9,7 @@ export default async function EditProductPage({ params }) {
 
     return (
         <div className="mt-2 mb-10">
-            <h1 className="md:text-3xl text-1xl font-bold mb-2">
+            <h1 className="md:text-3xl sm:ms-2 ms-0 text-1xl font-bold mb-2">
                 Edit Product
             </h1>
 

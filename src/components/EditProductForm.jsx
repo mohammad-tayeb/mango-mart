@@ -22,6 +22,7 @@ export default function EditProductForm({ product, id }) {
         formState: { isSubmitting },
     } = useForm({
         defaultValues: product,
+        isBestSelling: true,
     });
 
     const {
@@ -152,6 +153,21 @@ export default function EditProductForm({ product, id }) {
                             className="input input-bordered w-full focus:input-orange-500 text-sm h-10"
                         />
                     </div>
+                </div>
+                {/* set best selling  */}
+                <div className="flex items-center gap-3 mt-2">
+                    <input
+                        type="checkbox"
+                        id="isBestSelling"
+                        {...register("isBestSelling")}
+                        className="checkbox checkbox-warning"
+                    />
+                    <label
+                        htmlFor="isBestSelling"
+                        className="text-sm font-medium text-slate-700 cursor-pointer"
+                    >
+                        Best Selling Product
+                    </label>
                 </div>
             </div>
 

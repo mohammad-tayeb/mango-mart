@@ -2,7 +2,7 @@
 import useCartStore from "@/app/store/cartStore";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { FaBagShopping, FaWhatsapp, FaPhone } from "react-icons/fa6";
+import { FaBagShopping, FaWhatsapp, FaPhone, FaFireFlameCurved } from "react-icons/fa6";
 import ProductCard from "./ProductCard";
 import { useRouter } from "next/navigation";
 
@@ -121,8 +121,14 @@ ${window.location.href}
 
                         </span>
                         {discountPercentage && (
-                            <span className="rounded-full bg-[#34be82] px-2 py-1 text-xs font-bold text-white shadow-md">
+                            <span className="rounded-md bg-[#34be82] px-2 py-1 text-xs font-bold text-white shadow-md">
                                 Save {discountPercentage}%
+                            </span>
+                        )}
+                        {product.isBestSelling && (
+                            <span className="flex items-center gap-1 rounded-md bg-red-500 px-2 py-1 text-xs font-semibold text-white shadow-md">
+                                <FaFireFlameCurved />
+                                Best Selling
                             </span>
                         )}
                     </div>

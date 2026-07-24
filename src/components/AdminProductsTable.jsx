@@ -13,6 +13,7 @@ function AdminProductsTable({ products = [], refetch }) {
     const router = useRouter();
 
     const category = searchParams.get("category") || "all";
+    const stock = searchParams.get("stock") || "all";
 
     const handleCategoryChange = (value) => {
         const params = new URLSearchParams(searchParams.toString());
@@ -21,6 +22,18 @@ function AdminProductsTable({ products = [], refetch }) {
             params.delete("category");
         } else {
             params.set("category", value);
+        }
+
+        router.replace(`?${params.toString()}`);
+    };
+
+    const handleStockChange = (value) => {
+        const params = new URLSearchParams(searchParams.toString());
+
+        if (value === "all") {
+            params.delete("stock");
+        } else {
+            params.set("stock", value);
         }
 
         router.replace(`?${params.toString()}`);
@@ -65,13 +78,22 @@ function AdminProductsTable({ products = [], refetch }) {
                 category === "all" ||
                 product.category?.toLowerCase() === category;
 
+            const matchesStock =
+                stock === "all" ||
+                (stock === "in_stock" &&
+                    product.stock?.status === "in_stock") ||
+                (stock === "out_of_stock" &&
+                    product.stock?.status === "out_of_stock");
+
             const matchesSearch =
                 !search.trim() ||
                 product.name?.toLowerCase().includes(search.toLowerCase());
 
-            return matchesCategory && matchesSearch;
+            return matchesCategory && matchesStock && matchesSearch;
         });
-    }, [products, category, search]);
+    }, [products, category, stock, search]);
+
+
 
     return (
         <div className="w-full flex flex-col h-[calc(100vh-120px)] min-h-[500px] rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
@@ -89,21 +111,33 @@ function AdminProductsTable({ products = [], refetch }) {
                                 {...register("search")}
                                 type="text"
                                 placeholder="Search products..."
-                                className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-slate-200 rounded-xl shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] text-slate-800 placeholder-slate-400 focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all duration-200"
+                                className="input input-bordered input-sm w-full sm:flex-1 lg:w-72 text-xs border-orange-200 rounded shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)] text-slate-800 placeholder-slate-600 focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-500/10 transition-all duration-200"
                             />
                         </div>
                     </div>
 
-                    <select
-                        value={category}
-                        onChange={(e) => handleCategoryChange(e.target.value)}
-                        className="select select-bordered select-sm w-full md:w-40"
-                    >
-                        <option value="all">All Products</option>
-                        <option value="mango">Mango</option>
-                        <option value="honey">Honey</option>
-                        <option value="ghee">Ghee</option>
-                    </select>
+
+                    <div className="flex gap-2">
+                        <select
+                            value={stock}
+                            onChange={(e) => handleStockChange(e.target.value)}
+                            className="select select-bordered select-sm w-full md:w-40"
+                        >
+                            <option value="all">All Stock</option>
+                            <option value="in_stock">In Stock</option>
+                            <option value="out_of_stock">Out of Stock</option>
+                        </select>
+                        <select
+                            value={category}
+                            onChange={(e) => handleCategoryChange(e.target.value)}
+                            className="select select-bordered select-sm w-full md:w-40"
+                        >
+                            <option value="all">All Products</option>
+                            <option value="mango">Mango</option>
+                            <option value="honey">Honey</option>
+                            <option value="ghee">Ghee</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
