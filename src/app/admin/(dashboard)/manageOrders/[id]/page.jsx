@@ -141,7 +141,16 @@ export default async function OrderDetails({ params }) {
                         <div className="grid grid-cols-2 gap-2">
                             <div>
                                 <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider">Method</label>
-                                <p className="text-sm text-gray-800 capitalize">{order.payment.method.replace('_', ' ')} ({order.payment.type})</p>
+                                <p className="text-sm text-gray-800 capitalize">
+                                    {order.payment?.method === "intl_send"
+                                        ? "Bkash Send Money"
+                                        : order.payment?.method === "bd_payment"
+                                            ? "Bkash Payment"
+                                            : order.payment?.method === "bank"
+                                                ? "Bank Transfer"
+                                                : order.payment?.method}
+
+                                    ({order.payment.type})</p>
                             </div>
                             <div>
                                 <label className="block text-xs font-medium text-gray-400 uppercase tracking-wider">Transaction ID</label>

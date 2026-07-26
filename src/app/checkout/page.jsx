@@ -403,9 +403,9 @@ export default function Page() {
 
                         {/* 2. Top Navigation Tabs */}
                         {paymentMode === "online" &&
-                            <div className="grid grid-cols-3 gap-2.5 mb-4">
-                                {/* Domestic Payment */}
-                                <button
+                            <div className="grid grid-cols-2 gap-2.5 mb-4">
+                                {/* Bkash Payment */}
+                                {/* <button
                                     type="button"
                                     onClick={() => setSelectedMethod('bd_payment')}
                                     className={`p-3 border rounded-xl flex flex-col items-center justify-center text-center transition-all ${selectedMethod === "bd_payment"
@@ -425,9 +425,9 @@ export default function Page() {
                                     <span className="text-xs font-semibold text-gray-700 leading-snug">
                                         দেশ থেকে <span className="text-pink-500">Payment</span> করুন
                                     </span>
-                                </button>
+                                </button> */}
 
-                                {/* International Send Money */}
+                                {/* Bkash Send Money */}
                                 <button
                                     type="button"
                                     onClick={() => setSelectedMethod('intl_send')}
@@ -446,7 +446,7 @@ export default function Page() {
                                         />
                                     </div>
                                     <span className="text-xs font-semibold text-gray-700 leading-snug">
-                                        বিদেশ থেকে <span className="text-pink-600">Send Money</span> করুন
+                                        <span className="text-pink-600">Baksh Send Money</span>
                                     </span>
                                 </button>
 
@@ -481,11 +481,11 @@ export default function Page() {
                         )}
 
                         {/* 3. Render Content Conditionally via selectedMethod State */}
-                        {/* OPTION 1: International Send Money Content */}
+                        {/* OPTION 1: Baksh Send Money Content */}
                         {selectedMethod === 'intl_send' && (
                             <div className="border border-pink-500 rounded-2xl p-4 bg-pink-50/50 space-y-4 transition-all">
                                 <div className="flex items-center gap-1.5 flex-wrap">
-                                    <h3 className="text-sm font-black text-pink-600">বিদেশ থেকে Send Money অপশনে ট্যাপ করুন।</h3>
+                                    <h3 className="text-sm font-black text-pink-600">Send Money অপশনে ট্যাপ করুন।</h3>
                                 </div>
 
                                 <div className="space-y-2">
@@ -524,11 +524,11 @@ export default function Page() {
                                             <span>Payment Instructions</span>
                                         </div>
                                         <p className="text-xs text-red-600 font-bold leading-relaxed">
-                                            নিচের bKash নাম্বারে ৳{activeAmount} Send করুন, তারপর আপনার Transaction ID (TrxID) দিয়ে দিন।
+                                            নিচের bKash নাম্বারে  ৳{activeAmount}  Send Money করুন, তারপর আপনার Transaction ID (TrxID) দিয়ে দিন।
                                         </p>
                                         <div className="flex items-center justify-between bg-gray-50/50 rounded-lg px-3 py-2 border border-gray-100">
-                                            <span className="text-xs font-semibold text-gray-500">Send to: <strong className="text-gray-800 ml-1 font-mono text-xs">01822350799</strong></span>
-                                            <button type="button" onClick={() => handleCopy('01822350799')} className="text-[10px] font-bold text-pink-600 border border-pink-100 rounded-md bg-white px-2.5 py-1">📋 Copy</button>
+                                            <span className="text-xs font-semibold text-gray-500">Send to: <strong className="text-gray-800 ml-1 font-mono text-xs">01859599130</strong></span>
+                                            <button type="button" onClick={() => handleCopy('01859599130')} className="text-[10px] font-bold text-pink-600 border border-pink-100 rounded-md bg-white px-2.5 py-1">📋 Copy</button>
                                         </div>
                                         <div className="flex items-center justify-between bg-gray-50/50 rounded-lg px-3 py-2 border border-gray-100">
                                             <span className="text-xs font-semibold text-gray-500">Amount: <strong className="text-gray-800 ml-1 font-black text-xs">{activeAmount}</strong></span>
@@ -544,8 +544,8 @@ export default function Page() {
                             </div>
                         )}
 
-                        {/* OPTION 2: Domestic Payment Content */}
-                        {selectedMethod === 'bd_payment' && (
+                        {/* OPTION 2: Bkash Payment Content */}
+                        {/* {selectedMethod === 'bd_payment' && (
                             <div className="border border-pink-500 rounded-2xl p-4 bg-pink-50/50 space-y-4 transition-all">
                                 <div className="flex items-center gap-1.5 flex-wrap">
                                     <h3 className="text-sm font-black text-pink-600">দেশ থেকে Payment অপশনে ট্যাপ করুন।</h3>
@@ -611,7 +611,7 @@ export default function Page() {
                                     </div>
                                 }
                             </div>
-                        )}
+                        )} */}
 
                         {/* OPTION 3: Bank Transfer Content */}
                         {selectedMethod === 'bank' && (

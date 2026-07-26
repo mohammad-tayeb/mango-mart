@@ -276,7 +276,18 @@ const OrdersTable = () => {
                     {/* Payment Overview */}
                     <td className="py-3.5 px-4 align-top">
                       <div className="text-xs text-slate-700 space-y-0.5">
-                        <p><span className="text-slate-400">Method:</span> <span className="capitalize font-medium">{order.payment?.method?.replace('_', ' ')}</span></p>
+                        <p>
+                          <span className="text-slate-400">Method:</span>
+                          <span className="font-medium">
+                            {order.payment?.method === "intl_send"
+                              ? "Bkash Send Money"
+                              : order.payment?.method === "bd_payment"
+                                ? "Bkash Payment"
+                                : order.payment?.method === "bank"
+                                  ? "Bank Transfer"
+                                  : order.payment?.method}
+                          </span>
+                        </p>
                         <p><span className="text-slate-400">TrxID:</span> <span className="font-mono text-slate-600 bg-slate-50 px-1 rounded">{order.payment?.trxId}</span></p>
                         <p><span className="text-slate-400">Paid:</span> <span className="text-emerald-600 font-medium">৳{order.payment?.amountPaid?.toLocaleString()}</span></p>
                       </div>
