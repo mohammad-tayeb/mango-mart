@@ -1,6 +1,7 @@
 "use client";
 
 import jsPDF from "jspdf";
+import { FaDownload } from "react-icons/fa";
 
 export default function ReceiptButton({ order }) {
     const formatDate = (date) =>
@@ -427,13 +428,13 @@ export default function ReceiptButton({ order }) {
                 onClick={downloadThermalReceipt}
                 className="btn btn-xs md:btn-md bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
             >
-                Download Receipt
+                <FaDownload></FaDownload>Receipt
             </button>
             <button
                 onClick={downloadA4Invoice}
                 className="btn btn-xs md:btn-md bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
             >
-                Download Invoice(A4)
+                <FaDownload></FaDownload>Invoice(A4)
             </button>
         </div>
     );

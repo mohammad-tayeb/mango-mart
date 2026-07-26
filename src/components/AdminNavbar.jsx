@@ -186,7 +186,7 @@ function AdminDashboard({ session, children }) {
                 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
                 {/* Sidebar Header */}
-                <div className="flex h-16 items-center justify-between px-6 border-b border-slate-100">
+                <div className="relative flex h-16 items-center justify-between px-6 border-b border-slate-100">
                     <div className="flex items-center gap-2">
                         <span className="text-lg font-bold text-slate-900 tracking-tight">AdminPanel</span>
                     </div>
@@ -297,7 +297,9 @@ function AdminDashboard({ session, children }) {
                             </button>
 
                             {showNotifications && (
-                                <div className="fixed inset-x-4 top-16 sm:absolute sm:inset-auto sm:right-0 sm:top-14 w-auto sm:w-96 bg-white rounded-2xl shadow-xl border border-slate-100 z-50 overflow-hidden transform transition-all duration-200 max-w-full">
+                                <div
+                                    className="fixed top-16 left-4 right-4 w-auto max-w-none sm:absolute sm:top-full sm:right-0 sm:left-auto sm:mt-2 sm:w-96 sm:max-w-[24rem] bg-white rounded-2xl border border-slate-100 shadow-xl z-[9999] overflow-hidden"
+                                >
 
                                     {/* Header */}
                                     <div className="px-4 sm:px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">

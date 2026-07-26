@@ -7,25 +7,17 @@ export async function GET() {
     const session = await auth();
 
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const adminCollection = await dbConnect(
-      collectionNameObj.adminCollection
-    );
+    const adminCollection = await dbConnect(collectionNameObj.adminCollection);
 
     const admin = await adminCollection.findOne({
       email: session.user.email,
     });
 
     if (!admin) {
-      return NextResponse.json(
-        { message: "Forbidden" },
-        { status: 403 }
-      );
+      return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
 
     const [
@@ -40,11 +32,73 @@ export async function GET() {
       dbConnect(collectionNameObj.productCollection),
     ]);
 
+    const getSalesStats = async (startDate, endDate) => {
+      const result = await orderCollection
+        .aggregate([
+          {
+            $match: {
+              createdAt: {
+                $gte: startDate,
+                $lte: endDate,
+              },
+              orderStatus: {
+                $nin: ["Pending", "Deleted"],
+              },
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              totalSales: {
+                $sum: "$payment.actualAmount",
+              },
+              orderCount: {
+                $sum: 1,
+              },
+            },
+          },
+        ])
+        .toArray();
+
+      return {
+        totalSales: result[0]?.totalSales || 0,
+        orderCount: result[0]?.orderCount || 0,
+      };
+    };
+
+    const now = new Date();
+
+    // Today
+    const todayStart = new Date(now);
+    todayStart.setHours(0, 0, 0, 0);
+
+    const todayEnd = new Date(now);
+    todayEnd.setHours(23, 59, 59, 999);
+
+    // Last 7 days
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - 6);
+    weekStart.setHours(0, 0, 0, 0);
+
+    // Last 30 days
+    const monthStart = new Date(now);
+    monthStart.setDate(now.getDate() - 29);
+    monthStart.setHours(0, 0, 0, 0);
+
+    // Last 365 days
+    const yearStart = new Date(now);
+    yearStart.setFullYear(now.getFullYear() - 1);
+    yearStart.setHours(0, 0, 0, 0);
+
     const [
       orderStats,
       reviewStats,
       productStats,
       unreadMessages,
+      todayStats,
+      weekStats,
+      monthStats,
+      yearStats,
     ] = await Promise.all([
       orderCollection
         .aggregate([
@@ -59,6 +113,13 @@ export async function GET() {
                 },
               ],
               revenue: [
+                {
+                  $match: {
+                    orderStatus: {
+                      $nin: ["Deleted", "Pending"],
+                    },
+                  },
+                },
                 {
                   $group: {
                     _id: null,
@@ -109,7 +170,13 @@ export async function GET() {
         isRead: false,
         status: "New",
       }),
+      getSalesStats(todayStart, todayEnd),
+      getSalesStats(weekStart, now),
+      getSalesStats(monthStart, now),
+      getSalesStats(yearStart, now),
     ]);
+
+    // -----------------------------------------------------------
 
     // ---------------- Orders ----------------
 
@@ -142,25 +209,25 @@ export async function GET() {
       totalOrders: revenue.totalOrders || 0,
 
       totalRevenue: revenue.totalRevenue || 0,
-      totalAdvanceReceived:
-        revenue.totalAdvanceReceived || 0,
+      totalAdvanceReceived: revenue.totalAdvanceReceived || 0,
       totalDue: revenue.totalDue || 0,
+
+      todaySaleAmount: todayStats.totalSales,
+      todayOrderCount: todayStats.orderCount,
+
+      lastWeek: weekStats,
+      lastMonth: monthStats,
+      lastYear: yearStats,
 
       unreadMessages,
 
-      totalProducts:
-        productMap["in_stock"] || 0,
+      totalProducts: productMap["in_stock"] || 0,
+      noOfStockOutProducts: productMap["out_of_stock"] || 0,
 
-      noOfStockOutProducts:
-        productMap["out_of_stock"] || 0,
-
-      toatlReview:
-        reviews.totalReviews || 0,
-
-      averageRating:
-        reviews.averageRating
-          ? Number(reviews.averageRating.toFixed(1))
-          : 0,
+      toatlReview: reviews.totalReviews || 0,
+      averageRating: reviews.averageRating
+        ? Number(reviews.averageRating.toFixed(1))
+        : 0,
     });
   } catch (error) {
     console.error(error);
@@ -171,7 +238,7 @@ export async function GET() {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
