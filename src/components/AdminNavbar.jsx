@@ -297,10 +297,10 @@ function AdminDashboard({ session, children }) {
                             </button>
 
                             {showNotifications && (
-                                <div className="absolute right-0 top-14 w-96 bg-white rounded-2xl shadow-xl border border-slate-100 z-50 overflow-hidden transform transition-all duration-200">
+                                <div className="fixed inset-x-4 top-16 sm:absolute sm:inset-auto sm:right-0 sm:top-14 w-auto sm:w-96 bg-white rounded-2xl shadow-xl border border-slate-100 z-50 overflow-hidden transform transition-all duration-200 max-w-full">
 
                                     {/* Header */}
-                                    <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                                    <div className="px-4 sm:px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                                         <div className="flex items-center gap-2">
                                             <h3 className="font-semibold text-slate-800 text-base">Notifications</h3>
                                             {(latestOrders.length > 0 || latestMessages.length > 0) && (
@@ -312,12 +312,12 @@ function AdminDashboard({ session, children }) {
                                     </div>
 
                                     {/* Notification List Container */}
-                                    <div className="max-h-96 overflow-y-auto divide-y divide-slate-50">
+                                    <div className="max-h-[60vh] sm:max-h-96 overflow-y-auto divide-y divide-slate-50">
 
                                         {/* Orders Section */}
                                         {latestOrders.length > 0 && (
                                             <div className="py-2">
-                                                <div className="px-5 py-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                                                <div className="px-4 sm:px-5 py-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
                                                     Orders
                                                 </div>
                                                 {latestOrders.map(order => (
@@ -325,22 +325,22 @@ function AdminDashboard({ session, children }) {
                                                         key={order._id}
                                                         href={`/admin/manageOrders/${order._id}`}
                                                         onClick={() => setShowNotifications(false)}
-                                                        className="group flex items-center justify-between px-5 py-3 hover:bg-slate-50 transition-colors"
+                                                        className="group flex items-center justify-between px-4 sm:px-5 py-3 hover:bg-slate-50 transition-colors"
                                                     >
-                                                        <div className="flex items-center gap-3">
+                                                        <div className="flex items-center gap-3 min-w-0 pr-2">
                                                             <div className="h-9 w-9 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100/50 text-base">
                                                                 <FiShoppingBag />
                                                             </div>
-                                                            <div className="flex flex-col">
-                                                                <p className="text-sm font-medium text-slate-900 group-hover:text-amber-600 transition-colors">
+                                                            <div className="flex flex-col min-w-0">
+                                                                <p className="text-sm font-medium text-slate-900 group-hover:text-amber-600 transition-colors truncate">
                                                                     New Order Received
                                                                 </p>
-                                                                <p className="text-xs text-slate-500 truncate max-w-[200px]">
+                                                                <p className="text-xs text-slate-500 truncate max-w-[150px] sm:max-w-[200px]">
                                                                     {order.customer?.fullName || "Guest Customer"}
                                                                 </p>
                                                             </div>
                                                         </div>
-                                                        <FiChevronRight className="w-4 h-4 text-slate-300 group-hover:text-slate-400 group-hover:translate-x-0.5 transition-all" />
+                                                        <FiChevronRight className="w-4 h-4 text-slate-300 group-hover:text-slate-400 group-hover:translate-x-0.5 transition-all shrink-0" />
                                                     </Link>
                                                 ))}
                                             </div>
@@ -349,7 +349,7 @@ function AdminDashboard({ session, children }) {
                                         {/* Messages Section */}
                                         {latestMessages.length > 0 && (
                                             <div className="py-2">
-                                                <div className="px-5 py-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                                                <div className="px-4 sm:px-5 py-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
                                                     Messages
                                                 </div>
                                                 {latestMessages.map(message => (
@@ -357,22 +357,22 @@ function AdminDashboard({ session, children }) {
                                                         key={message._id}
                                                         href="/admin/messages"
                                                         onClick={() => setShowNotifications(false)}
-                                                        className="group flex items-center justify-between px-5 py-3 hover:bg-slate-50 transition-colors"
+                                                        className="group flex items-center justify-between px-4 sm:px-5 py-3 hover:bg-slate-50 transition-colors"
                                                     >
-                                                        <div className="flex items-center gap-3">
+                                                        <div className="flex items-center gap-3 min-w-0 pr-2">
                                                             <div className="h-9 w-9 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100/50 text-base">
                                                                 <FiMessageSquare />
                                                             </div>
-                                                            <div className="flex flex-col">
-                                                                <p className="text-sm font-medium text-slate-900 group-hover:text-blue-600 transition-colors">
+                                                            <div className="flex flex-col min-w-0">
+                                                                <p className="text-sm font-medium text-slate-900 group-hover:text-blue-600 transition-colors truncate">
                                                                     {message.name}
                                                                 </p>
-                                                                <p className="text-xs text-slate-500 truncate max-w-[200px]">
+                                                                <p className="text-xs text-slate-500 truncate max-w-[150px] sm:max-w-[200px]">
                                                                     New message received
                                                                 </p>
                                                             </div>
                                                         </div>
-                                                        <FiChevronRight className="w-4 h-4 text-slate-300 group-hover:text-slate-400 group-hover:translate-x-0.5 transition-all" />
+                                                        <FiChevronRight className="w-4 h-4 text-slate-300 group-hover:text-slate-400 group-hover:translate-x-0.5 transition-all shrink-0" />
                                                     </Link>
                                                 ))}
                                             </div>
@@ -396,7 +396,7 @@ function AdminDashboard({ session, children }) {
                                         <Link
                                             href="/admin/manageOrders?status=pending&page=1"
                                             onClick={() => setShowNotifications(false)}
-                                            className="flex-1 text-center py-2 px-3 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100/70 rounded-lg transition-colors"
+                                            className="flex-1 text-center py-2 px-2 sm:px-3 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100/70 rounded-lg transition-colors truncate"
                                         >
                                             View Orders
                                         </Link>
@@ -404,7 +404,7 @@ function AdminDashboard({ session, children }) {
                                         <Link
                                             href="/admin/messages"
                                             onClick={() => setShowNotifications(false)}
-                                            className="flex-1 text-center py-2 px-3 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100/70 rounded-lg transition-colors"
+                                            className="flex-1 text-center py-2 px-2 sm:px-3 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100/70 rounded-lg transition-colors truncate"
                                         >
                                             View Messages
                                         </Link>
