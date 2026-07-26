@@ -1,10 +1,14 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { FiLogOut } from "react-icons/fi";
+import { FiCheckCircle, FiChevronRight, FiLogOut } from "react-icons/fi";
 import Link from "next/link";
+import { FiBell } from "react-icons/fi";
+import { useQuery } from "@tanstack/react-query";
+
+
 import {
     FiShoppingBag,
     FiMessageSquare,
@@ -16,14 +20,94 @@ import { MdPhotoLibrary } from "react-icons/md";
 
 function AdminDashboard({ session, children }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [showNotifications, setShowNotifications] = useState(false);
+
     const pathname = usePathname(); // Get the current active URL path
+
+    //data count loading for notification bell icon
+    const { data } = useQuery({
+        queryKey: ["notifications"],
+        queryFn: async () => {
+            const res = await fetch("/api/admin/notifications");
+
+            if (!res.ok) {
+                throw new Error("Failed to load notifications");
+            }
+
+            return res.json();
+        },
+        refetchInterval: 10000,
+    });
+
+
+    const totalNotifications = data?.total || 0;
+    const latestOrders = data?.latestOrders || [];
+    const latestMessages = data?.latestMessages || [];
+
+    useEffect(() => {
+        if ("Notification" in window && Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+    }, []);
+
+    const previousOrderId = useRef(null);
+    const previousMessageId = useRef(null);
+
+    const latestOrder = latestOrders[0];
+    const latestMessage = latestMessages[0];
+
+    useEffect(() => {
+        if (!data) return;
+        if (!("Notification" in window)) return;
+        if (Notification.permission !== "granted") return;
+
+        // New Order
+        if (
+            previousOrderId.current &&
+            latestOrder &&
+            latestOrder._id !== previousOrderId.current
+        ) {
+            const notification = new Notification("🛒 New Order", {
+                body: `${latestOrder.customer?.fullName ?? "A customer"} placed a new order.`,
+                icon: "/logo.png",
+            });
+
+            notification.onclick = () => {
+                window.focus();
+                window.location.href = "/admin/manageOrders";
+                notification.close();
+            };
+        }
+
+        // New Message
+        if (
+            previousMessageId.current &&
+            latestMessage &&
+            latestMessage._id !== previousMessageId.current
+        ) {
+            const notification = new Notification("💬 New Message", {
+                body: `${latestMessage.name ?? "Someone"} sent you a message.`,
+                icon: "/logo.png",
+            });
+
+            notification.onclick = () => {
+                window.focus();
+                window.location.href = "/admin/messages";
+                notification.close();
+            };
+        }
+
+        previousOrderId.current = latestOrder?._id ?? null;
+        previousMessageId.current = latestMessage?._id ?? null;
+
+    }, [data, latestOrder, latestMessage]);
 
     const navigationItems = [
         {
             id: 'dashboard',
             label: 'Dashboard',
             href: '/admin/dashboard',
-            icon: <VscDashboard className="h-5 w-5"/>,
+            icon: <VscDashboard className="h-5 w-5" />,
         },
         {
             id: 'changeHomeBanner',
@@ -65,6 +149,24 @@ function AdminDashboard({ session, children }) {
     const adminName = session?.user?.name || "Admin";
     const adminEmail = session?.user?.email || "admin@company.com";
     const avatarInitials = adminName.split(" ").map(n => n[0]).join("").substring(0, 2).toUpperCase();
+
+    const notificationRef = useRef(null);
+
+    useEffect(() => {
+        function handleClick(e) {
+            if (
+                notificationRef.current &&
+                !notificationRef.current.contains(e.target)
+            ) {
+                setShowNotifications(false);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClick);
+
+        return () =>
+            document.removeEventListener("mousedown", handleClick);
+    }, []);
 
     return (
         <div className="h-screen bg-slate-50 text-slate-800 antialiased flex">
@@ -177,11 +279,149 @@ function AdminDashboard({ session, children }) {
                         </h2>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        {/* Minimalist Top Bar Action Icon */}
-                        <Link href="/" className="rounded-xl p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-700 cursor-pointer">
-                            <HiHome></HiHome>
+                    <div className="flex items-center gap-3">
+
+                        <div ref={notificationRef} className="relative">
+
+                            <button
+                                onClick={() => setShowNotifications(prev => !prev)}
+                                className="relative rounded-xl p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-700"
+                            >
+                                <FiBell className="h-6 w-6" />
+
+                                {totalNotifications > 0 && (
+                                    <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center animate-pulse">
+                                        {totalNotifications}
+                                    </span>
+                                )}
+                            </button>
+
+                            {showNotifications && (
+                                <div className="absolute right-0 top-14 w-96 bg-white rounded-2xl shadow-xl border border-slate-100 z-50 overflow-hidden transform transition-all duration-200">
+
+                                    {/* Header */}
+                                    <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+                                        <div className="flex items-center gap-2">
+                                            <h3 className="font-semibold text-slate-800 text-base">Notifications</h3>
+                                            {(latestOrders.length > 0 || latestMessages.length > 0) && (
+                                                <span className="bg-amber-100 text-amber-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+                                                    {latestOrders.length + latestMessages.length}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Notification List Container */}
+                                    <div className="max-h-96 overflow-y-auto divide-y divide-slate-50">
+
+                                        {/* Orders Section */}
+                                        {latestOrders.length > 0 && (
+                                            <div className="py-2">
+                                                <div className="px-5 py-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                                                    Orders
+                                                </div>
+                                                {latestOrders.map(order => (
+                                                    <Link
+                                                        key={order._id}
+                                                        href={`/admin/manageOrders/${order._id}`}
+                                                        onClick={() => setShowNotifications(false)}
+                                                        className="group flex items-center justify-between px-5 py-3 hover:bg-slate-50 transition-colors"
+                                                    >
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="h-9 w-9 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100/50 text-base">
+                                                                <FiShoppingBag />
+                                                            </div>
+                                                            <div className="flex flex-col">
+                                                                <p className="text-sm font-medium text-slate-900 group-hover:text-amber-600 transition-colors">
+                                                                    New Order Received
+                                                                </p>
+                                                                <p className="text-xs text-slate-500 truncate max-w-[200px]">
+                                                                    {order.customer?.fullName || "Guest Customer"}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <FiChevronRight className="w-4 h-4 text-slate-300 group-hover:text-slate-400 group-hover:translate-x-0.5 transition-all" />
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {/* Messages Section */}
+                                        {latestMessages.length > 0 && (
+                                            <div className="py-2">
+                                                <div className="px-5 py-1.5 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                                                    Messages
+                                                </div>
+                                                {latestMessages.map(message => (
+                                                    <Link
+                                                        key={message._id}
+                                                        href="/admin/messages"
+                                                        onClick={() => setShowNotifications(false)}
+                                                        className="group flex items-center justify-between px-5 py-3 hover:bg-slate-50 transition-colors"
+                                                    >
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="h-9 w-9 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100/50 text-base">
+                                                                <FiMessageSquare />
+                                                            </div>
+                                                            <div className="flex flex-col">
+                                                                <p className="text-sm font-medium text-slate-900 group-hover:text-blue-600 transition-colors">
+                                                                    {message.name}
+                                                                </p>
+                                                                <p className="text-xs text-slate-500 truncate max-w-[200px]">
+                                                                    New message received
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <FiChevronRight className="w-4 h-4 text-slate-300 group-hover:text-slate-400 group-hover:translate-x-0.5 transition-all" />
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {/* Empty State */}
+                                        {latestOrders.length === 0 && latestMessages.length === 0 && (
+                                            <div className="py-12 px-4 text-center flex flex-col items-center justify-center">
+                                                <div className="h-12 w-12 rounded-full bg-slate-50 text-slate-400 flex items-center justify-center mb-3 text-xl">
+                                                    <FiCheckCircle />
+                                                </div>
+                                                <p className="text-sm font-medium text-slate-800">All caught up!</p>
+                                                <p className="text-xs text-slate-400 mt-0.5">No new notifications right now.</p>
+                                            </div>
+                                        )}
+
+                                    </div>
+
+                                    {/* Footer Navigation */}
+                                    <div className="border-t border-slate-100 p-2 bg-slate-50/50 flex items-center justify-between gap-2">
+                                        <Link
+                                            href="/admin/manageOrders?status=pending&page=1"
+                                            onClick={() => setShowNotifications(false)}
+                                            className="flex-1 text-center py-2 px-3 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100/70 rounded-lg transition-colors"
+                                        >
+                                            View Orders
+                                        </Link>
+
+                                        <Link
+                                            href="/admin/messages"
+                                            onClick={() => setShowNotifications(false)}
+                                            className="flex-1 text-center py-2 px-3 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100/70 rounded-lg transition-colors"
+                                        >
+                                            View Messages
+                                        </Link>
+                                    </div>
+
+                                </div>
+                            )}
+
+                        </div>
+
+                        <Link
+                            href="/"
+                            className="rounded-xl p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-700"
+                        >
+                            <HiHome className="h-6 w-6" />
                         </Link>
+
                     </div>
                 </header>
 

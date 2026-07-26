@@ -173,11 +173,11 @@ function ContactPage() {
                                         placeholder="Write your message here..."
                                         className={`textarea textarea-bordered w-full p-3 bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 rounded-lg border-gray-200 resize-none transition ${errors.message ? "border-orange-500 focus:ring-orange-500" : ""
                                             }`}
-                                        maxLength={100}
+                                        maxLength={500}
                                         {...register("message", { required: "Message field cannot be empty" })}
                                     />
                                     <div className="text-right text-xs text-gray-400 mt-1">
-                                        {messageContent.length}/100
+                                        {messageContent.length}/500
                                     </div>
                                     {errors.message && (
                                         <p className="text-xs text-orange-500 mt-0.5">{errors.message.message}</p>
