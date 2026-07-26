@@ -96,7 +96,7 @@ export default function DashboardStats() {
   return (
     <div className="space-y-6 p-2 sm:p-4">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-200/80 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
             বিজনেস ওভারভিউ
@@ -147,7 +147,7 @@ export default function DashboardStats() {
           </div>
 
           {/* Timeframe Analytics Card */}
-          <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-indigo-200 shadow-xs flex flex-col justify-between relative overflow-hidden">
+          <div className="lg:col-span-2 bg-white p-6 rounded-2xl border-2 border-indigo-200 shadow-xs flex flex-col justify-between relative overflow-hidden">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-4 border-b border-slate-100">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100/80">
@@ -157,9 +157,6 @@ export default function DashboardStats() {
                   <h4 className="text-sm font-bold text-slate-800">
                     সময়ভিত্তিক বিক্রয় হিসাব
                   </h4>
-                  <p className="text-xs text-slate-400">
-                    ফিল্টার নির্বাচন করে নির্দিষ্ট সময়সীমার তথ্য দেখুন
-                  </p>
                 </div>
               </div>
 
@@ -188,7 +185,7 @@ export default function DashboardStats() {
             </div>
 
             {/* Display Active Period Metrics */}
-            <div className="bg-slate-50/80 border border-indigo-200/60 rounded-xl p-5 grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+            <div className="bg-slate-100/80 border border-indigo-200/60 rounded-xl p-5 grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-white border border-slate-200/80 rounded-xl text-indigo-600 shadow-2xs">
                   <FiCalendar className="text-2xl" />
@@ -218,7 +215,7 @@ export default function DashboardStats() {
         </div>
 
         {/* Middle Row: Order Tracking Pipeline */}
-        <div className="bg-white p-6 rounded-2xl border border-blue-200 shadow-xs relative overflow-hidden">
+        <div className="bg-white p-6 rounded-2xl border-2 border-blue-200 shadow-xs relative overflow-hidden">
           <div className="flex items-center justify-between mb-5 border-b border-slate-100 pb-4">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl text-blue-600 bg-blue-50 border border-blue-100/80">
@@ -246,8 +243,8 @@ export default function DashboardStats() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-slate-50/60 p-4 rounded-xl border border-rose-200/70 transition-colors hover:bg-slate-50">
-              <div className="flex items-center gap-1.5 text-rose-600 mb-1.5">
+            <div className="bg-slate-100/80  p-4 rounded-xl border border-rose-200/70 transition-colors hover:bg-slate-50">
+              <div className="flex items-center gap-1.5 text-yellow-500 mb-1.5">
                 <HiOutlineClock className="text-base" />
                 <span className="text-[11px] font-bold uppercase tracking-wider">
                   পেন্ডিং
@@ -259,7 +256,7 @@ export default function DashboardStats() {
               </p>
             </div>
 
-            <div className="bg-slate-50/60 p-4 rounded-xl border border-amber-200/70 transition-colors hover:bg-slate-50">
+            <div className="bg-slate-100/80  p-4 rounded-xl border border-amber-200/70 transition-colors hover:bg-slate-50">
               <div className="flex items-center gap-1.5 text-amber-600 mb-1.5">
                 <FiTruck className="text-sm" />
                 <span className="text-[11px] font-bold uppercase tracking-wider">
@@ -274,7 +271,7 @@ export default function DashboardStats() {
               </p>
             </div>
 
-            <div className="bg-slate-50/60 p-4 rounded-xl border border-emerald-200/70 transition-colors hover:bg-slate-50">
+            <div className="bg-slate-100/80  p-4 rounded-xl border border-emerald-200/70 transition-colors hover:bg-slate-50">
               <div className="flex items-center gap-1.5 text-emerald-600 mb-1.5">
                 <HiOutlineCheckCircle className="text-base" />
                 <span className="text-[11px] font-bold uppercase tracking-wider">
@@ -287,8 +284,8 @@ export default function DashboardStats() {
               </p>
             </div>
 
-            <div className="bg-slate-50/60 p-4 rounded-xl border border-slate-300/80 transition-colors hover:bg-slate-50">
-              <div className="flex items-center gap-1.5 text-slate-500 mb-1.5">
+            <div className="bg-slate-100/80  p-4 rounded-xl border border-slate-300/80 transition-colors hover:bg-slate-50">
+              <div className="flex items-center gap-1.5 text-red-500 mb-1.5">
                 <HiOutlineXCircle className="text-base" />
                 <span className="text-[11px] font-bold uppercase tracking-wider">
                   বাতিল
@@ -306,7 +303,7 @@ export default function DashboardStats() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {/* Products Summary */}
           <div className="bg-white p-5 rounded-2xl border-teal-200 shadow-xs hover:shadow-md transition-all duration-200 group relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-rose-500" />
+            <div className="absolute top-0 left-0 right-0 h-1 bg-emerald-500" />
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <div className="p-2.5 rounded-xl border w-fit text-emerald-600 bg-emerald-50 border-emerald-100/80 mb-3 group-hover:scale-105 transition-transform">
@@ -336,7 +333,7 @@ export default function DashboardStats() {
 
           {/* Ratings & Reviews */}
           <div className="bg-white p-5 rounded-2xl border border-amber-200 shadow-xs hover:shadow-md transition-all duration-200 group relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 to-indigo-500" />
+            <div className="absolute top-0 left-0 right-0 h-1 bg-amber-500" />
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <div className="p-2.5 rounded-xl border w-fit text-amber-500 bg-amber-50 border-amber-100/80 mb-3 group-hover:scale-105 transition-transform">
