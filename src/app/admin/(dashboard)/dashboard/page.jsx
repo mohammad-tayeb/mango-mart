@@ -42,16 +42,118 @@ export default function DashboardStats() {
 
   if (isLoading) {
     return (
-      <div className="bg-slate-50/50 rounded-2xl border border-slate-200/60 p-4 md:p-6 animate-pulse space-y-6">
-        <div className="h-8 w-48 rounded-lg bg-slate-200" />
+      <div className="space-y-6 p-2 sm:p-4 animate-pulse">
+        {/* Header */}
+        <div className="h-8 w-52 rounded-lg bg-slate-200" />
+
+        {/* Top Row */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 h-[220px]" />
-          <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200/80 p-6 h-[220px]" />
+          {/* Revenue Card */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200">
+            <div className="flex justify-between items-center mb-6">
+              <div className="space-y-2">
+                <div className="h-3 w-28 bg-slate-200 rounded" />
+                <div className="h-8 w-40 bg-slate-200 rounded" />
+              </div>
+              <div className="h-12 w-12 rounded-xl bg-slate-200" />
+            </div>
+
+            <div className="border-t pt-5 grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <div className="h-3 w-20 bg-slate-200 rounded" />
+                <div className="h-5 w-24 bg-slate-200 rounded" />
+              </div>
+
+              <div className="space-y-2 border-l pl-4">
+                <div className="h-3 w-20 bg-slate-200 rounded" />
+                <div className="h-5 w-24 bg-slate-200 rounded" />
+              </div>
+            </div>
+          </div>
+
+          {/* Timeframe Card */}
+          <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200">
+            <div className="flex flex-col sm:flex-row justify-between gap-4 border-b pb-4 mb-5">
+              <div className="flex items-center gap-3">
+                <div className="h-11 w-11 rounded-xl bg-slate-200" />
+                <div className="h-4 w-40 bg-slate-200 rounded" />
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {[1, 2, 3, 4].map((i) => (
+                  <div
+                    key={i}
+                    className="h-9 w-20 rounded-lg bg-slate-200"
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 bg-slate-100 rounded-xl p-5">
+              <div className="flex gap-4">
+                <div className="h-12 w-12 rounded-xl bg-slate-200" />
+
+                <div className="space-y-2">
+                  <div className="h-3 w-28 bg-slate-200 rounded" />
+                  <div className="h-3 w-20 bg-slate-200 rounded" />
+                  <div className="h-7 w-32 bg-slate-200 rounded" />
+                </div>
+              </div>
+
+              <div className="space-y-2 sm:border-l sm:pl-6">
+                <div className="h-3 w-20 bg-slate-200 rounded" />
+                <div className="h-7 w-20 bg-slate-200 rounded" />
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 h-[140px]" />
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 h-[140px]" />
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 h-[140px]" />
+
+        {/* Order Pipeline */}
+        <div className="bg-white p-6 rounded-2xl border border-slate-200">
+          <div className="flex justify-between items-center border-b pb-4 mb-5">
+            <div className="flex gap-3 items-center">
+              <div className="h-11 w-11 rounded-xl bg-slate-200" />
+
+              <div className="space-y-2">
+                <div className="h-4 w-32 bg-slate-200 rounded" />
+                <div className="h-3 w-40 bg-slate-200 rounded" />
+              </div>
+            </div>
+
+            <div className="h-8 w-24 rounded-lg bg-slate-200" />
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="rounded-xl border border-slate-200 p-4 space-y-3"
+              >
+                <div className="h-3 w-16 bg-slate-200 rounded" />
+                <div className="h-8 w-14 bg-slate-200 rounded" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {[1, 2, 3].map((card) => (
+            <div
+              key={card}
+              className="bg-white rounded-2xl border border-slate-200 p-5"
+            >
+              <div className="grid grid-cols-2 gap-4">
+                {[1, 2].map((item) => (
+                  <div key={item} className="space-y-3">
+                    <div className="h-11 w-11 rounded-xl bg-slate-200" />
+                    <div className="h-3 w-20 bg-slate-200 rounded" />
+                    <div className="h-7 w-16 bg-slate-200 rounded" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -111,7 +213,7 @@ export default function DashboardStats() {
           {/* Total Revenue Card */}
           <div className="bg-white p-6 rounded-2xl border border-emerald-200 shadow-xs hover:shadow-md transition-all duration-200 flex flex-col justify-between relative overflow-hidden group">
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-500" />
-            
+
             <div>
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
@@ -161,7 +263,7 @@ export default function DashboardStats() {
               </div>
 
               {/* Timeframe Selector Tabs */}
-              <div className="inline-flex p-1 bg-slate-100/80 rounded-xl text-xs font-semibold text-slate-600">
+              <div className="grid grid-cols-2 sm:inline-flex p-1 bg-slate-100/80 rounded-xl text-xs font-semibold text-slate-600 gap-1">
                 {[
                   { key: "today", label: "আজকে" },
                   { key: "lastWeek", label: "গত ৭ দিন" },
@@ -172,11 +274,10 @@ export default function DashboardStats() {
                     key={tab.key}
                     type="button"
                     onClick={() => setSelectedTimeframe(tab.key)}
-                    className={`px-3 py-1.5 rounded-lg transition-all duration-200 whitespace-nowrap ${
-                      selectedTimeframe === tab.key
-                        ? "bg-white text-indigo-600 shadow-xs font-bold border border-indigo-100"
-                        : "hover:text-slate-900 text-slate-500"
-                    }`}
+                    className={`w-full sm:w-auto px-3 py-2 rounded-lg transition-all duration-200 text-center whitespace-nowrap ${selectedTimeframe === tab.key
+                      ? "bg-white text-indigo-600"
+                      : "hover:text-slate-900 text-slate-500"
+                      }`}
                   >
                     {tab.label}
                   </button>
@@ -228,7 +329,7 @@ export default function DashboardStats() {
                 <p className="text-xs text-slate-400">
                   সর্বমোট অর্ডার:{" "}
                   <span className="font-semibold text-slate-700">
-                    {formatBn(dashboardData?.totalOrders)}
+                    {formatBn(dashboardData?.allOrders)}
                   </span>{" "}
                   টি
                 </p>
@@ -243,7 +344,7 @@ export default function DashboardStats() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-slate-100/80  p-4 rounded-xl border border-rose-200/70 transition-colors hover:bg-slate-50">
+            <Link href="https://www.mangomartbd.shop/admin/manageOrders?status=pending&page=1" className="bg-slate-100/80  p-4 rounded-xl border border-rose-200/70 transition-colors hover:bg-slate-50">
               <div className="flex items-center gap-1.5 text-yellow-500 mb-1.5">
                 <HiOutlineClock className="text-base" />
                 <span className="text-[11px] font-bold uppercase tracking-wider">
@@ -254,9 +355,9 @@ export default function DashboardStats() {
                 {formatBn(dashboardData?.pendingOrders)}{" "}
                 <span className="text-xs text-slate-400 font-normal">টি</span>
               </p>
-            </div>
+            </Link>
 
-            <div className="bg-slate-100/80  p-4 rounded-xl border border-amber-200/70 transition-colors hover:bg-slate-50">
+            <Link href="https://www.mangomartbd.shop/admin/manageOrders?status=in%20transit&page=1" className="bg-slate-100/80  p-4 rounded-xl border border-amber-200/70 transition-colors hover:bg-slate-50">
               <div className="flex items-center gap-1.5 text-amber-600 mb-1.5">
                 <FiTruck className="text-sm" />
                 <span className="text-[11px] font-bold uppercase tracking-wider">
@@ -269,9 +370,9 @@ export default function DashboardStats() {
                 )}{" "}
                 <span className="text-xs text-slate-400 font-normal">টি</span>
               </p>
-            </div>
+            </Link>
 
-            <div className="bg-slate-100/80  p-4 rounded-xl border border-emerald-200/70 transition-colors hover:bg-slate-50">
+            <Link href="https://www.mangomartbd.shop/admin/manageOrders?status=delivered&page=1" className="bg-slate-100/80  p-4 rounded-xl border border-emerald-200/70 transition-colors hover:bg-slate-50">
               <div className="flex items-center gap-1.5 text-emerald-600 mb-1.5">
                 <HiOutlineCheckCircle className="text-base" />
                 <span className="text-[11px] font-bold uppercase tracking-wider">
@@ -282,9 +383,9 @@ export default function DashboardStats() {
                 {formatBn(dashboardData?.deliveredOrders)}{" "}
                 <span className="text-xs text-slate-400 font-normal">টি</span>
               </p>
-            </div>
+            </Link>
 
-            <div className="bg-slate-100/80  p-4 rounded-xl border border-slate-300/80 transition-colors hover:bg-slate-50">
+            <Link href="https://www.mangomartbd.shop/admin/manageOrders?status=deleted&page=1" className="bg-slate-100/80  p-4 rounded-xl border border-slate-300/80 transition-colors hover:bg-slate-50">
               <div className="flex items-center gap-1.5 text-red-500 mb-1.5">
                 <HiOutlineXCircle className="text-base" />
                 <span className="text-[11px] font-bold uppercase tracking-wider">
@@ -295,7 +396,7 @@ export default function DashboardStats() {
                 {formatBn(dashboardData?.deletedOrders)}{" "}
                 <span className="text-xs text-slate-400 font-normal">টি</span>
               </p>
-            </div>
+            </Link>
           </div>
         </div>
 

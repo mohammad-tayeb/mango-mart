@@ -100,7 +100,7 @@ ${window.location.href}
                 </div>
 
                 {/* Right Side: Product Customization Dashboard */}
-                <div className="flex flex-col space-y-6">
+                <div className="flex flex-col sm:space-y-6 space-y-4">
 
                     {/* name */}
                     <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
@@ -120,17 +120,25 @@ ${window.location.href}
                             {(selectedVariant?.offerPrice || selectedVariant?.price).toLocaleString()}
 
                         </span>
-                        {discountPercentage && (
-                            <span className="rounded-md bg-[#34be82] px-2 py-1 text-xs font-bold text-white shadow-md">
-                                Save {discountPercentage}%
-                            </span>
-                        )}
-                        {product.isBestSelling && (
-                            <span className="flex items-center gap-1 rounded-md bg-red-500 px-2 py-1 text-xs font-semibold text-white shadow-md">
-                                <FaFireFlameCurved />
-                                Best Selling
-                            </span>
-                        )}
+
+                        {/* discount and best selling badge */}
+                        <div className="flex flex-col gap-2">
+                            <div>
+                                {discountPercentage && (
+                                    <span className="rounded-md bg-[#34be82] px-2 py-1 text-xs font-bold text-white shadow-md">
+                                        Save {discountPercentage}%
+                                    </span>
+                                )}
+                            </div>
+                            <div>
+                                {product.isBestSelling && (
+                                    <span className="flex items-center gap-1 rounded-md bg-red-500 px-2 py-1 text-xs font-semibold text-white shadow-md">
+                                        <FaFireFlameCurved />
+                                        Best Selling
+                                    </span>
+                                )}
+                            </div>
+                        </div>
                     </div>
 
                     {/* Weight Variant Option Chips */}

@@ -200,6 +200,8 @@ export async function GET() {
       productMap[item._id] = item.count;
     });
 
+    const allOrders = await orderCollection.countDocuments();
+
     return NextResponse.json({
       pendingOrders: statusMap["Pending"] || 0,
       deliveredOrders: statusMap["Delivered"] || 0,
@@ -214,6 +216,7 @@ export async function GET() {
 
       todaySaleAmount: todayStats.totalSales,
       todayOrderCount: todayStats.orderCount,
+      allOrders,
 
       lastWeek: weekStats,
       lastMonth: monthStats,

@@ -17,6 +17,7 @@ import {
 import { VscDashboard } from "react-icons/vsc";
 import { HiHome } from "react-icons/hi2";
 import { MdPhotoLibrary } from "react-icons/md";
+import Image from "next/image";
 
 function AdminDashboard({ session, children }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -181,19 +182,25 @@ function AdminDashboard({ session, children }) {
 
             {/* 2. SIDEBAR NAVIGATION */}
             <aside className={`
-                fixed inset-y-0 left-0 z-50 flex w-48 flex-col border-r border-slate-200 bg-white transition-transform duration-300 ease-in-out
+                fixed inset-y-0 left-0 z-50 flex sm:w-48 w-52 flex-col border-r border-slate-200 bg-white transition-transform duration-300 ease-in-out
                 lg:static lg:translate-x-0
                 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
                 {/* Sidebar Header */}
                 <div className="relative flex h-16 items-center justify-between px-6 border-b border-slate-100">
-                    <div className="flex items-center gap-2">
-                        <span className="text-lg font-bold text-slate-900 tracking-tight">AdminPanel</span>
-                    </div>
+                    <Link href="https://www.mangomartbd.shop/admin/dashboard" className="flex items-center gap-2">
+                        <Image
+                            src="/logo2.png" // Ensure your logo file is in the public folder
+                            alt="Mango Lovers Logo"
+                            width={90}
+                            height={40}
+                            className="object-contain"
+                        />
+                    </Link>
                     {/* Close Menu Button (Mobile Only) */}
                     <button
                         onClick={() => setIsSidebarOpen(false)}
-                        className="rounded-lg p-1 text-slate-500 hover:bg-slate-100 lg:hidden cursor-pointer"
+                        className="rounded-lg p-1 text-orange-500 hover:bg-slate-100 lg:hidden cursor-pointer"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="h-6 w-6">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
