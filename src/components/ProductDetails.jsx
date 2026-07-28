@@ -50,6 +50,7 @@ ${window.location.href}
     )}`;
 
     const description = product?.description || "";
+    console.log(description)
 
     const discountPercentage =
         selectedVariant?.offerPrice &&
@@ -67,12 +68,12 @@ ${window.location.href}
 
                 {/* Left Side: Product Image Display Portfolio */}
                 <div className="flex flex-col space-y-4 md:sticky md:top-24">
-                    <div className="relative aspect-square w-full rounded-2xl border bg-white p-6 shadow-sm">
+                    <div className="relative aspect-square w-full bg-white p-6 shadow-sm">
                         <img
                             src={selectedImage}
                             alt={product.name}
                             loading="lazy"
-                            className="absolute inset-0 w-full h-full object-contain p-4"
+                            className="absolute inset-0 w-full h-full object-cover"
                         />
                     </div>
 
@@ -92,7 +93,7 @@ ${window.location.href}
                                     src={img}
                                     alt={`${product.name} view ${index + 1}`}
                                     loading="lazy"
-                                    className="object-contain w-full h-full"
+                                    className="object-cover w-full h-full"
                                 />
                             </button>
                         ))}
@@ -100,7 +101,7 @@ ${window.location.href}
                 </div>
 
                 {/* Right Side: Product Customization Dashboard */}
-                <div className="flex flex-col sm:space-y-6 space-y-4">
+                <div className="flex flex-col sm:space-y-6 space-y-4 sm:mt-10 -mt-4">
 
                     {/* name */}
                     <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight">
@@ -122,7 +123,7 @@ ${window.location.href}
                         </span>
 
                         {/* discount and best selling badge */}
-                        <div className="flex flex-col gap-2">
+                        <div className="flex flex-col gap-x-2">
                             <div>
                                 {discountPercentage && (
                                     <span className="rounded-md bg-[#34be82] px-2 py-1 text-xs font-bold text-white shadow-md">
@@ -132,7 +133,7 @@ ${window.location.href}
                             </div>
                             <div>
                                 {product.isBestSelling && (
-                                    <span className="flex items-center gap-1 rounded-md bg-red-500 px-2 py-1 text-xs font-semibold text-white shadow-md">
+                                    <span className="flex mt-2 items-center gap-1 rounded-md bg-red-500 px-2 py-1 text-xs font-semibold text-white shadow-md">
                                         <FaFireFlameCurved />
                                         Best Selling
                                     </span>
@@ -279,15 +280,24 @@ ${window.location.href}
                 </div>
 
                 {/* Body */}
-                <div className="divide-y divide-gray-100  sm:p-10 p-4">
-                    <p className="text-gray-700 leading-8 whitespace-pre-line">
-                        {description}
-                    </p>
-
-                    {!description && (
+                <div className="sm:p-10 p-4">
+                    {!description ? (
                         <p className="text-sm text-gray-400 text-center py-6">
                             কোন বিবরণ পাওয়া যায়নি।
                         </p>
+                    ) : /<\/?[a-z][\s\S]*>/i.test(description) ? (
+                        // TipTap HTML content
+                        <div
+                            className="prose prose-sm lg:prose-base max-w-none"
+                            dangerouslySetInnerHTML={{
+                                __html: description,
+                            }}
+                        />
+                    ) : (
+                        // Old plain text content
+                        <div className="prose prose-sm lg:prose-base max-w-none whitespace-pre-line">
+                            {description}
+                        </div>
                     )}
                 </div>
             </section>

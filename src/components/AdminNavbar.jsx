@@ -188,15 +188,16 @@ function AdminDashboard({ session, children }) {
             `}>
                 {/* Sidebar Header */}
                 <div className="relative flex h-16 items-center justify-between px-6 border-b border-slate-100">
-                    <Link href="https://www.mangomartbd.shop/admin/dashboard" className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                         <Image
-                            src="/logo2.png" // Ensure your logo file is in the public folder
+                            src="/logo2.png"
                             alt="Mango Lovers Logo"
                             width={90}
                             height={40}
-                            className="object-contain"
+                            className="object-contain h-12 w-auto"
+                            priority
                         />
-                    </Link>
+                    </div>
                     {/* Close Menu Button (Mobile Only) */}
                     <button
                         onClick={() => setIsSidebarOpen(false)}

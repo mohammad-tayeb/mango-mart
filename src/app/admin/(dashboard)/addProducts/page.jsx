@@ -1,7 +1,8 @@
 "use client";
 
+import RichTextEditor from "@/components/RichTextEditor";
 import { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { FiPlus, FiTrash2, FiLayers, FiImage, FiSettings, FiInfo, FiFileText, FiUploadCloud, FiCheckCircle } from "react-icons/fi";
 
 export default function AddProduct() {
@@ -138,6 +139,7 @@ export default function AddProduct() {
             setUploadingIndex(null);
         }
     };
+    
     return (
         // <div></div>
         <div className="max-w-6xl mx-auto border border-gray-100 rounded-xl shadow-xl p-6 md:p-8 font-sans">
@@ -307,12 +309,25 @@ export default function AddProduct() {
                     </h2>
                     <div>
                         <label className="block text-xs font-semibold text-gray-600 mb-1.5">Details Description *</label>
-                        <textarea
-                            rows={6}
-                            placeholder="জাত: আম্রপালি। উৎস: নওগাঁ... (পণ্যের বিস্তারিত বিবরণ এখানে লিখুন)"
-                            className={`w-full px-3 py-2 bg-white border rounded-lg text-sm focus:outline-none resize-y ${errors.description ? "border-red-500" : "border-gray-200 focus:border-orange-500"}`}
-                            {...register("description", { required: "Product description is required" })}
-                        ></textarea>
+                        <Controller
+                            name="description"
+                            control={control}
+                            rules={{
+                                required: "Product description is required",
+                            }}
+                            render={({ field }) => (
+                                <RichTextEditor
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                />
+                            )}
+                        />
+
+                        {errors.description && (
+                            <p className="mt-2 text-xs text-red-500">
+                                {errors.description.message}
+                            </p>
+                        )}
                         {errors.description && (
                             <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>
                         )}

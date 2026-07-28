@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { HiPencilAlt } from "react-icons/hi"
@@ -46,6 +46,8 @@ function AdminProductsTable({ products = [], refetch }) {
 
         if (!confirmed) return;
 
+        const toastId = toast.loading("Deleting product...");
+
         try {
             const res = await fetch(`/api/products/${id}`, {
                 method: "DELETE",
@@ -57,10 +59,15 @@ function AdminProductsTable({ products = [], refetch }) {
                 throw new Error(result.message || "Delete failed");
             }
 
-            toast.success("Product deleted successfully");
+            toast.success("Product deleted successfully", {
+                id: toastId,
+            });
+
             refetch();
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.message, {
+                id: toastId,
+            });
         }
     };
 

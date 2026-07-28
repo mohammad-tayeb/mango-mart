@@ -5,6 +5,8 @@ import { useForm, useFieldArray } from "react-hook-form";
 import toast from "react-hot-toast";
 import { FiCheckCircle } from "react-icons/fi";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Controller } from "react-hook-form";
+import RichTextEditor from "@/components/RichTextEditor";
 
 
 export default function EditProductForm({ product, id }) {
@@ -326,11 +328,16 @@ export default function EditProductForm({ product, id }) {
                 </h2>
                 <div className="flex flex-col gap-1.5">
                     <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider">Product Description</label>
-                    <textarea
-                        {...register("description")}
-                        placeholder="জাত, উৎস, স্বাদ, রং এবং অন্যান্য বিবরণ এখানে লিখুন..."
-                        className="textarea textarea-bordered w-full focus:textarea-orange-500 text-sm resize-y"
-                        rows={6}
+                    <Controller
+                        name="description"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                            <RichTextEditor
+                                value={field.value}
+                                onChange={field.onChange}
+                            />
+                        )}
                     />
                 </div>
             </div>

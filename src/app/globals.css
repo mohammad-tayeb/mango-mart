@@ -1,4 +1,37 @@
 @import "tailwindcss";
+
 @plugin "daisyui" {
-    themes: light --default;
+  themes: light --default;
+}
+
+.tiptap {
+  min-height: 250px;
+}
+
+.tiptap .ProseMirror {
+  min-height: 250px;
+  padding: 1rem;
+  outline: none;
+}
+
+.tiptap .ProseMirror ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+.tiptap .ProseMirror ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+}
+
+.tiptap .ProseMirror mark {
+  background: #fde047;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+/* Paragraph spacing */
+.tiptap .ProseMirror p {
+  margin-block: 0.5rem;
+  line-height: 1.6;
 }
