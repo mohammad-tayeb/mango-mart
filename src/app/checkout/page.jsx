@@ -123,10 +123,6 @@ export default function Page() {
                 method: paymentMode === "cod" ? "cod" : selectedMethod,
                 type: paymentMode === "online" ? paymentType : null,
                 trxId: paymentMode === "online" ? trxId : null,
-                // actualAmount: total,
-                // amountPaid: activeAmount,
-                // amountDue: dueAmount,
-                // charge,
             },
         };
 
