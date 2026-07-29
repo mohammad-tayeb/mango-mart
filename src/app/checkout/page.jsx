@@ -403,9 +403,9 @@ export default function Page() {
 
                         {/* 2. Top Navigation Tabs */}
                         {paymentMode === "online" &&
-                            <div className="grid grid-cols-2 gap-2.5 mb-4">
+                            <div className="grid grid-cols-3 gap-2.5 mb-4">
                                 {/* Bkash Payment */}
-                                {/* <button
+                                <button
                                     type="button"
                                     onClick={() => setSelectedMethod('bd_payment')}
                                     className={`p-3 border rounded-xl flex flex-col items-center justify-center text-center transition-all ${selectedMethod === "bd_payment"
@@ -423,9 +423,9 @@ export default function Page() {
                                         />
                                     </div>
                                     <span className="text-xs font-semibold text-gray-700 leading-snug">
-                                        দেশ থেকে <span className="text-pink-500">Payment</span> করুন
+                                        <span className="text-pink-500">Bkash Payment</span>
                                     </span>
-                                </button> */}
+                                </button>
 
                                 {/* Bkash Send Money */}
                                 <button
@@ -459,10 +459,9 @@ export default function Page() {
                                         : 'border-gray-200 hover:bg-amber-50/30'
                                         }`}
                                 >
-                                    <div className="px-1.5 py-0.5 bg-cyan-50 border border-cyan-200 rounded text-[8px] font-black text-cyan-700 tracking-tighter mb-2">
+                                    <div className="px-1.5 py-0.5 bg-cyan-50 border border-cyan-200 rounded md:text-md text-sm font-black text-cyan-700 tracking-tighter mb-2">
                                         BANK TRANSFER
                                     </div>
-                                    <span className="text-[10px] font-semibold text-gray-600">Bank Transfer</span>
                                 </button>
                             </div>
                         }
@@ -485,7 +484,7 @@ export default function Page() {
                         {selectedMethod === 'intl_send' && (
                             <div className="border border-pink-500 rounded-2xl p-4 bg-pink-50/50 space-y-4 transition-all">
                                 <div className="flex items-center gap-1.5 flex-wrap">
-                                    <h3 className="text-sm font-black text-pink-600">Send Money অপশনে ট্যাপ করুন।</h3>
+                                    <h3 className="text-sm font-black text-pink-600">Baksh Send Money অপশনে ট্যাপ করুন।</h3>
                                 </div>
 
                                 <div className="space-y-2">
@@ -545,10 +544,10 @@ export default function Page() {
                         )}
 
                         {/* OPTION 2: Bkash Payment Content */}
-                        {/* {selectedMethod === 'bd_payment' && (
+                        {selectedMethod === 'bd_payment' && (
                             <div className="border border-pink-500 rounded-2xl p-4 bg-pink-50/50 space-y-4 transition-all">
                                 <div className="flex items-center gap-1.5 flex-wrap">
-                                    <h3 className="text-sm font-black text-pink-600">দেশ থেকে Payment অপশনে ট্যাপ করুন।</h3>
+                                    <h3 className="text-sm font-black text-pink-600">Bkash Payment অপশনে ট্যাপ করুন।</h3>
                                 </div>
 
                                 <div className="space-y-2">
@@ -611,7 +610,7 @@ export default function Page() {
                                     </div>
                                 }
                             </div>
-                        )} */}
+                        )}
 
                         {/* OPTION 3: Bank Transfer Content */}
                         {selectedMethod === 'bank' && (

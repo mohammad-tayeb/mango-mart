@@ -1,7 +1,5 @@
 import { Manrope } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layouts/Navbar";
-import Footer from "@/components/layouts/Footer";
 import { Toaster } from "react-hot-toast";
 import QueryProvider from "@/providers/QueryProvider";
 import LayoutWrapper from "@/components/layouts/LayoutWrapper";

@@ -274,9 +274,6 @@ ${window.location.href}
                     <h2 className="text-lg font-bold text-gray-900">
                         পণ্যের বিবরণ
                     </h2>
-                    <p className="mt-0.5 text-xs text-gray-500">
-                        এই পণ্যের বিস্তারিত তথ্য
-                    </p>
                 </div>
 
                 {/* Body */}

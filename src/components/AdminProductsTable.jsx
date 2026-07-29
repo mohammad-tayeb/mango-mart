@@ -11,6 +11,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 function AdminProductsTable({ products = [], refetch }) {
     const searchParams = useSearchParams();
     const router = useRouter();
+    const [IsUpdating, setIsUpdating] = useState(false);
 
     const category = searchParams.get("category") || "all";
     const stock = searchParams.get("stock") || "all";
@@ -45,6 +46,7 @@ function AdminProductsTable({ products = [], refetch }) {
         );
 
         if (!confirmed) return;
+        setIsUpdating(true)
 
         const toastId = toast.loading("Deleting product...");
 
@@ -68,6 +70,8 @@ function AdminProductsTable({ products = [], refetch }) {
             toast.error(error.message, {
                 id: toastId,
             });
+        } finally {
+            setIsUpdating(false)
         }
     };
 
@@ -263,7 +267,11 @@ function AdminProductsTable({ products = [], refetch }) {
                                                 className="p-2 rounded-lg border border-red-100 text-red-500 bg-red-50/50 hover:bg-red-50 hover:text-red-700 hover:border-red-200 transition-all duration-150 shadow-sm"
                                                 title="Delete Product"
                                             >
-                                                <HiTrash className="text-base" />
+                                                {IsUpdating ? (
+                                                    <span className="loading loading-spinner loading-xs"></span> // DaisyUI spinner
+                                                ) : (
+                                                    <HiTrash className="text-base" />
+                                                )}
                                             </button>
                                         </div>
                                     </td>
