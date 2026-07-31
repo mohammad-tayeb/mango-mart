@@ -36,3 +36,50 @@
   margin-block: 0.5rem;
   line-height: 1.6;
 }
+
+.order-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  transform-origin: center;
+  animation: orderAttention 2.0s infinite;
+  will-change: transform;
+}
+
+@keyframes orderAttention {
+
+  /* idle */
+  0%,
+  70%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  /* grow */
+  74% {
+    transform: scale(1.08) rotate(-4deg);
+  }
+
+  /* vibrate */
+  77% {
+    transform: scale(1.08) rotate(4deg);
+  }
+
+  80% {
+    transform: scale(1.08) rotate(-4deg);
+  }
+
+  83% {
+    transform: scale(1.08) rotate(4deg);
+  }
+
+  /* settle */
+  86% {
+    transform: scale(1.04) rotate(0deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}

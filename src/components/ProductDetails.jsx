@@ -215,12 +215,12 @@ ${window.location.href}
                             </p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div className="grid grid-cols-2 gap-2.5 sm:gap-4 pt-2">
                             {/* Add to Cart */}
                             <button
                                 onClick={handleAddToCart}
                                 type="button"
-                                className="w-full border-2 border-gray-900 text-gray-900 font-bold py-3.5 px-6 rounded-md hover:bg-gray-900 hover:text-white transition"
+                                className="w-full border-2 border-gray-900 text-gray-900 font-bold py-2.5 sm:py-3.5 px-2 sm:px-6 rounded-md hover:bg-gray-900 hover:text-white transition-colors text-xs xs:text-sm sm:text-base flex items-center justify-center text-center"
                             >
                                 কার্টে যোগ করুন
                             </button>
@@ -229,10 +229,10 @@ ${window.location.href}
                             <button
                                 onClick={() => handleAddToCart("proceed")}
                                 type="button"
-                                className="w-full bg-orange-500 text-white font-bold py-3.5 px-6 rounded-md hover:bg-orange-600 flex items-center justify-center gap-2"
+                                className="order-btn w-full bg-orange-500 text-white font-bold py-2.5 sm:py-3.5 px-2 sm:px-6 rounded-md hover:bg-orange-600 transition-colors flex items-center justify-center gap-1.5 sm:gap-2 text-xs xs:text-sm sm:text-base"
                             >
-                                <FaBagShopping />
-                                অর্ডার করুন
+                                <FaBagShopping className="text-sm sm:text-lg shrink-0" />
+                                <span className="whitespace-nowrap">অর্ডার করুন</span>
                             </button>
 
                             {/* WhatsApp */}
@@ -240,19 +240,19 @@ ${window.location.href}
                                 href={whatsappUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-full bg-[#25D366] text-white font-bold py-3.5 px-6 rounded-md hover:bg-[#20ba5a] flex items-center justify-center gap-2"
+                                className="w-full bg-[#25D366] text-white font-bold py-2.5 sm:py-3.5 px-1.5 sm:px-6 rounded-md hover:bg-[#20ba5a] transition-colors flex items-center justify-center gap-1 sm:gap-2 text-[11px] xs:text-xs sm:text-base"
                             >
-                                <FaWhatsapp />
-                                হোয়াটসঅ্যাপে অর্ডার করুন
+                                <FaWhatsapp className="text-base sm:text-2xl shrink-0" />
+                                <span className="text-center leading-tight">হোয়াটসঅ্যাপে অর্ডার</span>
                             </a>
 
                             {/* Call */}
                             <a
                                 href="tel:+8801822350799"
-                                className="w-full border-2 border-gray-900 text-gray-900 font-bold py-3.5 px-6 rounded-md hover:bg-gray-50 flex items-center justify-center gap-2"
+                                className="w-full border-2 border-gray-900 text-gray-900 font-bold py-2.5 sm:py-3.5 px-2 sm:px-6 rounded-md hover:bg-gray-50 transition-colors flex items-center justify-center gap-1.5 sm:gap-2 text-xs xs:text-sm sm:text-base"
                             >
-                                <FaPhone className="rotate-90" />
-                                কল অর্ডার
+                                <FaPhone className="rotate-90 text-xs sm:text-base shrink-0" />
+                                <span className="whitespace-nowrap">কল অর্ডার</span>
                             </a>
                         </div>
                     )}
