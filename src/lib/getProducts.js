@@ -17,6 +17,7 @@ export async function getProducts(page = 1, limit = 12, category = "") {
 
   const products = await productCollection
     .find(query)
+    .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
     .toArray();

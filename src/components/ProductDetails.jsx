@@ -50,7 +50,6 @@ ${window.location.href}
     )}`;
 
     const description = product?.description || "";
-    console.log(description)
 
     const discountPercentage =
         selectedVariant?.offerPrice &&
@@ -301,12 +300,13 @@ ${window.location.href}
 
             <div className="mt-20">
                 <h2 className="text-2xl font-bold mb-6">
-                    Related Products
+                    You may also like
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-6 sm:px-6">
                     {relatedProducts.map((product) => (
                         <ProductCard key={product._id} product={product}></ProductCard>
                     ))}
+                    {relatedProducts.length === 0 && <div><p>No Related Porducts Found</p></div>}
                 </div>
             </div>
         </div>
