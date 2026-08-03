@@ -17,7 +17,10 @@ export async function getProducts(page = 1, limit = 12, category = "") {
 
   const products = await productCollection
     .find(query)
-    .sort({ createdAt: -1 })
+    .sort({
+      "stock.status": 1,
+      createdAt: -1,
+    })
     .skip(skip)
     .limit(limit)
     .toArray();
@@ -55,6 +58,9 @@ export async function getFeaturedProducts() {
     .aggregate([
       {
         $addFields: {
+          stockPriority: {
+            $cond: [{ $eq: ["$stock.status", "in_stock"] }, 0, 1],
+          },
           categoryPriority: {
             $cond: [{ $eq: ["$category", "mango"] }, 0, 1],
           },
@@ -62,6 +68,7 @@ export async function getFeaturedProducts() {
       },
       {
         $sort: {
+          stockPriority: 1,
           categoryPriority: 1,
           createdAt: -1,
         },
@@ -71,6 +78,7 @@ export async function getFeaturedProducts() {
       },
       {
         $project: {
+          stockPriority: 0,
           categoryPriority: 0,
         },
       },
