@@ -17,6 +17,12 @@ export const metadata = {
     template: "%s | Mango Mart BD",
   },
 
+  verification: {
+    other: {
+      "facebook-domain-verification": "0m2vnt4bs1aj5t32wmrjpzkwwyo0bk",
+    },
+  },
+
   description:
     "Buy fresh, chemical-free mangoes online in Bangladesh. Enjoy fast home delivery, premium quality mangoes, and secure ordering from Mango Mart BD.",
 
