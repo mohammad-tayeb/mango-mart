@@ -298,7 +298,7 @@ function AdminDashboard({ session, children }) {
                                 <FiBell className="h-6 w-6" />
 
                                 {totalNotifications > 0 && (
-                                    <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center animate-pulse">
+                                    <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
                                         {totalNotifications}
                                     </span>
                                 )}

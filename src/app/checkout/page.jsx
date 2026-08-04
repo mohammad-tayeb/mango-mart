@@ -78,6 +78,7 @@ export default function Page() {
                 id: item._id,
                 quantity: item.quantity,
                 item_price: item.price,
+                variant: `${item.variant.quantity}kg`
             })),
             num_items: cartItems.reduce(
                 (sum, item) => sum + item.quantity,
@@ -179,10 +180,11 @@ export default function Page() {
                     currency: "BDT",
                     content_type: "product",
                     content_ids: cartItems.map((item) => item._id),
-                    contents: cartItems.map((item) => ({
+                    contents: cartItems.map(item => ({
                         id: item._id,
                         quantity: item.quantity,
                         item_price: item.price,
+                        variant: `${item.variant.quantity}kg`
                     })),
                     num_items: cartItems.reduce(
                         (sum, item) => sum + item.quantity,

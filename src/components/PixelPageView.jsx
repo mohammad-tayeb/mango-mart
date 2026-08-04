@@ -7,7 +7,7 @@ export default function PixelPageView() {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (window.fbq) {
+    if (typeof window.fbq === "function") {
       window.fbq("track", "PageView");
     }
   }, [pathname]);
