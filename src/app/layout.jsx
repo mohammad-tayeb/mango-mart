@@ -3,6 +3,8 @@ import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import QueryProvider from "@/providers/QueryProvider";
 import LayoutWrapper from "@/components/layouts/LayoutWrapper";
+import MetaPixel from "@/components/MetaPixel";
+import PixelPageView from "@/components/PixelPageView";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -108,6 +110,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-theme="light">
       <body className={manrope.className}>
+        {/* Meta Pixel */}
+        <MetaPixel />
+        <PixelPageView />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

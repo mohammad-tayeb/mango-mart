@@ -1,6 +1,6 @@
 "use client"
 import useCartStore from "@/app/store/cartStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaBagShopping, FaWhatsapp, FaPhone, FaFireFlameCurved } from "react-icons/fa6";
 import ProductCard from "./ProductCard";
@@ -9,20 +9,44 @@ import { useRouter } from "next/navigation";
 function ProductDetails({ product, relatedProducts }) {
     const router = useRouter();
     const addToCart = useCartStore((state) => state.addToCart);
-
-
     // Layout State Management Hooks
     const images = product?.images || [];
-
     const [selectedImage, setSelectedImage] = useState(images[0] || "/placeholder.png");
     const [selectedVariant, setSelectedVariant] = useState(product.variants?.[0] || null);
     const [quantity, setQuantity] = useState(1);
+
+    //meta pixel specefic product view
+    useEffect(() => {
+        if (!window.fbq || !product || !selectedVariant) return;
+
+        window.fbq("track", "ViewContent", {
+            content_ids: [product._id],
+            content_name: product.name,
+            content_category: product.category,
+            content_type: "product",
+            value: selectedVariant.offerPrice ?? selectedVariant.price,
+            currency: "BDT",
+        });
+    }, [product, selectedVariant]);
+
 
     const incrementQuantity = () => setQuantity((prev) => prev + 1);
     const decrementQuantity = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
     const handleAddToCart = (instruction) => {
         addToCart(product, quantity, selectedVariant);
+
+        // meta pixel add to cart
+        if (window.fbq) {
+            window.fbq("track", "AddToCart", {
+                content_ids: [product._id],
+                content_name: product.name,
+                content_category: product.category,
+                content_type: "product",
+                value: (selectedVariant.offerPrice ?? selectedVariant.price) * quantity,
+                currency: "BDT",
+            });
+        }
 
         toast.success(
             `Added ${product.name} (${selectedVariant.quantity}) to cart`
