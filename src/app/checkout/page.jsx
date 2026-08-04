@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { useForm } from 'react-hook-form';
 import locations from "@/data/bangladesh-locations.json";
 import useCartStore from '../store/cartStore';
@@ -59,6 +59,35 @@ export default function Page() {
 
     const total = subtotal + charge;
 
+    // Meta Pixel - InitiateCheckout
+    const [checkoutTracked, setCheckoutTracked] = useState(false);
+
+    useEffect(() => {
+        if (
+            !window.fbq ||
+            cartItems.length === 0 ||
+            checkoutTracked
+        ) return;
+
+        window.fbq("track", "InitiateCheckout", {
+            value: total,
+            currency: "BDT",
+            content_type: "product",
+            content_ids: cartItems.map(item => item._id),
+            contents: cartItems.map(item => ({
+                id: item._id,
+                quantity: item.quantity,
+                item_price: item.price,
+            })),
+            num_items: cartItems.reduce(
+                (sum, item) => sum + item.quantity,
+                0
+            ),
+        });
+
+        setCheckoutTracked(true);
+
+    }, [cartItems, total, checkoutTracked]);
 
 
 
@@ -143,12 +172,32 @@ export default function Page() {
 
             toast.success(result.message);
 
+            // Meta Pixel - Purchase
+            if (window.fbq) {
+                window.fbq("track", "Purchase", {
+                    value: result.purchaseAmount,
+                    currency: "BDT",
+                    content_type: "product",
+                    content_ids: cartItems.map((item) => item._id),
+                    contents: cartItems.map((item) => ({
+                        id: item._id,
+                        quantity: item.quantity,
+                        item_price: item.price,
+                    })),
+                    num_items: cartItems.reduce(
+                        (sum, item) => sum + item.quantity,
+                        0
+                    ),
+                });
+            }
 
             clearCart();
             reset();
+            setCheckoutTracked(false);
             setSelectedMethod(null);
             setPaymentType(null);
             setTrxId("");
+
             router.push(`/order/success/${result.trackingId}`);
 
         } catch (error) {
@@ -166,6 +215,7 @@ export default function Page() {
         (paymentMode === "online" && !selectedMethod) ||
         (paymentMode === "online" && !paymentType) ||
         (paymentMode === "online" && !trxId.trim());
+
 
     return (
         <div className="relative bg-gray-50 mb-10 pt-1 md:p-8 p-0 flex md:flex-row flex-col items-center w-full gap-10">
@@ -442,7 +492,7 @@ export default function Page() {
                                         />
                                     </div>
                                     <span className="text-xs font-semibold text-gray-700 leading-snug">
-                                        <span className="text-pink-600">Baksh Send Money</span>
+                                        <span className="text-pink-600">Bkash Send Money</span>
                                     </span>
                                 </button>
 

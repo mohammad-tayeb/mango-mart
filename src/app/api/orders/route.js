@@ -260,6 +260,7 @@ export async function POST(req) {
       insertedId: result.insertedId,
       trackingId,
       message: "Order placed successfully",
+      purchaseAmount: actualAmount
     });
   } catch (error) {
     console.error(error);
