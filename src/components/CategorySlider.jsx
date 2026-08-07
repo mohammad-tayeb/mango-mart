@@ -1,12 +1,9 @@
 "use client"
 import Image from 'next/image';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import React from 'react';
 
-export default function CategorySlider() {
-    const searchParams = useSearchParams();
-    const activeCategory = searchParams.get("category") || "all";
+export default function CategorySlider({ activeCategory = "all" }) {
     const categories = [
         { id: 'all', name: 'All', image: '/all.png' },
         { id: 'mango', name: 'আম', image: '/mango.png' },
@@ -30,7 +27,6 @@ export default function CategorySlider() {
                                     ? "/products"
                                     : `/products?category=${category.id}`
                             }
-                            onClick={() => setActiveCategory(category.id)}
                             className="flex flex-col items-center shrink-0 group transition-all duration-300 hover:scale-105 active:scale-95"
                         >
                             {/* Image */}

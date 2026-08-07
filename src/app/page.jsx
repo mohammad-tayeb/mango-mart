@@ -13,7 +13,7 @@ export default function Home() {
       <HomeMarquee></HomeMarquee>
       {/* Sticky Category Slider */}
       <div className="sticky md:top-12 top-14 z-40 w-full">
-        <CategorySlider />
+        <CategorySlider activeCategory="all" />
       </div>
       <FeaturedProducts></FeaturedProducts>
       <Link href="/products" className="btn border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white">সব পণ্য দেখুন</Link>

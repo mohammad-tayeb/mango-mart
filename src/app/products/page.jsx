@@ -30,7 +30,7 @@ export default async function Products({ searchParams }) {
         <>
             <div>
                 <div className="sticky md:top-12 top-14 z-40 w-full">
-                    <CategorySlider />
+                    <CategorySlider activeCategory={category || "all"} />
                 </div>
                 <Breadcrumb category={category} />
                 <div className="mb-10">
