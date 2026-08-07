@@ -261,8 +261,18 @@ const OrdersTable = () => {
                                   {item.name || "Sample Item"}
                                 </p>
                                 <p className="text-[11px] text-slate-500 mt-0.5">
-                                  Qty: <span className="font-bold text-slate-700">{item.quantity || 1}</span>
-                                  {item.price && ` • ৳${item.price.toLocaleString()}`}
+                                  Qty: <span className="font-bold">{item.quantity ?? 1}</span>
+
+                                  {item.variant && (
+                                    <>
+                                      {" • "}
+                                      {item.variant.quantity}
+                                      {item.variant.unit ?? "kg"}
+                                    </>
+                                  )}
+
+                                  {" • "}৳
+                                  {(item.variant?.offerPrice ?? item.variant?.price)?.toLocaleString()}
                                 </p>
                               </div>
                             </div>

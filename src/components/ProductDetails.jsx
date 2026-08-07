@@ -40,8 +40,6 @@ function ProductDetails({ product, relatedProducts }) {
 
         if (typeof window.fbq === "function") {
 
-            console.log("ADD TO CART PIXEL");
-
             window.fbq("track", "AddToCart", {
                 content_ids: [String(product._id)],
                 content_name: product.name,
@@ -193,7 +191,7 @@ ${window.location.href}
                                             : "border-gray-200"
                                             }`}
                                     >
-                                        {variant.quantity}kg
+                                        {variant.quantity} kg
                                     </button>
                                 );
                             })}

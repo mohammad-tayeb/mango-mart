@@ -20,12 +20,16 @@ export default function AddProduct() {
             name: "",
             unitPricePerKg: "",
             category: "",
-            variants: [{ quantity: "", price: "", offerPrice: "" }],
+            variants: [{
+                quantity: "",
+                unit: "kg",
+                price: "",
+                offerPrice: ""
+            }],
             images: [{ url: "" }],
             description: "",
             stock: {
                 quantity: "",
-                unit: "kg",
                 status: "in_stock",
                 lowStockThreshold: ""
             }
@@ -63,6 +67,7 @@ export default function AddProduct() {
             category: data.category,
             variants: data.variants.map(v => ({
                 quantity: isNaN(Number(v.quantity)) ? v.quantity : Number(v.quantity),
+                unit: v.unit,
                 price: Number(v.price),
                 offerPrice: v.offerPrice ? Number(v.offerPrice) : null
             })),
@@ -139,7 +144,7 @@ export default function AddProduct() {
             setUploadingIndex(null);
         }
     };
-    
+
     return (
         // <div></div>
         <div className="max-w-6xl mx-auto border border-gray-100 rounded-xl shadow-xl p-6 md:p-8 font-sans">
@@ -189,7 +194,7 @@ export default function AddProduct() {
                         </h2>
                         <button
                             type="button"
-                            onClick={() => appendVariant({ quantity: "", price: "", offerPrice: "" })}
+                            onClick={() => appendVariant({ quantity: "", unit: "kg", price: "", offerPrice: "" })}
                             className="flex items-center gap-1 text-xs font-bold text-orange-500 hover:underline"
                         >
                             <FiPlus /> Add Variant
@@ -198,15 +203,29 @@ export default function AddProduct() {
 
                     <div className="space-y-3">
                         {variantFields.map((field, index) => (
-                            <div key={field.id} className="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-white p-3 border border-gray-200 rounded-lg items-end shadow-sm">
+                            <div key={field.id} className="grid grid-cols-1 sm:grid-cols-5 gap-3 bg-white p-3 border border-gray-200 rounded-lg items-end shadow-sm">
                                 <div>
-                                    <label className="block text-[11px] font-semibold text-gray-500 mb-1">Quantity (e.g., 0.5kg/ 5kg)</label>
+                                    <label className="block text-[11px] font-semibold text-gray-500 mb-1">Quantity (e.g., 500g/ 1kg)</label>
                                     <input
-                                        type="text"
-                                        placeholder="5"
+                                        type="number"
+                                        step="0.01"
+                                        placeholder="500"
                                         className="w-full px-3 py-1.5 border border-gray-200 rounded-md text-sm focus:outline-none focus:border-orange-500"
                                         {...register(`variants.${index}.quantity`, { required: true })}
                                     />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-semibold text-gray-600 mb-1.5">Unit</label>
+                                    <select
+                                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-orange-500 bg-white"
+                                        {...register(`variants.${index}.unit`, { required: true })}
+                                    >
+                                        <option value="g">gram</option>
+                                        <option value="kg">kg</option>
+                                        <option value="ml">ml</option>
+                                        <option value="L">L</option>
+                                        <option value="pcs">pcs</option>
+                                    </select>
                                 </div>
                                 <div>
                                     <label className="block text-[11px] font-semibold text-gray-500 mb-1">Regular Price *</label>
@@ -339,7 +358,7 @@ export default function AddProduct() {
                     <h2 className="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
                         <FiSettings className="text-orange-500" /> Stock & Operations
                     </h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                         <div>
                             <label className="block text-xs font-semibold text-gray-600 mb-1.5">Stock Qty *</label>
                             <input
@@ -347,15 +366,6 @@ export default function AddProduct() {
                                 placeholder="100"
                                 className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-orange-500"
                                 {...register("stock.quantity", { required: true })}
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-xs font-semibold text-gray-600 mb-1.5">Unit *</label>
-                            <input
-                                type="text"
-                                placeholder="kg"
-                                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-orange-500"
-                                {...register("stock.unit", { required: true })}
                             />
                         </div>
                         <div>

@@ -92,7 +92,7 @@ function ProductCard({ product }) {
                                         : "border-gray-200 text-gray-600 hover:border-gray-400"
                                         }`}
                                 >
-                                    {variant.quantity}kg
+                                    {variant.quantity} kg
                                 </button>
                             ))}
                         </div>
