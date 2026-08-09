@@ -191,7 +191,7 @@ ${window.location.href}
                                             : "border-gray-200"
                                             }`}
                                     >
-                                        {variant.quantity}{variant.unit || kg}
+                                        {variant.quantity}{variant.unit || "kg"}
                                     </button>
                                 );
                             })}
@@ -204,7 +204,7 @@ ${window.location.href}
                         <p className="text-sm font-medium text-gray-700 mb-2">
                             আপনি কতটি{" "}
                             <span className="font-semibold text-orange-500">
-                                {selectedVariant?.quantity}{selectedVariant.unit || kg}
+                                {selectedVariant?.quantity}{selectedVariant.unit || "kg"}
                             </span>{" "}
                             বক্স নিতে চান?
                         </p>
