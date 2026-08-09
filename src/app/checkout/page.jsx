@@ -78,7 +78,7 @@ export default function Page() {
                 id: item._id,
                 quantity: item.quantity,
                 item_price: item.price,
-                variant: `${item.variant.quantity}kg`
+                variant: `${item.variant.quantity}${item.variant.unit || "kg"}`
             })),
             num_items: cartItems.reduce(
                 (sum, item) => sum + item.quantity,
@@ -184,7 +184,7 @@ export default function Page() {
                         id: item._id,
                         quantity: item.quantity,
                         item_price: item.price,
-                        variant: `${item.variant.quantity}kg`
+                        variant: `${item.variant.quantity}${item.variant.unit || "kg"}`
                     })),
                     num_items: cartItems.reduce(
                         (sum, item) => sum + item.quantity,
@@ -793,7 +793,7 @@ export default function Page() {
                                         </h4>
 
                                         <p className="text-xs text-gray-500">
-                                            {item.variant.quantity}Kg
+                                            {item.variant.quantity}{item.variant.unit || "kg"}
                                         </p>
 
                                         <div className="flex items-center gap-2 mt-1">

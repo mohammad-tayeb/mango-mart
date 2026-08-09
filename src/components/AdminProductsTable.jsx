@@ -214,7 +214,7 @@ function AdminProductsTable({ products = [], refetch }) {
                                                 product.variants.map((v, idx) => (
                                                     <div key={idx} className="text-xs text-slate-600">
                                                         <span className="font-semibold text-slate-700 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-200/60 mr-1">
-                                                            {v.quantity}
+                                                            {v.quantity}{v.unit || "kg"}
                                                         </span>
                                                         {v.offerPrice ? (
                                                             <>

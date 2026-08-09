@@ -185,6 +185,7 @@ export async function POST(req) {
         quantity: item.quantity,
         variant: {
           quantity: dbVariant.quantity,
+          unit: dbVariant.unit,
           price: dbVariant.price,
           offerPrice: dbVariant.offerPrice,
         },

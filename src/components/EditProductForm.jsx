@@ -23,7 +23,13 @@ export default function EditProductForm({ product, id }) {
         watch,
         formState: { isSubmitting },
     } = useForm({
-        defaultValues: product,
+        defaultValues: {
+            ...product,
+            variants: product.variants?.map((variant) => ({
+                ...variant,
+                unit: variant.unit || "kg",
+            })) || [],
+        },
         isBestSelling: true,
     });
 
@@ -252,6 +258,7 @@ export default function EditProductForm({ product, id }) {
                         onClick={() =>
                             appendVariant({
                                 quantity: "",
+                                unit: "kg",
                                 price: "",
                                 offerPrice: "",
                             })
@@ -265,10 +272,14 @@ export default function EditProductForm({ product, id }) {
                     {variantFields.map((field, index) => (
                         <div
                             key={field.id}
-                            className="grid md:grid-cols-4 gap-4 p-4 bg-slate-50/60 border border-slate-200 rounded-lg items-end"
+                            className="grid md:grid-cols-5 gap-4 p-4 bg-slate-50/60 border border-slate-200 rounded-lg items-end"
                         >
+                            {/* Quantity */}
                             <div className="flex flex-col gap-1.5">
-                                <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Quantity Group</label>
+                                <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                                    Quantity
+                                </label>
+
                                 <input
                                     step="any"
                                     type="number"
@@ -276,12 +287,34 @@ export default function EditProductForm({ product, id }) {
                                         valueAsNumber: true,
                                     })}
                                     className="input input-bordered bg-white focus:input-orange-500 text-sm h-10"
-                                    placeholder="e.g. 5"
+                                    placeholder="e.g. 500"
                                 />
                             </div>
 
+                            {/* Unit */}
                             <div className="flex flex-col gap-1.5">
-                                <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Regular Price</label>
+                                <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                                    Unit
+                                </label>
+
+                                <select
+                                    {...register(`variants.${index}.unit`)}
+                                    className="select select-bordered bg-white focus:select-orange-500 text-sm h-10 min-h-0"
+                                >
+                                    <option value="kg">kg</option>
+                                    <option value="g">gram</option>
+                                    <option value="ml">ml</option>
+                                    <option value="L">L</option>
+                                    <option value="pcs">pcs</option>
+                                </select>
+                            </div>
+
+                            {/* Regular Price */}
+                            <div className="flex flex-col gap-1.5">
+                                <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                                    Regular Price
+                                </label>
+
                                 <input
                                     type="number"
                                     step="any"
@@ -293,8 +326,12 @@ export default function EditProductForm({ product, id }) {
                                 />
                             </div>
 
+                            {/* Offer Price */}
                             <div className="flex flex-col gap-1.5">
-                                <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Offer Price</label>
+                                <label className="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                                    Offer Price
+                                </label>
+
                                 <input
                                     type="number"
                                     step="any"
@@ -306,6 +343,7 @@ export default function EditProductForm({ product, id }) {
                                 />
                             </div>
 
+                            {/* Remove */}
                             <button
                                 type="button"
                                 className="btn bg-red-500 text-white h-10 min-h-0 rounded-lg w-full"
@@ -347,7 +385,7 @@ export default function EditProductForm({ product, id }) {
                 <h2 className="text-base font-semibold text-slate-900 border-l-4 border-orange-500 pl-2.5">
                     Stock Management
                 </h2>
-                <div className="grid md:grid-cols-4 gap-4">
+                <div className="grid md:grid-cols-3 gap-4">
                     <div className="flex flex-col gap-1">
                         <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider">Quantity</label>
                         <input
@@ -357,15 +395,6 @@ export default function EditProductForm({ product, id }) {
                             })}
                             className="input input-bordered focus:input-orange-500 text-sm h-10"
                             placeholder="Quantity"
-                        />
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider">Unit</label>
-                        <input
-                            {...register("stock.unit")}
-                            className="input input-bordered focus:input-orange-500 text-sm h-10"
-                            placeholder="Unit"
                         />
                     </div>
 

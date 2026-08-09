@@ -22,7 +22,7 @@ function ProductCard({ product }) {
         addToCart(product, 1, selectedVariant);
 
         toast.success(
-            `Added ${product.name} (${selectedVariant.quantity}kg) to cart`
+            `Added ${product.name} (${selectedVariant.quantity}${selectedVariant.unit || "kg"}) to cart`
         );
     };
 
@@ -92,7 +92,7 @@ function ProductCard({ product }) {
                                         : "border-gray-200 text-gray-600 hover:border-gray-400"
                                         }`}
                                 >
-                                    {variant.quantity} kg
+                                    {variant.quantity} {variant.unit || "kg"}
                                 </button>
                             ))}
                         </div>

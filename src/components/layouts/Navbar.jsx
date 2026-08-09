@@ -367,7 +367,7 @@ function Navbar() {
                       </h3>
 
                       <p className="text-xs text-gray-500">
-                        Weight: {item.variant.quantity}
+                        Weight: {item.variant.quantity}{item.variant.unit || "kg"}
                       </p>
 
                       <p className="text-xs text-gray-500">

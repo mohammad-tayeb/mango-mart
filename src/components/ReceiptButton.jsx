@@ -183,7 +183,7 @@ export default function ReceiptButton({ order }) {
                 doc.text(itemTitleLines, left, y);
                 y += (itemTitleLines.length * 4) + 5;
 
-                doc.text(`Qty: ${item.quantity} x ${item.variant.quantity} KG`, left + 2, y);
+                doc.text(`Qty: ${item.quantity} x ${item.variant.quantity} ${item.variant.unit || "kg"}`, left + 2, y);
                 doc.text(`Tk ${item.variant.offerPrice || item.variant.price}`, right, y, { align: "right" });
                 y += 7;
             });
@@ -342,7 +342,7 @@ export default function ReceiptButton({ order }) {
             docA.setFont("helvetica", "normal");
             order.cartItems.forEach((item, index) => {
                 const name = item.name.includes("|") ? item.name.split("|")[1].trim() : item.name;
-                const fullDescription = `${name} (${item.variant.quantity} KG)`;
+                const fullDescription = `${name} (${item.variant.quantity} ${item.variant.unit || "kg"})`;
 
                 const itemTitleLines = docA.splitTextToSize(fullDescription, 95);
                 const qtyText = String(item.quantity);

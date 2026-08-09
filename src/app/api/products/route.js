@@ -71,6 +71,8 @@ export async function POST(req) {
               ? variant.quantity
               : Number(variant.quantity),
 
+        unit: variant.unit, // ✅ add this
+
         price: Number(variant.price),
 
         offerPrice:
