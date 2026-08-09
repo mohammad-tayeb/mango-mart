@@ -64,21 +64,25 @@ function ProductDetails({ product, relatedProducts }) {
     };
 
     //whatsapp message
-    const message = `
+    const handleWhatsAppOrder = () => {
+        const message = `
 I want to order:
 
 Product: ${product.name}
-Variant: ${selectedVariant.quantity}
+Variant: ${selectedVariant.quantity}${selectedVariant.unit || "kg"}
 Quantity: ${quantity}
 Price: ৳${selectedVariant.offerPrice || selectedVariant.price}
 
 Product Link:
 ${window.location.href}
 `;
-    const whatsappUrl = `https://wa.me/8801822350799?text=${encodeURIComponent(
-        message
-    )}`;
 
+        const whatsappUrl = `https://wa.me/8801822350799?text=${encodeURIComponent(
+            message
+        )}`;
+
+        window.open(whatsappUrl, "_blank");
+    };
     const description = product?.description || "";
 
     const discountPercentage =
@@ -266,15 +270,16 @@ ${window.location.href}
                             </button>
 
                             {/* WhatsApp */}
-                            <a
-                                href={whatsappUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                            <button
+                                type="button"
+                                onClick={handleWhatsAppOrder}
                                 className="w-full bg-[#25D366] text-white font-bold py-2.5 sm:py-3.5 px-1.5 sm:px-6 rounded-md hover:bg-[#20ba5a] transition-colors flex items-center justify-center gap-1 sm:gap-2 text-[11px] xs:text-xs sm:text-base"
                             >
                                 <FaWhatsapp className="text-base sm:text-2xl shrink-0" />
-                                <span className="text-center leading-tight">হোয়াটসঅ্যাপে অর্ডার</span>
-                            </a>
+                                <span className="text-center leading-tight">
+                                    হোয়াটসঅ্যাপে অর্ডার
+                                </span>
+                            </button>
 
                             {/* Call */}
                             <a
