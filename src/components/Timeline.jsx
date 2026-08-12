@@ -23,12 +23,6 @@ export default function Timeline({ history }) {
                                 {item.note}
                             </p>
                         )}
-
-                        {item.updatedBy && (
-                            <p className="text-xs text-gray-400">
-                                Updated by: {item.updatedBy}
-                            </p>
-                        )}
                     </div>
                 </div>
             ))}

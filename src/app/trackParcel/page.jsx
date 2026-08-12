@@ -42,8 +42,10 @@ export default function TrackParcel() {
         }
     };
 
+    console.log(trackingData)
+
     return (
-        <div className="max-w-md mx-auto my-12 px-4 space-y-6">
+        <div className="max-w-lg mx-auto my-12 px-4 space-y-6">
             {/* Search Card */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                 <h2 className="text-xl font-bold text-gray-900 tracking-tight">
@@ -60,11 +62,10 @@ export default function TrackParcel() {
                                 required: "Tracking ID or Phone Number is required",
                             })}
                             placeholder="Tracking ID or Phone Number"
-                            className={`w-full rounded-xl border px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 ${
-                                errors.query
-                                    ? "border-red-500 focus:ring-red-100"
-                                    : "border-gray-200 focus:border-orange-500 focus:ring-orange-500/10"
-                            }`}
+                            className={`w-full rounded-xl border px-4 py-3 text-sm transition-all focus:outline-none focus:ring-2 ${errors.query
+                                ? "border-red-500 focus:ring-red-100"
+                                : "border-gray-200 focus:border-orange-500 focus:ring-orange-500/10"
+                                }`}
                         />
                         {errors.query && (
                             <p className="text-red-500 text-xs font-medium mt-1.5 px-1">
@@ -90,14 +91,29 @@ export default function TrackParcel() {
                         <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm space-y-5">
                             {/* Summary Box */}
                             <div className="bg-gray-50/60 border border-gray-100 rounded-xl p-4 space-y-2.5 text-sm">
+                                <div className="bg-gray-100 p-4">
+                                    <h4 className="text-gray-500">
+                                        Products:
+                                    </h4>
+
+                                    <div className="space-y-1.5">
+                                        {trackingData.order.cartItems?.map((item, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex justify-between text-xs"
+                                            >
+                                                <span className="text-gray-700 block w-[250px] break-words whitespace-normal">
+                                                    {item.name} × {item.quantity}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-500">Tracking ID</span>
                                     <span className="font-mono font-medium text-gray-900">{trackingData.order.trackingId}</span>
                                 </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-gray-500">Customer</span>
-                                    <span className="font-medium text-gray-900">{trackingData.order.customer.fullName}</span>
-                                </div>
+
                                 <div className="flex justify-between items-center">
                                     <span className="text-gray-500">Paid</span>
                                     <span className="font-medium text-gray-900">৳{trackingData.order.payment.amountPaid}</span>
@@ -128,8 +144,8 @@ export default function TrackParcel() {
                             <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400 px-1">
                                 Multiple Orders Found ({trackingData.orders.length})
                             </h3>
-                            
-                            {trackingData.orders.map((order,index) => {
+
+                            {trackingData.orders.map((order, index) => {
                                 const isExpanded = expandedTrackingId === order.trackingId;
                                 return (
                                     <div key={index} className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm">
@@ -137,11 +153,7 @@ export default function TrackParcel() {
                                             <div className="min-w-0">
                                                 <div className="flex items-center gap-2">
                                                     <span className="font-mono font-medium text-gray-900 truncate">{order.trackingId}</span>
-                                                    <span className="inline-flex items-center rounded bg-orange-50 px-1.5 py-0.5 text-[10px] font-medium text-orange-600">
-                                                        {order.orderStatus}
-                                                    </span>
                                                 </div>
-                                                <p className="text-xs text-gray-400 mt-0.5 truncate">{order.customer.fullName}</p>
                                             </div>
 
                                             <button
@@ -153,12 +165,74 @@ export default function TrackParcel() {
                                         </div>
 
                                         {isExpanded && (
-                                            <div className="border-t border-gray-50 bg-gray-50/30 px-5 py-5 space-y-4">
-                                                <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 bg-white p-3 rounded-xl border border-gray-100">
-                                                    <div>Paid: <span className="font-medium text-gray-800">৳{order.payment.amountPaid}</span></div>
-                                                    <div>Due: <span className="font-medium text-gray-800">৳{order.payment.amountDue}</span></div>
+                                            <div className="border-t border-gray-50 bg-gray-50/30  px-5 space-y-5">
+
+                                                {/* Order Details */}
+                                                <div className="bg-gray-50/60 border border-gray-100 rounded-xl p-4 space-y-2.5 text-sm">
+
+                                                    {/* Products */}
+                                                    <div>
+                                                        <h4 className="text-gray-500 mb-2">
+                                                            Products:
+                                                        </h4>
+
+                                                        <div className="space-y-1.5">
+                                                            {order.cartItems?.map((item, index) => (
+                                                                <div
+                                                                    key={index}
+                                                                    className="flex justify-between text-xs"
+                                                                >
+                                                                    <span className="text-gray-700 block w-[250px] break-words whitespace-normal">
+                                                                        {item.name} × {item.quantity}
+                                                                    </span>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Paid */}
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-gray-500">
+                                                            Paid
+                                                        </span>
+
+                                                        <span className="font-medium text-gray-900">
+                                                            ৳{order.payment.amountPaid}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* Due */}
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-gray-500">
+                                                            Due
+                                                        </span>
+
+                                                        <span className="font-medium text-gray-900">
+                                                            ৳{order.payment.amountDue}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* Status */}
+                                                    <div className="pt-2 border-t border-gray-100 flex justify-between items-center">
+                                                        <span className="text-gray-600 font-medium">
+                                                            Current Status
+                                                        </span>
+
+                                                        <span className="inline-flex items-center rounded-md bg-orange-50 px-2.5 py-1 text-xs font-semibold text-orange-600 border border-orange-100">
+                                                            {order.orderStatus}
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                                <Timeline history={order.orderHistory} />
+
+                                                {/* Timeline */}
+                                                <div>
+                                                    <h3 className="text-sm font-bold text-gray-900 mb-4 px-1">
+                                                        Order Timeline
+                                                    </h3>
+
+                                                    <Timeline history={order.orderHistory} />
+                                                </div>
+
                                             </div>
                                         )}
                                     </div>

@@ -147,6 +147,8 @@ function AdminProductsTable({ products = [], refetch }) {
                             <option value="mango">Mango</option>
                             <option value="honey">Honey</option>
                             <option value="ghee">Ghee</option>
+                            <option value="oil">Oil</option>
+                            <option value="date">Date</option>
                         </select>
                     </div>
                 </div>

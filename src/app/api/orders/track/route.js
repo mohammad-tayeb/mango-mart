@@ -7,9 +7,7 @@ export async function POST(req) {
 
     const isTrackingId = /^MM-\d{6}-[A-Z0-9]{6}$/i.test(query);
 
-    const orderCollection = await dbConnect(
-      collectionNameObj.orderCollection
-    );
+    const orderCollection = await dbConnect(collectionNameObj.orderCollection);
 
     if (isTrackingId) {
       const order = await orderCollection.findOne(
@@ -17,6 +15,7 @@ export async function POST(req) {
         {
           projection: {
             _id: 0,
+            cartItems: 1,
             trackingId: 1,
             orderStatus: 1,
             orderHistory: 1,
@@ -25,13 +24,13 @@ export async function POST(req) {
             "payment.amountPaid": 1,
             "payment.amountDue": 1,
           },
-        }
+        },
       );
 
       if (!order) {
         return NextResponse.json(
           { message: "Order not found" },
-          { status: 404 }
+          { status: 404 },
         );
       }
 
@@ -48,6 +47,7 @@ export async function POST(req) {
         {
           projection: {
             _id: 0,
+            cartItems: 1,
             trackingId: 1,
             orderStatus: 1,
             orderHistory: 1,
@@ -56,16 +56,20 @@ export async function POST(req) {
             "payment.amountPaid": 1,
             "payment.amountDue": 1,
           },
-        }
+        },
       )
       .sort({ createdAt: -1 })
       .toArray();
 
     if (orders.length === 0) {
-      return NextResponse.json(
-        { message: "Order not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "Order not found" }, { status: 404 });
+    }
+
+    if (orders.length === 1) {
+      return NextResponse.json({
+        type: "single",
+        order: orders[0],
+      });
     }
 
     return NextResponse.json({
@@ -77,7 +81,7 @@ export async function POST(req) {
 
     return NextResponse.json(
       { message: "Failed to fetch order" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
