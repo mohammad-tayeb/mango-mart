@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getSearchedProducts } from "@/lib/getProducts";
 import { auth } from "@/auth";
 import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
+import { syncProductsToMeta } from "@/lib/meta/catalog";
 
 //get searched product
 export async function GET() {
@@ -19,8 +20,6 @@ export async function POST(req) {
   }
   try {
     // Optional: Protect admin route
-    const session = await auth();
-
     if (!session) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
@@ -99,6 +98,22 @@ export async function POST(req) {
     };
 
     const result = await productCollection.insertOne(product);
+
+    // 2. Get the newly-created product including MongoDB _id
+    const newProduct = {
+      ...product,
+      _id: result.insertedId,
+    };
+
+    // 3. Sync product to Meta
+    try {
+      await syncProductsToMeta([newProduct]);
+
+      console.log(`Meta catalogue sync successful: ${result.insertedId}`);
+    } catch (metaError) {
+      // Don't fail product creation if Meta sync fails
+      console.error("Meta catalogue sync failed:", metaError);
+    }
 
     return NextResponse.json(
       {
