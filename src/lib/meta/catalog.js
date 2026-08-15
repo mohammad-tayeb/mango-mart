@@ -143,3 +143,41 @@ export async function syncProductsToMeta(products) {
 
   return result;
 }
+
+export async function deleteProductFromMeta(productId) {
+  const url = `https://graph.facebook.com/${META_API_VERSION}/${META_CATALOG_ID}/items_batch`;
+
+  const response = await fetch(url, {
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+    },
+
+    body: JSON.stringify({
+      access_token: META_ACCESS_TOKEN,
+
+      item_type: "PRODUCT_ITEM",
+
+      requests: [
+        {
+          method: "DELETE",
+
+          data: {
+            id: productId.toString(),
+          },
+        },
+      ],
+    }),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    console.error("Meta Catalog delete error:", result);
+
+    throw new Error(result?.error?.message || "Meta Catalog delete failed");
+  }
+
+  return result;
+}

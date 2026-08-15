@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 import dbConnect, { collectionNameObj } from "@/lib/dbConnect";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
+import { deleteProductFromMeta, syncProductsToMeta } from "@/lib/meta/catalog";
 
 export async function PATCH(req, { params }) {
   const session = await auth();
@@ -39,6 +40,35 @@ export async function PATCH(req, { params }) {
       },
     );
 
+    // Product not found
+    if (result.matchedCount === 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Product not found",
+        },
+        { status: 404 },
+      );
+    }
+
+    // Get the updated product
+    const updatedProduct = await collection.findOne({
+      _id: new ObjectId(id),
+    });
+
+    // Sync updated product to Meta
+    let metaSynced = false;
+
+    try {
+      await syncProductsToMeta([updatedProduct]);
+
+      metaSynced = true;
+
+      console.log(`Meta catalogue update successful: ${id}`);
+    } catch (metaError) {
+      console.error("Meta catalogue update failed:", metaError);
+    }
+
     // Refresh cached pages
     revalidatePath("/");
     revalidatePath("/products");
@@ -47,6 +77,7 @@ export async function PATCH(req, { params }) {
     return NextResponse.json({
       success: true,
       modifiedCount: result.modifiedCount,
+      metaSynced,
     });
   } catch (err) {
     return NextResponse.json(
@@ -77,6 +108,7 @@ export async function DELETE(req, { params }) {
   if (!admin) {
     return NextResponse.json({ message: "Forbidden" }, { status: 403 });
   }
+
   try {
     const { id } = await params;
 
@@ -84,6 +116,7 @@ export async function DELETE(req, { params }) {
       collectionNameObj.productCollection,
     );
 
+    // Delete from MongoDB
     const result = await productCollection.deleteOne({
       _id: new ObjectId(id),
     });
@@ -95,6 +128,19 @@ export async function DELETE(req, { params }) {
       );
     }
 
+    // Delete from Meta
+    let metaDeleted = false;
+
+    try {
+      await deleteProductFromMeta(id);
+
+      metaDeleted = true;
+
+      console.log(`Meta catalogue delete successful: ${id}`);
+    } catch (metaError) {
+      console.error("Meta catalogue delete failed:", metaError);
+    }
+
     // Refresh cached pages
     revalidatePath("/");
     revalidatePath("/products");
@@ -103,8 +149,17 @@ export async function DELETE(req, { params }) {
     return NextResponse.json({
       success: true,
       message: "Product deleted successfully",
+      metaDeleted,
     });
   } catch (error) {
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: error.message,
+      },
+      { status: 500 },
+    );
   }
 }
