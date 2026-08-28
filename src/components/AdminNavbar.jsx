@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import { FiCheckCircle, FiChevronRight, FiLogOut } from "react-icons/fi";
+import { FiCheckCircle, FiChevronRight, FiLogOut, FiTruck } from "react-icons/fi";
 import Link from "next/link";
 import { FiBell } from "react-icons/fi";
 import { useQuery } from "@tanstack/react-query";
@@ -140,6 +140,12 @@ function AdminDashboard({ session, children }) {
             href: '/admin/manageProducts',
             icon: <FiPackage className="h-5 w-5" />,
         },
+        {
+            id: 'manageDeliveryPrices',
+            label: 'Manage Delivery Price',
+            href: '/admin/manageDeliveryPrices',
+            icon: <FiTruck className="h-5 w-5" />,
+        },
     ];
 
     // Determine fallback title if no navigation match is detected
@@ -188,7 +194,7 @@ function AdminDashboard({ session, children }) {
             `}>
                 {/* Sidebar Header */}
                 <div className="relative flex h-16 items-center justify-between px-6 border-b border-slate-100">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mt-1">
                         <Image
                             src="/logo2.png"
                             alt="Mango Lovers Logo"
@@ -231,7 +237,7 @@ function AdminDashboard({ session, children }) {
                 </nav>
 
                 {/* Sidebar Footer Account block */}
-                <div className="border-t border-slate-100 p-4">
+                <div className="border-t border-slate-100 py-4">
                     {/* User Info */}
                     <div className="flex items-center gap-3 rounded-xl p-2">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-500 font-semibold text-white">
@@ -247,9 +253,6 @@ function AdminDashboard({ session, children }) {
                             </p>
                         </div>
                     </div>
-
-                    <div className="my-3 border-t border-slate-100" />
-
                     {/* Logout */}
                     <button
                         onClick={() =>
@@ -269,7 +272,6 @@ function AdminDashboard({ session, children }) {
 
             {/* 3. MAIN CONTENT CONTAINER */}
             <div className="flex flex-1 flex-col overflow-hidden w-full">
-
                 {/* Top Header Bar */}
                 <header className="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 md:px-8 shadow-sm shadow-slate-100">
                     <div className="flex items-center gap-4">
@@ -282,7 +284,7 @@ function AdminDashboard({ session, children }) {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                             </svg>
                         </button>
-                        <h2 className="text-xl font-bold text-slate-900">
+                        <h2 className="text-md font-bold text-slate-900">
                             {headerTitle}
                         </h2>
                     </div>

@@ -196,6 +196,8 @@ export default function ReceiptButton({ order }) {
             y += 6;
 
             row("Method", paymentMethod[order.payment.method] || order.payment.method);
+            row("Bkash Send Money Charge", `Tk ${order.payment.charge}`);
+            row("Subtotal", `Tk ${order.delivery.charge}`);
             row("Subtotal", `Tk ${order.payment.actualAmount}`);
             row("Paid", `Tk ${order.payment.amountPaid}`);
             line();
@@ -379,6 +381,9 @@ export default function ReceiptButton({ order }) {
                 y += 5.5;
             };
 
+            
+            summaryRow("Bkash Send Money Charge:", `Tk ${order.payment.charge}`);
+            summaryRow("Delivery Charge:", `Tk ${order.delivery.charge}`);
             summaryRow("Subtotal:", `Tk ${order.payment.actualAmount}`);
             summaryRow("Paid Amount:", `Tk ${order.payment.amountPaid}`);
             line(0.2, 180);

@@ -8,6 +8,7 @@ import Image from 'next/image';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useQuery } from "@tanstack/react-query";
 
 
 export default function Page() {
@@ -15,6 +16,26 @@ export default function Page() {
     const [selectedMethod, setSelectedMethod] = useState(null); // intl_send, bd_payment, bank
     const [paymentType, setPaymentType] = useState(null);
     const [paymentMode, setPaymentMode] = useState("cod");
+
+    // load category delivery price data
+    const {
+        data: deliveryPrices = [],
+        isLoading,
+        error,
+        refetch
+    } = useQuery({
+        queryKey: ["deliveryPrices"],
+        queryFn: async () => {
+            const res = await fetch("/api/admin/delivery-prices");
+
+            if (!res.ok) {
+                throw new Error("Failed to fetch delivery prices");
+            }
+
+            return res.json();
+        },
+    });
+    console.log(deliveryPrices)
 
     const [trxId, setTrxId] = useState('');
     const router = useRouter();
@@ -30,7 +51,9 @@ export default function Page() {
     const district = watch("district");
 
     // cart related
+    // load cart items
     const cartItems = useCartStore((state) => state.cart);
+    console.log(cartItems)
 
     const increaseQuantity = useCartStore(
         (state) => state.increaseQuantity
@@ -52,12 +75,32 @@ export default function Page() {
         (sum, item) => sum + item.price * item.quantity,
         0
     );
+
+    const uniqueCategories = [
+        ...new Set(
+            cartItems.map((item) => item.category?.toLowerCase())
+        ),
+    ];
+
+    let deliveryCharge = 0;
+
+    if (uniqueCategories.length === 1) {
+        const categoryDelivery = deliveryPrices.find(
+            (item) =>
+                item.category?.toLowerCase() === uniqueCategories[0]
+        );
+
+        deliveryCharge = Number(categoryDelivery?.price || 0);
+    } else if (uniqueCategories.length > 1) {
+        deliveryCharge = 100;
+    }
+
     const charge =
         selectedMethod === "intl_send"
             ? Math.round(subtotal * 0.018)
             : 0;
 
-    const total = subtotal + charge;
+    const total = subtotal + deliveryCharge + charge;
 
     // Meta Pixel - InitiateCheckout
     const [checkoutTracked, setCheckoutTracked] = useState(false);
@@ -220,16 +263,15 @@ export default function Page() {
 
 
     return (
-        <div className="relative bg-gray-50 mb-10 pt-1 md:p-8 p-0 flex md:flex-row flex-col items-center w-full gap-10">
+        <div className="relative mb-10 pt-1 md:p-8 p-0 flex md:flex-row flex-col items-center w-full gap-10">
             {/* Left Side: Delivery Information Form */}
             <div className='md:w-2/3 w-full'>
                 {/* form */}
                 <form onSubmit={handleSubmit(onSubmit)} className="md:col-span-2 md:px-4 px-2 space-y-6">
-                    <div className='w-full max-w-6xl bg-white rounded-xl shadow-sm border border-gray-100 p-4 '>
+                    <div className='w-full max-w-6xl bg-white rounded-xl shadow-sm border border-orange-400 p-8 '>
                         {/* Section Title */}
-                        <h1 className='md:text-2xl text-center mb-4 mt-2 text-xl font-semibold'>Checkout</h1>
                         <div className="flex items-center gap-3 mb-5">
-                            <span className="w-14 h-6 rounded bg-red-500 text-white flex items-center justify-center text-sm font-bold">
+                            <span className="w-14 h-6 rounded bg-orange-500 text-white flex items-center justify-center text-sm font-bold">
                                 Step: 1
                             </span>
                             <h2 className="text-lg font-bold text-gray-800">Delivery Information</h2>
@@ -242,7 +284,7 @@ export default function Page() {
                                 type="text"
                                 placeholder='Your Full Name'
                                 {...register('fullName', { required: 'Full name is required' })}
-                                className="w-full px-3 py-2 bg-blue-50/40 border border-blue-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800"
+                                className="w-full px-3 py-2 bg-blue-50/40 border border-blue-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 text-gray-800"
                             />
                             {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName.message}</p>}
                         </div>
@@ -261,7 +303,7 @@ export default function Page() {
                                             message: "Enter a valid Bangladeshi phone number"
                                         }
                                     })}
-                                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800"
+                                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 text-gray-800"
                                 />
                                 {errors.phoneNumber && <p className="text-red-500 text-xs mt-1">{errors.phoneNumber.message}</p>}
                             </div>
@@ -271,7 +313,7 @@ export default function Page() {
                                     type="email"
                                     placeholder='Your Email'
                                     {...register('email')}
-                                    className="w-full px-3 py-2 bg-blue-50/40 border border-blue-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800"
+                                    className="w-full px-3 py-2 bg-blue-50/40 border border-blue-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 text-gray-800"
                                 />
                             </div>
                         </div>
@@ -283,7 +325,7 @@ export default function Page() {
                                 rows={3}
                                 placeholder='Detailed Delivery Address'
                                 {...register('deliveryAddress', { required: 'Address is required' })}
-                                className="w-full px-3 py-2 bg-blue-50/40 border border-blue-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 resize-none"
+                                className="w-full px-3 py-2 bg-blue-50/40 border border-blue-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 text-gray-800 resize-none"
                             />
                             {errors.deliveryAddress && <p className="text-red-500 text-xs mt-1">{errors.deliveryAddress.message}</p>}
                         </div>
@@ -330,21 +372,21 @@ export default function Page() {
 
                         {/* Special Instructions */}
                         <div>
-                            <label className="block text-sm text-gray-700 my-1 font-semibold">বিশেষ অনুরোধ উল্লেখ করুন</label>
+                            <label className="block text-sm text-gray-700 mt-4 mb-2 font-semibold">বিশেষ অনুরোধ উল্লেখ করুন</label>
                             <input
                                 type="text"
                                 placeholder="Special instructions (optional)"
                                 {...register('specialInstructions')}
-                                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 placeholder-gray-400"
+                                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400 text-gray-800 placeholder-gray-400"
                             />
                         </div>
                     </div>
 
                     {/* step 2 */}
-                    <div className="w-full mt-4 max-w-6xl bg-white rounded-xl shadow-sm border border-gray-100 p-4 ">
+                    <div className="w-full mt-4 max-w-6xl bg-white rounded-xl shadow-sm border border-orange-400 p-6 ">
                         {/* Section Title */}
                         <div className="flex items-center gap-3 mb-4">
-                            <span className="w-14 h-6 rounded bg-red-500 text-white flex items-center justify-center text-sm font-bold">
+                            <span className="w-14 h-6 rounded bg-orange-500 text-white flex items-center justify-center text-sm font-bold">
                                 Step: 2
                             </span>
                             <h2 className="text-lg font-bold text-gray-800">Delivery Option</h2>
@@ -353,24 +395,26 @@ export default function Page() {
                         {/* Selected Delivery Box */}
                         <div className="w-full p-4 rounded-xl border border-green-300 bg-green-50 shadow-sm transition-all">
                             <div className="space-y-1">
-                                {/* Option Headline */}
                                 <h3 className="text-base font-bold text-green-700">
-                                    Home Delivery - ৳0
+                                    হোম ডেলিভারি চার্জ -{" "}
+                                    {deliveryCharge === 0
+                                        ? "ফ্রি"
+                                        : `৳${deliveryCharge.toLocaleString()}`}
                                 </h3>
-                                {/* Subtext Description */}
+
                                 <p className="text-sm text-gray-600">
-                                    উপজেলা পর্যায়ে ৫ কি মি এর মধ্যে হোম ডেলিভারি হবে।
+                                    উপজেলা পর্যায়ে ৫ কি মি এর মধ্যে হোম ডেলিভারি হবে।
                                 </p>
                             </div>
                         </div>
                     </div>
 
                     {/* step 3 */}
-                    <div className="w-full mt-4 bg-white rounded-2xl shadow-sm border border-gray-100 p-5  text-gray-800">
+                    <div className="w-full mt-4 bg-white rounded-2xl shadow-sm border border-orange-400 p-6  text-gray-800">
 
                         {/* 1. Header Section */}
                         <div className="flex items-center gap-3 mb-5">
-                            <span className="w-14 h-6 rounded bg-red-500 text-white flex items-center justify-center text-sm font-bold">
+                            <span className="w-14 h-6 rounded bg-orange-500 text-white flex items-center justify-center text-sm font-bold">
                                 Step: 3
                             </span>
                             <h2 className="text-base font-black text-gray-900">Payment Method</h2>
@@ -379,7 +423,7 @@ export default function Page() {
                         {/* Payment Type */}
                         <div className="space-y-3 mb-3">
                             <h3 className="text-sm font-bold text-gray-700">
-                                How do you want to pay?
+                                আপনি কীভাবে মূল্য পরিশোধ করতে চান?
                             </h3>
 
                             <div className="grid grid-cols-2 gap-3">
@@ -394,8 +438,8 @@ export default function Page() {
                                         setTrxId("");
                                     }}
                                     className={`rounded-2xl border p-3 text-left transition-all ${paymentMode === "cod"
-                                        ? "border-orange-500 bg-orange-50 ring-2 ring-orange-200"
-                                        : "border-gray-200 hover:border-orange-300 hover:bg-orange-50/40"
+                                        ? "border-green-400 bg-green-50 ring ring-green-200"
+                                        : "border-gray-200 hover:border-green-300 hover:bg-green-50/40"
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
@@ -405,11 +449,11 @@ export default function Page() {
 
                                         <div>
                                             <h4 className="font-bold text-gray-900">
-                                                Cash on Delivery
+                                                ক্যাশ অন ডেলিভারি
                                             </h4>
 
                                             <p className="text-xs text-gray-500 mt-1">
-                                                Pay after receiving your order.
+                                                পণ্য হাতে পাওয়ার পর মূল্য পরিশোধ করুন।
                                             </p>
                                         </div>
                                     </div>
@@ -425,8 +469,8 @@ export default function Page() {
                                         setTrxId("");
                                     }}
                                     className={`rounded-2xl border p-3 text-left transition-all ${paymentMode === "online"
-                                        ? "border-orange-500 bg-orange-50 ring-2 ring-orange-200"
-                                        : "border-gray-200 hover:border-orange-300 hover:bg-orange-50/40"
+                                        ? "border-green-400 bg-green-50 ring ring-green-200"
+                                        : "border-gray-200 hover:border-green-300 hover:bg-green-50/40"
                                         }`}
                                 >
                                     <div className="flex items-center gap-3">
@@ -436,11 +480,11 @@ export default function Page() {
 
                                         <div>
                                             <h4 className="font-bold text-gray-900">
-                                                Online Payment
+                                                অনলাইন পেমেন্ট
                                             </h4>
 
                                             <p className="text-xs text-gray-500 mt-1">
-                                                Pay now using bKash or Bank Transfer.
+                                                bKash অথবা ব্যাংক ট্রান্সফারের মাধ্যমে এখনই পেমেন্ট করুন।
                                             </p>
                                         </div>
                                     </div>
@@ -514,19 +558,6 @@ export default function Page() {
                             </div>
                         }
 
-                        {paymentMode === "cod" && (
-                            <div className="mt-4 rounded-xl border border-green-300 bg-green-50 p-5">
-                                <h3 className="font-bold text-green-700">
-                                    Cash on Delivery
-                                </h3>
-
-                                <p className="mt-2 text-sm text-gray-600">
-                                    No advance payment is required.
-                                    Pay the full amount when your order is delivered.
-                                </p>
-                            </div>
-                        )}
-
                         {/* 3. Render Content Conditionally via selectedMethod State */}
                         {/* OPTION 1: Baksh Send Money Content */}
                         {selectedMethod === 'intl_send' && (
@@ -536,7 +567,7 @@ export default function Page() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <h4 className="text-xs font-bold text-gray-700">How much to pay now?</h4>
+                                    <h4 className="text-xs font-bold text-gray-700">এখন কত টাকা পরিশোধ করতে চান?</h4>
                                     <div className="grid grid-cols-2 gap-3">
 
                                         <button
@@ -599,7 +630,7 @@ export default function Page() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <h4 className="text-xs font-bold text-gray-700">How much to pay now?</h4>
+                                    <h4 className="text-xs font-bold text-gray-700">এখন কত টাকা পরিশোধ করতে চান?</h4>
                                     <div className="grid grid-cols-2 gap-3">
 
                                         <button
@@ -668,7 +699,7 @@ export default function Page() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <h4 className="text-xs font-bold text-gray-700">How much to pay now?</h4>
+                                    <h4 className="text-xs font-bold text-gray-700">এখন কত টাকা পরিশোধ করতে চান?</h4>
                                     <div className="grid grid-cols-2 gap-3">
                                         <button
                                             type="button"
@@ -731,7 +762,7 @@ export default function Page() {
 
             {/* Right Side: Order Summary Card */}
             {cartItems.length === 0 ? (
-                <div className="flex items-center justify-center sticky top-24 md:w-1/3 w-full bg-white rounded-xl shadow-sm border border-gray-100 p-4 self-start space-y-3">
+                <div className="flex items-center justify-center sticky top-24 md:w-1/3 w-full bg-white rounded-xl shadow-sm border border-orange-400 p-4 self-start space-y-3">
                     <div className="flex items-center border-b border-gray-100 pb-3">
                         <div className="flex flex-col items-center justify-center py-10 text-center">
                             <FaShoppingCart className="text-5xl text-gray-300 mb-4" />
@@ -755,7 +786,7 @@ export default function Page() {
                     </div>
                 </div>
             ) : (
-                <div className="sticky top-24 md:w-1/3 w-full bg-white rounded-xl shadow-sm border border-gray-100 md:p-4 p-8 self-start space-y-3">
+                <div className="sticky top-24 md:w-1/3 w-full bg-white rounded-xl shadow-sm border border-orange-400 md:p-4 p-8 self-start space-y-3">
                     <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                         <h2 className="text-base font-bold text-gray-800">
                             Order Summary
@@ -860,8 +891,15 @@ export default function Page() {
                             <div className="flex justify-between text-gray-600">
                                 <span>Delivery Charge</span>
 
-                                <span className="font-semibold text-emerald-600">
-                                    Free
+                                <span
+                                    className={`font-semibold ${deliveryCharge === 0
+                                        ? "text-emerald-600"
+                                        : "text-orange-500"
+                                        }`}
+                                >
+                                    {deliveryCharge === 0
+                                        ? "Free"
+                                        : `(+) ৳${deliveryCharge.toLocaleString()}`}
                                 </span>
                             </div>
 
@@ -872,7 +910,7 @@ export default function Page() {
                                         <div className="flex justify-between text-gray-600">
                                             <span>Advance Payment</span>
                                             <span className="font-semibold text-orange-500">
-                                                ৳250
+                                                (-) ৳250
                                             </span>
                                         </div>
 
@@ -907,8 +945,8 @@ export default function Page() {
                         disabled={isDisabled}
                         onClick={handleSubmit(onSubmit)}
                         className={`w-full py-3 rounded-xl font-bold transition ${isDisabled
-                            ? "bg-gray-300 cursor-not-allowed"
-                            : "bg-red-500 hover:bg-red-600 text-white"
+                            ? "bg-gray-200 cursor-not-allowed"
+                            : "bg-orange-500 hover:bg-orange-600 text-white"
                             }`}
                     >
                         {loading

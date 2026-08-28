@@ -18,6 +18,7 @@ export default async function OrderDetails({ params }) {
             minute: '2-digit'
         });
     };
+    console.log(order)
 
     return (
         <div className="max-w-4xl mx-auto bg-gray-50  font-sans">
@@ -162,12 +163,20 @@ export default async function OrderDetails({ params }) {
 
                         <div className="space-y-2 pt-1">
                             <div className="flex justify-between text-sm">
-                                <span className="text-gray-500">Subtotal Amount</span>
-                                <span className="font-medium text-gray-800">৳{order.payment.actualAmount.toLocaleString()}</span>
+                                <span className="text-gray-500">Total</span>
+                                <span className="font-medium text-gray-800">৳{order.payment.subtotal.toLocaleString()}</span>
                             </div>
                             <div className="flex justify-between text-sm">
-                                <span className="text-gray-500">Service Charge</span>
+                                <span className="text-gray-500">Bkash Send Money Charge</span>
                                 <span className="font-medium text-gray-800">৳{order.payment.charge}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-500">Deelivery Charge</span>
+                                <span className="font-medium text-gray-800">৳{order.delivery.charge}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                                <span className="text-gray-500">Subtotal Amount</span>
+                                <span className="font-medium text-gray-800">৳{order.payment.actualAmount.toLocaleString()}</span>
                             </div>
                             <div className="flex justify-between text-sm text-emerald-600 font-medium">
                                 <span>Advance Paid</span>

@@ -32,6 +32,7 @@ const useCartStore = create(
               {
                 _id: product._id,
                 name: product.name,
+                category: product.category,
                 image: product.images[0],
 
                 variant,

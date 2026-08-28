@@ -18,14 +18,14 @@ export async function POST(req) {
     if (!order.customer?.fullName?.trim()) {
       return NextResponse.json(
         { message: "Full name is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (!order.customer?.phoneNumber?.trim()) {
       return NextResponse.json(
         { message: "Phone number is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -34,31 +34,28 @@ export async function POST(req) {
     // -----------------------
 
     if (!Array.isArray(order.cartItems) || order.cartItems.length === 0) {
-      return NextResponse.json(
-        { message: "Cart is empty" },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: "Cart is empty" }, { status: 400 });
     }
 
     for (const item of order.cartItems) {
       if (!ObjectId.isValid(item._id)) {
         return NextResponse.json(
           { message: "Invalid product." },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
       if (!item.variant?.quantity) {
         return NextResponse.json(
           { message: "Invalid product variant." },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
-      if (item.quantity <= 0) {
+      if (!Number.isInteger(item.quantity) || item.quantity <= 0) {
         return NextResponse.json(
           { message: "Invalid quantity." },
-          { status: 400 }
+          { status: 400 },
         );
       }
     }
@@ -72,7 +69,7 @@ export async function POST(req) {
     if (!allowedModes.includes(order.payment?.mode)) {
       return NextResponse.json(
         { message: "Invalid payment mode." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -81,7 +78,23 @@ export async function POST(req) {
     if (!allowedMethods.includes(order.payment?.method)) {
       return NextResponse.json(
         { message: "Invalid payment method." },
-        { status: 400 }
+        { status: 400 },
+      );
+    }
+
+    // COD must use COD method
+    if (order.payment.mode === "cod" && order.payment.method !== "cod") {
+      return NextResponse.json(
+        { message: "Invalid payment method for COD." },
+        { status: 400 },
+      );
+    }
+
+    // Online payment cannot use COD
+    if (order.payment.mode === "online" && order.payment.method === "cod") {
+      return NextResponse.json(
+        { message: "Invalid payment method for online payment." },
+        { status: 400 },
       );
     }
 
@@ -91,17 +104,14 @@ export async function POST(req) {
     ) {
       return NextResponse.json(
         { message: "Invalid payment type." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    if (
-      order.payment.mode === "online" &&
-      !order.payment.trxId?.trim()
-    ) {
+    if (order.payment.mode === "online" && !order.payment.trxId?.trim()) {
       return NextResponse.json(
         { message: "Transaction ID is required." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -110,12 +120,10 @@ export async function POST(req) {
     // -----------------------
 
     const productCollection = await dbConnect(
-      collectionNameObj.productCollection
+      collectionNameObj.productCollection,
     );
 
-    const ids = order.cartItems.map(
-      (item) => new ObjectId(item._id)
-    );
+    const ids = order.cartItems.map((item) => new ObjectId(item._id));
 
     const products = await productCollection
       .find({
@@ -124,14 +132,11 @@ export async function POST(req) {
       .toArray();
 
     const productMap = new Map(
-      products.map((product) => [
-        product._id.toString(),
-        product,
-      ])
+      products.map((product) => [product._id.toString(), product]),
     );
 
     // -----------------------
-    // Calculate Amount
+    // Calculate Subtotal
     // -----------------------
 
     let subtotal = 0;
@@ -144,23 +149,25 @@ export async function POST(req) {
       if (!product) {
         return NextResponse.json(
           { message: "Product not found." },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
+      // Stock validation
       if (product.stock?.status !== "in_stock") {
         return NextResponse.json(
           {
             message: `${product.name} is currently out of stock.`,
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
-      const dbVariant = product.variants.find(
+      // Find the requested variant from DB
+      const dbVariant = product.variants?.find(
         (variant) =>
-          Number(variant.quantity) ===
-          Number(item.variant.quantity)
+          Number(variant.quantity) === Number(item.variant.quantity) &&
+          (variant.unit || "kg") === (item.variant.unit || "kg"),
       );
 
       if (!dbVariant) {
@@ -168,21 +175,27 @@ export async function POST(req) {
           {
             message: `Invalid variant for ${product.name}.`,
           },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
-      const variantPrice =
-        dbVariant.offerPrice ?? dbVariant.price;
+      // Use trusted DB price
+      const variantPrice = dbVariant.offerPrice ?? dbVariant.price;
 
       subtotal += variantPrice * item.quantity;
 
       // Save only trusted cart data
       safeCartItems.push({
         _id: product._id.toString(),
+
         name: product.name,
+
+        category: product.category,
+
         image: product.images?.[0] || "",
+
         quantity: item.quantity,
+
         variant: {
           quantity: dbVariant.quantity,
           unit: dbVariant.unit,
@@ -193,24 +206,68 @@ export async function POST(req) {
     }
 
     // -----------------------
-    // Payment Calculation
+    // Delivery Charge
+    // -----------------------
+
+    const uniqueCategories = [
+      ...new Set(safeCartItems.map((item) => item.category).filter(Boolean)),
+    ];
+
+    let deliveryCharge = 0;
+
+    if (uniqueCategories.length === 1) {
+      // --------------------------------
+      // One category
+      // Use that category's DB price
+      // --------------------------------
+
+      const deliveryPriceCollection = await dbConnect(
+        collectionNameObj.deliveryPricesCollection,
+      );
+
+      const deliveryPrice = await deliveryPriceCollection.findOne({
+        category: uniqueCategories[0],
+      });
+
+      deliveryCharge = Number(deliveryPrice?.price || 0);
+    } else if (uniqueCategories.length > 1) {
+      // --------------------------------
+      // Multiple categories
+      // Fixed delivery charge
+      // --------------------------------
+
+      deliveryCharge = 100;
+    }
+
+    // -----------------------
+    // Payment Charge
     // -----------------------
 
     let charge = 0;
 
+    // bKash Send Money 1.8% charge
     if (order.payment.method === "intl_send") {
       charge = Math.round(subtotal * 0.018);
     }
 
-    const actualAmount = subtotal + charge;
+    // -----------------------
+    // Final Amount
+    // -----------------------
+
+    const actualAmount = subtotal + deliveryCharge + charge;
+
+    // -----------------------
+    // Payment Amount
+    // -----------------------
 
     let amountPaid = 0;
 
     if (order.payment.mode === "online") {
-      amountPaid =
-        order.payment.type === "advance250"
-          ? 250
-          : actualAmount;
+      if (order.payment.type === "advance250") {
+        amountPaid = 250;
+      } else if (order.payment.type === "full") {
+        amountPaid = actualAmount;
+      }
     }
 
     const amountDue = actualAmount - amountPaid;
@@ -219,25 +276,36 @@ export async function POST(req) {
     // Save Order
     // -----------------------
 
-    const orderCollection = await dbConnect(
-      collectionNameObj.orderCollection
-    );
+    const orderCollection = await dbConnect(collectionNameObj.orderCollection);
 
     const result = await orderCollection.insertOne({
       customer: order.customer,
 
       cartItems: safeCartItems,
 
+      // Delivery information
+      delivery: {
+        charge: deliveryCharge,
+        categories: uniqueCategories,
+      },
+
       payment: {
         mode: order.payment.mode,
         method: order.payment.method,
         type: order.payment.type,
-        trxId: order.payment.trxId,
+        trxId: order.payment.trxId || null,
+
+        subtotal,
+
+        deliveryCharge,
+
+        charge,
 
         actualAmount,
+
         amountPaid,
+
         amountDue,
-        charge,
       },
 
       trackingId,
@@ -256,15 +324,33 @@ export async function POST(req) {
       updatedAt: new Date(),
     });
 
+    // -----------------------
+    // Response
+    // -----------------------
+
     return NextResponse.json({
       success: true,
+
       insertedId: result.insertedId,
+
       trackingId,
+
       message: "Order placed successfully",
-      purchaseAmount: actualAmount
+
+      purchaseAmount: actualAmount,
+
+      subtotal,
+
+      deliveryCharge,
+
+      charge,
+
+      amountPaid,
+
+      amountDue,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Place order error:", error);
 
     return NextResponse.json(
       {
@@ -273,20 +359,16 @@ export async function POST(req) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
-
 export async function GET() {
   try {
     const session = await auth();
 
     if (!session) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const orders = await getOrders();
@@ -301,7 +383,7 @@ export async function GET() {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }

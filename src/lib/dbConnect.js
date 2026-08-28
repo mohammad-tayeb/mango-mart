@@ -9,7 +9,8 @@ export const collectionNameObj = {
   messageCollection: "messages",
   adminCollection: "admins",
   orderCollection: "orders",
-  bannerCollection: "banners"
+  bannerCollection: "banners",
+  deliveryPricesCollection: "deliveryPrices"
 };
 
 const client = new MongoClient(process.env.MONGO_URI, {
