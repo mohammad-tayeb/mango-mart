@@ -63,6 +63,8 @@ function Navbar() {
         { name: "Honey", href: "/products?category=honey" },
         { name: "Date", href: "/products?category=date" },
         { name: "Oil", href: "/products?category=oil" },
+        { name: "Nut", href: "/products?category=nut" },
+        { name: "Nut Mix", href: "/products?category=nut%20mix" },
         { name: "Rambutan", href: "/products?category=rambutan" },
       ],
     },
