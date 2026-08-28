@@ -11,14 +11,15 @@ export default function CategorySlider({ activeCategory = "all" }) {
         { id: 'honey', name: 'মধু', image: '/honey.png' },
         { id: 'dates', name: 'খেজুর', image: '/dates.png' },
         { id: 'oil', name: 'তেল', image: '/oil.png' },
-        { id: 'nut', name: 'নাট', image: '/nut.png' },
-        { id: 'nut mix', name: 'নাট মিক্স', image: '/nutmix.png' },
+        { id: "nut", name: "বাদাম", image: "/nut.png" },
+        { id: "nut mix", name: "বাদাম মিক্স", image: "/nut mix.png" },
+        { id: "rambutan", name: "রামবুটান", image: "/rambutan.png" },
 
     ];
 
     return (
-        <div className="w-full max-w-xl mx-auto px-2 sm:px-4 py-2 sm:py-3">
-            <div className="bg-amber-50/90 sm:rounded-full shadow-md border border-gray-100 px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-center gap-3 sm:gap-5 overflow-x-auto scrollbar-none">
+        <div className="w-full max-w-2xl mx-auto px-2 sm:px-4 py-2 sm:py-3">
+            <div className="bg-amber-50/90 sm:rounded-full rounded-lg shadow-md border border-gray-100 px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-start sm:justify-center gap-3 sm:gap-5 overflow-x-auto scrollbar-none">
                 {categories.map((category) => {
                     const isActive = activeCategory === category.id;
 
