@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 
 export default function MessageDashboard() {
   // ফিল্টার স্টেট: "All" | "Unread" | "Read" | "Deleted"
-  const [activeFilter, setActiveFilter] = useState("All");
+  const [activeFilter, setActiveFilter] = useState("Unread");
 
   const {
     data: messages = [],
@@ -232,7 +232,7 @@ export default function MessageDashboard() {
             {/* Empty State */}
             {filteredMessages.length === 0 && (
               <div className="text-center py-12 bg-white rounded-xl border border-dashed border-slate-300 text-slate-400 text-sm">
-                এই ফিল্টারে কোনো মেসেজ পাওয়া যায়নি।
+                No message found!
               </div>
             )}
           </div>

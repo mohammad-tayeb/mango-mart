@@ -83,3 +83,12 @@
     transform: scale(1) rotate(0deg);
   }
 }
+/* Hide scrollbar but keep scrolling enabled */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}

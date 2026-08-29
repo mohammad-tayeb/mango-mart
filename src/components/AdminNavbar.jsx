@@ -176,7 +176,7 @@ function AdminDashboard({ session, children }) {
     }, []);
 
     return (
-        <div className="h-screen bg-slate-50 text-slate-800 antialiased flex">
+        <div className="h-dvh overflow-hidden bg-slate-50 text-slate-800 antialiased flex">
 
             {/* 1. MOBILE SIDEBAR OVERLAY */}
             {isSidebarOpen && (
@@ -194,7 +194,7 @@ function AdminDashboard({ session, children }) {
             `}>
                 {/* Sidebar Header */}
                 <div className="relative flex h-16 items-center justify-between px-6 border-b border-slate-100">
-                    <div className="flex items-center gap-2 mt-1">
+                    <Link href="/" className="flex items-center gap-2 mt-1">
                         <Image
                             src="/logo2.png"
                             alt="Mango Lovers Logo"
@@ -203,7 +203,7 @@ function AdminDashboard({ session, children }) {
                             className="object-contain h-12 w-auto"
                             priority
                         />
-                    </div>
+                    </Link>
                     {/* Close Menu Button (Mobile Only) */}
                     <button
                         onClick={() => setIsSidebarOpen(false)}
@@ -237,7 +237,7 @@ function AdminDashboard({ session, children }) {
                 </nav>
 
                 {/* Sidebar Footer Account block */}
-                <div className="border-t border-slate-100 py-4">
+                <div className="border-t border-slate-100 pb-4">
                     {/* User Info */}
                     <div className="flex items-center gap-3 rounded-xl p-2">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-500 font-semibold text-white">
@@ -426,18 +426,10 @@ function AdminDashboard({ session, children }) {
                             )}
 
                         </div>
-
-                        <Link
-                            href="/"
-                            className="rounded-xl p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-700"
-                        >
-                            <HiHome className="h-6 w-6" />
-                        </Link>
-
                     </div>
                 </header>
 
-                <main className="flex-1 overflow-y-auto md:p-3 p-1">
+                <main className="flex-1 min-h-0 overflow-y-auto scrollbar-hide md:p-3 p-1">
                     {children}
                 </main>
 
