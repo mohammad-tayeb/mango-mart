@@ -27,7 +27,7 @@ export default function CategorySlider({ activeCategory = "all" }) {
 
         setCanScrollRight(
             slider.scrollLeft + slider.clientWidth <
-                slider.scrollWidth - 5
+            slider.scrollWidth - 5
         );
     };
 
@@ -46,6 +46,17 @@ export default function CategorySlider({ activeCategory = "all" }) {
             window.removeEventListener("resize", updateScrollState);
         };
     }, []);
+
+    const scrollRight = () => {
+        const slider = sliderRef.current;
+
+        if (!slider) return;
+
+        slider.scrollBy({
+            left: slider.clientWidth * 0.7,
+            behavior: "smooth",
+        });
+    };
 
     return (
         <div className="relative mx-auto w-full max-w-2xl px-2 py-2 sm:px-4 sm:py-3">
@@ -69,11 +80,10 @@ export default function CategorySlider({ activeCategory = "all" }) {
                         >
                             {/* Category Image */}
                             <div
-                                className={`relative h-9 w-9 overflow-hidden rounded-full transition-all duration-200 ${
-                                    isActive
-                                        ? "ring-2 ring-orange-500 ring-offset-2"
-                                        : "group-hover:ring-2 group-hover:ring-orange-500 group-hover:ring-offset-2"
-                                }`}
+                                className={`relative h-9 w-9 overflow-hidden rounded-full transition-all duration-200 ${isActive
+                                    ? "ring-2 ring-orange-500 ring-offset-2"
+                                    : "group-hover:ring-2 group-hover:ring-orange-500 group-hover:ring-offset-2"
+                                    }`}
                             >
                                 <Image
                                     src={category.image}
@@ -86,11 +96,10 @@ export default function CategorySlider({ activeCategory = "all" }) {
 
                             {/* Category Name */}
                             <span
-                                className={`mt-1 whitespace-nowrap text-[10px] font-semibold transition-colors duration-200 sm:text-xs ${
-                                    isActive
-                                        ? "text-orange-500"
-                                        : "text-gray-600 group-hover:text-orange-500"
-                                }`}
+                                className={`mt-1 whitespace-nowrap text-[10px] font-semibold transition-colors duration-200 sm:text-xs ${isActive
+                                    ? "text-orange-500"
+                                    : "text-gray-600 group-hover:text-orange-500"
+                                    }`}
                             >
                                 {category.name}
                             </span>
@@ -99,12 +108,17 @@ export default function CategorySlider({ activeCategory = "all" }) {
                 })}
             </div>
 
-            {/* More Categories Indicator */}
+            {/* More Categories Button */}
             {canScrollRight && (
-                <div className="pointer-events-none absolute right-2 top-2 bottom-2 flex w-14 items-center justify-end rounded-r-lg bg-gradient-to-l from-amber-50 via-amber-50/90 to-transparent sm:right-4 sm:top-3 sm:bottom-3 sm:rounded-r-full">
-                    <span className="mr-1 flex h-7 w-7 items-center justify-center rounded-full border border-gray-100 bg-white/95 text-base font-bold text-orange-500 shadow-sm sm:h-8 sm:w-8 sm:text-lg">
+                <div className="absolute right-2 top-2 bottom-2 flex w-14 items-center justify-end rounded-r-lg bg-gradient-to-l from-amber-50 via-amber-50/90 to-transparent sm:right-4 sm:top-3 sm:bottom-3 sm:rounded-r-full">
+                    <button
+                        onClick={scrollRight}
+                        type="button"
+                        aria-label="Show more categories"
+                        className="mr-1 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border border-gray-100 bg-white/95 text-base font-bold text-orange-500 shadow-sm transition-all hover:scale-110 hover:bg-orange-500 hover:text-white active:scale-95 sm:h-8 sm:w-8 sm:text-lg"
+                    >
                         →
-                    </span>
+                    </button>
                 </div>
             )}
         </div>
